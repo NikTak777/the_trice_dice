@@ -16,3 +16,7 @@ script = ExtResource("3_4fuuu")
 
 [node name="DungeonGenerator" type="Node" parent="Map"]
 script = ExtResource("4_dxrkv")
+
+[node name="Entities" type="Node2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="."]

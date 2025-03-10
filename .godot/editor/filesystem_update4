@@ -1,0 +1,14 @@
+res://game/game.tscn
+res://assets/definitions/entities/actors/entity_definition_player.tres
+res://assets/definitions/tiles/tile_definition_floor.tres
+res://assets/definitions/tiles/tile_definition_wall.tres
+res://game/game.gd
+res://entities/actors/actions/movement_action.gd
+res://game/EventHandler.gd
+res://entities/entity.gd
+res://entities/actors/actions/action.gd
+res://map/tile.gd
+res://utils/grid.gd
+res://map/dungeon_generator.gd
+res://map/map.gd
+res://map/map_data.gd

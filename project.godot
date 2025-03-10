@@ -11,5 +11,6 @@ config_version=5
 [application]
 
 config/name="the_trice_dice"
+run/main_scene="uid://ciqgkcm73rvbj"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
