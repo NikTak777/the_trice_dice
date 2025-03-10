@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cad2476ml0wom"]
+
+[ext_resource type="Script" uid="uid://6lwx2b5rw1sf" path="res://scr/Entities/Player/dice.gd" id="1_d6yv8"]
+[ext_resource type="Texture2D" uid="uid://buyrodlacp80l" path="res://assets/dice.png" id="2_jp6y2"]
+
+[node name="Dice" type="CharacterBody2D"]
+script = ExtResource("1_d6yv8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_jp6y2")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
