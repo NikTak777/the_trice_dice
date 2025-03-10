@@ -10,6 +10,7 @@ config_version=5
 
 [application]
 
-config/name="the_trice_dice"
+config/name="TTD 2"
+run/main_scene="uid://cad2476ml0wom"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
