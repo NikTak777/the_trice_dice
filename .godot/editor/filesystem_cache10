@@ -1,22 +1,23 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1742153211
+::res://::1742321724
 icon.svg::CompressedTexture2D/CompressedTexture2D::8264130230500570880::1742150567::1742150594::1::::<><><>0<>0<>d0200a59b93586c2995edf2dac268479<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 README.md::TextFile/TextFile::-1::1742150555::0::1::::<><><>0<>0<><>::
 ::res://scr/::1742150735
-::res://scr/Assets/::1742153211
+::res://scr/Assets/::1742153231
+::res://scr/Assets/pictures/::1742153213
+CosmicLilac_Tiles.png::CompressedTexture2D/CompressedTexture2D::1289988650377111559::1742151819::1742153211::1::::<><><>0<>0<>a858094b13a4c466aeb832d9c82c0169<>res://.godot/imported/CosmicLilac_Tiles.png-8acd53e4ae29c0a8c7aa6b3a83c5c051.ctex::
 Здесь лежат текстуры.txt::TextFile/TextFile::-1::1742150760::0::1::::<><><>0<>0<><>::
-::res://scr/Assets/pictures/::1742153211
-CosmicLilac_Tiles.png::CompressedTexture2D::1289988650377111559::1742151819::1742153211::1::::<><><>0<>0<>a858094b13a4c466aeb832d9c82c0169<>res://.godot/imported/CosmicLilac_Tiles.png-8acd53e4ae29c0a8c7aa6b3a83c5c051.ctex::
+::res://scr/Assets/resources/::1742154464
 ::res://scr/Entities/::1742150567
 ::res://scr/Entities/Player/::1742150567
 dice.gd::GDScript/GDScript::2199940576236270353::1742150567::0::1::::<>CharacterBody2D<><>0<>0<><>::
 dice.tscn::PackedScene/PackedScene::4780727376673392760::1742150567::0::1::::<><><>0<>0<><>::uid://6lwx2b5rw1sf::::res://scr/Entities/Player/dice.gd<>uid://buyrodlacp80l::::res://assets/dice.png
-::res://scr/Game/::1742153162
-game.gd::GDScript::1528695546128112357::1742153162::0::1::::<>Node2D<><>0<>0<><>::
-game.tscn::PackedScene::7532924718863129290::1742153162::0::1::::<><><>0<>0<><>::uid://v1rnlq673a2p::::res://scr/Game/game.gd
+::res://scr/Game/::1742321711
+game.gd::GDScript/GDScript::1528695546128112357::1742245364::0::1::::<>Node2D<><>0<>0<><>::
+game.tscn::PackedScene::7532924718863129290::1742321711::0::1::::<><><>0<>0<><>::uid://v1rnlq673a2p::::res://scr/Game/game.gd<>uid://sm46o3s7m408::::res://scr/Assets/pictures/CosmicLilac_Tiles.png
 Тут располагается игра.txt::TextFile/TextFile::-1::1742150567::0::1::::<><><>0<>0<><>::
-::res://scr/Levels/::1742153162
-map_generator.gd::GDScript::8984426073987567189::1742153162::0::1::::Branch<>Node<><>0<>0<><>::
+::res://scr/Levels/::1742156624
+map_generator.gd::GDScript/GDScript::8984426073987567189::1742156623::0::1::::map_generator<>Node<><>0<>0<><>::
 Тут располагаются уровни.txt::TextFile/TextFile::-1::1742150567::0::1::::<><><>0<>0<><>::
 ::res://scr/Objects/::1742150567
 Тут располагаются объекты.txt::TextFile/TextFile::-1::1742150567::0::1::::<><><>0<>0<><>::

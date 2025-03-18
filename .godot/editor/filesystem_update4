@@ -1,4 +1,2 @@
-res://scr/Game/game.gd
-res://scr/Levels/map_generator.gd
 res://scr/Game/game.tscn
-res://scr/Assets/resources/purple_tiles.tres
+res://scr/Game/game.gd

@@ -20,6 +20,7 @@ texture = ExtResource("2_ssiyq")
 12:0/0 = 0
 0:1/0 = 0
 1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 2:1/0 = 0
 3:1/0 = 0
 4:1/0 = 0
@@ -101,7 +102,9 @@ texture = ExtResource("2_ssiyq")
 2:7/0 = 0
 3:7/0 = 0
 4:7/0 = 0
+5:7/next_alternative_id = 2
 5:7/0 = 0
+5:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 6:7/0 = 0
 7:7/0 = 0
 8:7/0 = 0
@@ -111,6 +114,7 @@ texture = ExtResource("2_ssiyq")
 12:7/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_cxrij"]
+physics_layer_0/collision_layer = 0
 sources/0 = SubResource("TileSetAtlasSource_8kvvk")
 
 [node name="Game" type="Node2D"]
