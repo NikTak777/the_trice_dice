@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dflaf0825is7c"]
+[gd_scene load_steps=6 format=3 uid="uid://dflaf0825is7c"]
 
 [ext_resource type="Script" uid="uid://v1rnlq673a2p" path="res://scr/Game/game.gd" id="1_wivpw"]
 [ext_resource type="Texture2D" uid="uid://sm46o3s7m408" path="res://scr/Assets/pictures/CosmicLilac_Tiles.png" id="2_ssiyq"]
+[ext_resource type="PackedScene" uid="uid://cad2476ml0wom" path="res://scr/Entities/Player/dice.tscn" id="3_8kvvk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8kvvk"]
 texture = ExtResource("2_ssiyq")
@@ -114,7 +115,7 @@ texture = ExtResource("2_ssiyq")
 12:7/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_cxrij"]
-physics_layer_0/collision_layer = 1
+physics_layer_0/collision_layer = 0
 sources/0 = SubResource("TileSetAtlasSource_8kvvk")
 
 [node name="Game" type="Node2D"]
@@ -123,3 +124,5 @@ script = ExtResource("1_wivpw")
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_cxrij")
 format = 2
+
+[node name="Dice" parent="." instance=ExtResource("3_8kvvk")]

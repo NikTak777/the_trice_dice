@@ -1,5 +1,7 @@
 extends Node2D
 
+var player_scene = preload("res://scr/Entities/Player/dice.tscn")  # Подставь путь к сцене персонажа
+
 var root_node: map_generator
 var tile_size: int =  16
 
@@ -10,10 +12,23 @@ var map_y: int = 30
 
 func _ready():
 	tilemap = get_node("TileMap")
+	
 	root_node  = map_generator.new(Vector2i(0, 0), Vector2i(map_x, map_y)) #устанавливаем размер карты
 	root_node.split(2, paths) #кол-во комнат = 2 в степени первого числа
+	
+	spawn_player() # Создание главное героя в игровом уровне
+	
 	queue_redraw()
 	pass 
+	
+func spawn_player():
+	var player = player_scene.instantiate()
+	add_child(player)
+
+	# Устанавливает позицию персонажа в центр первой комнаты
+	var spawn_position = root_node.get_room_center(1) * tile_size
+	player.position = Vector2(spawn_position.x, spawn_position.y)
+	player.scale = Vector2(0.125, 0.125)
 
 func is_inside_padding(x, y, leaf, padding): #проверка на границу комнаты
 	return x <= padding.x or y <= padding.y or x >= leaf.size.x - padding.z or y >= leaf.size.y - padding.w 

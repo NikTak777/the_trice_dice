@@ -22,7 +22,7 @@ func get_leaves():
 
 func split(remaining, paths):
 	var rng = RandomNumberGenerator.new()
-	var split_percent = rng.randf_range(0.4,0.6) #сколько места от сплита будут занимать комнаты
+	var split_percent = rng.randf_range(0.4, 0.6) #сколько места от сплита будут занимать комнаты
 	var split_horizontal = size.y >= size.x # проверка на ориентацию комнаты (горизонтальная или вертикальная)
 	if(split_horizontal): #горизонтальная комната
 		var left_height = int(size.y * split_percent)
@@ -42,3 +42,9 @@ func split(remaining, paths):
 		left_child.split(remaining - 1, paths)
 		right_child.split(remaining - 1, paths)
 	pass
+	
+func get_room_center(room_number):
+	var leaves = get_leaves()
+	if leaves.size() > 0 and leaves.size() >= room_number:
+		return leaves[room_number-1].get_center()
+	return Vector2i(0, 0)  # Возвращаем (0,0), если нет комнат или выбранная несуществующая комната
