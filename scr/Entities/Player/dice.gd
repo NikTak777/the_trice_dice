@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const SPEED = 250.0
+const SPEED = 100.0
 
 func _ready():
 	position = Vector2.ZERO # Устанавливает начальную позицию на (0, 0)
