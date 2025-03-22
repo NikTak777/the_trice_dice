@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://rxmbvxumdo58"]
 
-[ext_resource type="Script" uid="uid://d3wnjp1g1p4p3" path="res://scr/utils/SpriteFlipper/sprite_flipper.gd" id="1_qaxs7"]
+[ext_resource type="Script" uid="uid://d3wnjp1g1p4p3" path="res://scr/Utils/SpriteFlipper/sprite_flipper.gd" id="1_qaxs7"]
 
 [node name="SpriteFlipper" type="Node2D"]
 script = ExtResource("1_qaxs7")
