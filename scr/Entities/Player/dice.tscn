@@ -1,7 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://cad2476ml0wom"]
+[gd_scene load_steps=7 format=3 uid="uid://cad2476ml0wom"]
 
 [ext_resource type="Script" uid="uid://6lwx2b5rw1sf" path="res://scr/Entities/Player/dice.gd" id="1_d6yv8"]
-[ext_resource type="Texture2D" uid="uid://brmufcnuwdnog" path="res://scr/Assets/dice.png" id="2_jp6y2"]
+[ext_resource type="Texture2D" uid="uid://brmufcnuwdnog" path="res://scr/Assets/dice_sprite/dice.png" id="2_jp6y2"]
+[ext_resource type="PackedScene" uid="uid://rxmbvxumdo58" path="res://scr/Utils/SpriteFlipper/SpriteFlipper.tscn" id="3_avock"]
+[ext_resource type="PackedScene" uid="uid://ick0tstnrml1" path="res://scr/Utils/ZoomController/ZoomController.tscn" id="4_nmhnp"]
+
+[sub_resource type="GDScript" id="GDScript_tdquo"]
+script/source = "extends Camera2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vsjsk"]
 radius = 61.0082
@@ -16,8 +32,14 @@ script = ExtResource("1_d6yv8")
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_jp6y2")
 
+[node name="SpriteFlipper" parent="." instance=ExtResource("3_avock")]
+
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_enabled = true
+script = SubResource("GDScript_tdquo")
+
+[node name="ZoomController" parent="Camera2D" node_paths=PackedStringArray("camera") instance=ExtResource("4_nmhnp")]
+camera = NodePath("..")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_vsjsk")

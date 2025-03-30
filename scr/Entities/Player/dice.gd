@@ -1,14 +1,18 @@
 extends CharacterBody2D
 
-const SPEED = 250.0
+const SPEED = 100.0
 
 func _ready():
-	position = Vector2(0, 0) # Устанавливает начальную позицию на (0, 0)
+	position = Vector2.ZERO # Устанавливает начальную позицию на (0, 0)
 
-func get_input():
-	var input_direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	velocity = input_direction * SPEED
+func get_movement_direction():
+	var input_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	return input_direction
+	
 
-func _physics_process(delta):
-	get_input()
+func _process(delta):
+	var diretion = get_movement_direction()
+	
+	velocity = diretion * SPEED
+	
 	move_and_slide()
