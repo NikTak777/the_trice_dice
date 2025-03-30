@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cad2476ml0wom"]
 
 [ext_resource type="Script" uid="uid://6lwx2b5rw1sf" path="res://scr/Entities/Player/dice.gd" id="1_d6yv8"]
-[ext_resource type="Texture2D" uid="uid://brmufcnuwdnog" path="res://scr/Assets/dice_sprite/dice.png" id="2_jp6y2"]
+[ext_resource type="Texture2D" uid="uid://brmufcnuwdnog" path="res://scr/Assets/dice.png" id="2_jp6y2"]
 [ext_resource type="PackedScene" uid="uid://rxmbvxumdo58" path="res://scr/Utils/SpriteFlipper/SpriteFlipper.tscn" id="3_avock"]
 [ext_resource type="PackedScene" uid="uid://ick0tstnrml1" path="res://scr/Utils/ZoomController/ZoomController.tscn" id="4_nmhnp"]
 
