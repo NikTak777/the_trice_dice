@@ -1,0 +1,57 @@
+* [33mabe8305[m[33m ([m[1;32mmain[m[33m)[m Обновлён project.godot
+*   [33m38db046[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #4 from NikTak777/dev
+[32m|[m[33m\[m  
+[32m|[m [33m|[m * [33mb8af81b[m[33m ([m[1;31morigin/pick_up_weapons[m[33m)[m Delete scr/Objects/powerup_weapon.tscn
+[32m|[m [33m|[m * [33m89929a8[m Update Readme.txt
+[32m|[m [33m|[m * [33m26e7837[m Delete scr/Utils/weapon.gd.uid
+[32m|[m [33m|[m * [33m9379864[m Delete scr/Utils/dice.gd.uid
+[32m|[m [33m|[m * [33m5ffd8b9[m Update and rename weapon.gd to Dice.gd
+[32m|[m [33m|[m * [33m6283f8f[m Update and rename dice.gd to Weapon.gd
+[32m|[m [33m|[m * [33m63c3807[m dice.gd
+[32m|[m [33m|[m * [33m3ac7917[m dice.gd
+[32m|[m [33m|[m * [33m80cb96c[m Update and rename Текстовый документ.txt to Readme.txt
+[32m|[m [33m|[m * [33m24b8b8c[m Update powerup_weapon.tscn
+[32m|[m [33m|[m * [33me6e799a[m Update Текстовый документ.txt
+[32m|[m [33m|[m * [33m2eae0d3[m Update Текстовый документ.txt
+[32m|[m [33m|[m * [33mdc39040[m Add files via upload
+[32m|[m [33m|[m * [33m423b5f6[m Delete Utils
+[32m|[m [33m|[m * [33md9655e8[m Utils
+[32m|[m [33m|[m [34m|[m * [33mddc2f73[m[33m ([m[1;31morigin/main_character_movement[m[33m)[m Обновление механики перемещения персонажа
+[32m|[m [33m|[m [34m|[m * [33mc23ad92[m Обновление механики перемещения главного персонажа
+[32m|[m [33m|[m [34m|[m * [33m438cce0[m Обновлён скрипт перемещения главного персонажа
+[32m|[m [33m|[m [34m|[m *   [33mb8b5b71[m Слияние изменений из dev в main_character_movement
+[32m|[m [33m|[m [34m|[m [36m|[m[1;31m\[m  
+[32m|[m [33m|[m [34m|[m [36m|[m * [33m4fe1037[m[33m ([m[1;31morigin/spawn_enemies[m[33m, [m[1;31morigin/dev[m[33m, [m[1;31morigin/ability_change[m[33m)[m Объединение механик перемещения и генерации мира
+[32m|[m [33m|[m [34m|[m [36m|[m * [33mb097cb0[m Слияние изменений из generate_world в dev
+[32m|[m [33m|[m [34m|[m [36m|[m[34m/[m[1;33m|[m 
+[32m|[m [33m|[m [34m|[m[34m/[m[36m|[m [1;33m|[m 
+[32m|[m [33m|[m [34m|[m [36m|[m * [33meb2dc40[m[33m ([m[1;31morigin/generate_world[m[33m)[m Сделал коллизию
+[32m|[m [33m|[m [34m|[m [36m|[m * [33mc9d2532[m Переделал генерацию карты и разложил всё по папкам
+[32m|[m [33m|[m [34m|[m [36m|[m *   [33md238405[m Merge branch 'generate_world' of https://github.com/NikTak777/the_trice_dice into generate_world
+[32m|[m [33m|[m [34m|[m [36m|[m [1;34m|[m[1;35m\[m  
+[32m|[m [33m|[m [34m|[m [36m|[m [1;34m|[m *   [33md35ed8f[m Слияние изменений из dev в generate_world
+[32m|[m [33m|[m [34m|[m [36m|[m [1;34m|[m [1;36m|[m[34m\[m  
+[32m|[m [33m|[m [34m|[m [36m|[m[34m_[m[1;34m|[m[34m_[m[1;36m|[m[34m/[m  
+[32m|[m [33m|[m [34m|[m[34m/[m[36m|[m [1;34m|[m [1;36m|[m   
+[32m|[m [33m|[m * [36m|[m [1;34m|[m [1;36m|[m [33mf208bee[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mgame_menu[m[33m, [m[1;31morigin/game_menu[m[33m)[m Слияние изменений из main_character_movement в dev
+[32m|[m [33m|[m[33m/[m[36m|[m [36m|[m [1;34m|[m [1;36m|[m 
+[32m|[m [33m|[m [36m|[m[36m/[m [1;34m/[m [1;36m/[m  
+[32m|[m [33m|[m * [1;34m|[m [1;36m|[m [33mc16b6d1[m Обновлена структура файлов и скрипт перемещения
+[32m|[m [33m|[m * [1;34m|[m [1;36m|[m [33mbd95dc1[m Удаление старой папки со сценой игры
+[32m|[m [33m|[m * [1;34m|[m [1;36m|[m [33m71189e3[m Удаление старой папки с элементами игры
+[32m|[m [33m|[m * [1;34m|[m [1;36m|[m [33m17b5474[m Небольшие изменения README.md
+[32m|[m * [33m|[m [1;34m|[m [1;36m|[m   [33m6e4381e[m Merge pull request #3 from NikTak777/main
+[32m|[m [33m|[m[32m\[m [33m\[m [1;34m\[m [1;36m\[m  
+[32m|[m [33m|[m[32m/[m [33m/[m [1;34m/[m [1;36m/[m  
+[32m|[m[32m/[m[33m|[m [33m/[m [1;34m/[m [1;36m/[m   
+[32m|[m [33m|[m[33m/[m [1;34m/[m [1;36m/[m    
+* [33m/[m [1;34m/[m [1;36m/[m [33m891ad45[m Небольшие изменения README.md
+[33m|[m[33m/[m [1;34m/[m [1;36m/[m  
+[33m|[m * [1;36m/[m [33m6cab4f5[m Сделал процедурную генерацию карты
+[33m|[m [1;36m|[m[1;36m/[m  
+[33m|[m * [33m6018bf0[m Небольшие изменения README.md
+[33m|[m[33m/[m  
+* [33mc93219e[m Add files via upload
+* [33m21fac68[m Обновил README.md, добавил роли
+* [33mf2a8970[m Добавил каркас README для дальнейшего наполнения
+* [33m6d67b31[m Initial commit

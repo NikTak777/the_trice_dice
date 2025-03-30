@@ -1,0 +1,4 @@
+res://scr/UserInterface/main_menu.tscn
+res://scr/Entities/Player/dice.tscn
+res://scr/UserInterface/main_menu.gd
+res://scr/Entities/Player/dice.gd

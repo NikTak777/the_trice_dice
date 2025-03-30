@@ -1,0 +1,21 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1743363419
+icon.svg::CompressedTexture2D/CompressedTexture2D::8264130230500570880::1743276424::1743363337::1::::<><><>0<>0<>d0200a59b93586c2995edf2dac268479<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
+README.md::TextFile/TextFile::-1::1743262826::0::1::::<><><>0<>0<><>::
+::res://assets/::1743364019
+dice.png::CompressedTexture2D/CompressedTexture2D::6343296310381082266::1743262826::1743363337::1::::<><><>0<>0<>85ec954850c943d32ff60b40b69a173b<>res://.godot/imported/dice.png-e5d359870d3fd9a3f63c876c162e5dc0.ctex::
+GrapeSoda.ttf::FontFile::5634252736477585078::1743364019::1743364020::1::::<><><>0<>0<>b226e808e22f738b76ca7a8d39d5299d<>res://.godot/imported/GrapeSoda.ttf-0d60fb07fc5da351b12de09bb19e628d.fontdata::
+::res://scr/::1743276424
+::res://scr/Entities/::1743276424
+::res://scr/Entities/Player/::1743363724
+dice.gd::GDScript/GDScript::2199940576236270353::1743276424::0::1::::<>CharacterBody2D<><>0<>0<><>::
+dice.tscn::PackedScene::4780727376673392760::1743363724::0::1::::<><><>0<>0<><>::uid://6lwx2b5rw1sf::::res://scr/Entities/Player/dice.gd<>uid://cwm0fs724515w::::res://assets/dice.png
+::res://scr/Game/::1743276424
+Тут располагается игра.txt::TextFile/TextFile::-1::1743276424::0::1::::<><><>0<>0<><>::
+::res://scr/Levels/::1743276424
+Тут располагаются уровни.txt::TextFile/TextFile::-1::1743276424::0::1::::<><><>0<>0<><>::
+::res://scr/Objects/::1743276424
+Тут располагаются объекты.txt::TextFile/TextFile::-1::1743276424::0::1::::<><><>0<>0<><>::
+::res://scr/UserInterface/::1743363724
+main_menu.tscn::PackedScene::2934830690463672758::1743363724::0::1::::<><><>0<>0<><>::
+Тут располагается интерфейс.txt::TextFile/TextFile::-1::1743276424::0::1::::<><><>0<>0<><>::

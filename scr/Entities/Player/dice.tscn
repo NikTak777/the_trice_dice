@@ -1,7 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://cad2476ml0wom"]
+[gd_scene load_steps=8 format=3 uid="uid://cad2476ml0wom"]
 
 [ext_resource type="Script" uid="uid://6lwx2b5rw1sf" path="res://scr/Entities/Player/dice.gd" id="1_d6yv8"]
-[ext_resource type="Texture2D" uid="uid://buyrodlacp80l" path="res://assets/dice.png" id="2_jp6y2"]
+[ext_resource type="Texture2D" uid="uid://cwm0fs724515w" path="res://assets/dice.png" id="2_jp6y2"]
+[ext_resource type="Script" uid="uid://d1jd5jwim1twd" path="res://scr/UserInterface/button.gd" id="3_avock"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jp6y2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jp6y2"]
+bg_color = Color(0.808998, 0.808998, 0.808998, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avock"]
+bg_color = Color(0.2484, 0.2484, 0.2484, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nmhnp"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [node name="Dice" type="CharacterBody2D"]
 script = ExtResource("1_d6yv8")
@@ -12,3 +28,21 @@ texture = ExtResource("2_jp6y2")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_enabled = true
+
+[node name="Button" type="Button" parent="."]
+offset_left = 461.0
+offset_top = -321.0
+offset_right = 574.0
+offset_bottom = -290.0
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jp6y2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jp6y2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_avock")
+theme_override_styles/normal = SubResource("StyleBoxFlat_nmhnp")
+text = "Пауза"
+script = ExtResource("3_avock")
+
+[connection signal="pressed" from="Button" to="." method="_on_pause_pressed"]
