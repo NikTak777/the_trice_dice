@@ -62,7 +62,7 @@ func die():
 func spawn_weapon():
 	weapon = WEAPON_SCENE.instantiate()  # Создаём экземпляр оружия
 	get_parent().add_child(weapon)  # Добавляем оружие на тот же уровень, что и персонаж
-	weapon.position = position + Vector2(150, 100)  # Размещаем оружие на 40 пикселей правее персонажа
+	weapon.position = position + Vector2(130, 100)  # Размещаем оружие
 	weapon.scale = Vector2(0.3, 0.3)  # Уменьшаем оружие в 2 раза
 	print("Weapon position: ", weapon.position)  # Лог для проверки
 
