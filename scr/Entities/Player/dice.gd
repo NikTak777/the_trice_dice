@@ -4,6 +4,7 @@ extends CharacterBody2D
 
 const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")  # Загружаем сцену заранее
 const INVENTORY_SCENE = preload("res://scr/Utils/Inventory/Inventory.tscn")
+const BULLET_SCENE = preload("res://scr/Objects/Bullet/Bullet.tscn")
 const SPEED = 100.0
 
 var max_hp = 100
@@ -43,6 +44,11 @@ func _process(delta):
 		if nearby_weapon:
 			inventory.pickup_weapon(nearby_weapon)
 			nearby_weapon = null
+			
+	if Input.is_action_just_pressed("shoot"):
+		if inventory.carried_weapon:
+			shoot()
+			move_and_slide()
 
 func toggle_pause() -> void:
 	get_tree().paused = !get_tree().paused
@@ -63,3 +69,12 @@ func take_damage(amount: int):
 
 func die():
 	queue_free()  # Удаляем персонажа
+	
+func shoot():
+	var bullet = BULLET_SCENE.instantiate()
+	bullet.global_position = global_position  # Пуля вылетает из персонажа
+	
+	var mouse_pos = get_global_mouse_position()
+	bullet.direction = (mouse_pos - global_position).normalized() # Вычисление направления от персонажа к курсору
+	
+	get_parent().add_child(bullet) # Добавление пули в сцену
