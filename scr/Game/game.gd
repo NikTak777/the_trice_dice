@@ -3,6 +3,7 @@ extends Node2D
 var player_scene = preload("res://scr/Entities/Player/dice.tscn")
 var weapon_spawner_scene = preload("res://scr/Utils/WeaponSpawner/WeaponSpawner.tscn")
 var weapon_spawner: Node  # Будем хранить ссылку здесь
+var weapon_spawner2: Node  # Будем хранить ссылку здесь
 
 var root_node: map_generator
 var tile_size: int =  16
@@ -23,9 +24,14 @@ func _ready():
 	# Создаём экземпляр WeaponSpawner и добавляем в сцену
 	weapon_spawner = weapon_spawner_scene.instantiate()
 	add_child(weapon_spawner)
-
 	# Вызываем спавн оружия в комнате №2
 	weapon_spawner.spawn_weapon_in_room(2, root_node)
+	
+	# Создаём экземпляр WeaponSpawner и добавляем в сцену
+	weapon_spawner2 = weapon_spawner_scene.instantiate()
+	add_child(weapon_spawner2)
+	# Вызываем спавн оружия в комнате №2
+	weapon_spawner2.spawn_weapon_in_room(3, root_node)
 	
 	queue_redraw()
 	pass 
