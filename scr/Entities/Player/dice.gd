@@ -3,22 +3,27 @@ extends CharacterBody2D
 @onready var menu = $"../CanvasLayer/MainMenu"  # Подключаем меню
 
 const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")  # Загружаем сцену заранее
-const WEAPON_SCENE = preload("res://scr/Objects/pick_up_weapon/weapon.tscn")  # Путь к сцене оружия
 
 const SPEED = 100.0
-const PICKUP_DISTANCE = 20  # Расстояние, на котором можно подобрать оружие
 
 var max_hp = 100
 var current_hp = 100
 var hp_bar = null  # Здесь будем хранить ссылку на HealthBar
-var weapon: Node2D = null  # Храним ссылку на оружие
+
+# Новые переменные для работы с оружием
+var carried_weapon = null  # Оружие, которое подобрали
+var nearby_weapon = null   # Оружие, рядом с которым персонаж
 
 func _ready():
 	position = Vector2.ZERO  # Устанавливает начальную позицию на (0, 0)
+	add_to_group("player")
 	spawn_health_bar()
-	spawn_weapon()  # Спавним оружие на фиксированном месте
-
-	print("Weapon spawned at position: ", weapon.position)  # Лог для проверки
+	
+	# Создаем слот для оружия, куда оно будет прикреплено
+	var weapon_slot = Node2D.new()
+	weapon_slot.name = "WeaponSlot"
+	add_child(weapon_slot)
+	weapon_slot.position = Vector2(10, 0)  # Смещение относительно персонажа (настройте по необходимости)
 
 func get_movement_direction():
 	var input_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -30,13 +35,16 @@ func _process(delta):
 		velocity = direction * SPEED
 		move_and_slide()
 
-	# Проверяем, что персонаж рядом с оружием и нажата клавиша "T" для подбора
-	if weapon and is_near_weapon() and Input.is_action_just_pressed("pick_up_weapon"):
-		collect_weapon()
-
 	if Input.is_action_just_pressed("damage"):
 		print("Take damage!")
 		take_damage(10)
+	
+	# Проверка на нажатие кнопки подбора оружия
+	if Input.is_action_just_pressed("pickup"):
+		print("Кнопка подбора нажата!")
+		if nearby_weapon and carried_weapon == null:
+			print("Оружие рядом!")
+			pickup_weapon(nearby_weapon)
 
 func toggle_pause() -> void:
 	get_tree().paused = !get_tree().paused
@@ -57,21 +65,21 @@ func take_damage(amount: int):
 
 func die():
 	queue_free()  # Удаляем персонажа
-
-# Функция для спавна оружия на фиксированном месте
-func spawn_weapon():
-	weapon = WEAPON_SCENE.instantiate()  # Создаём экземпляр оружия
-	get_parent().add_child(weapon)  # Добавляем оружие на тот же уровень, что и персонаж
-	weapon.position = position + Vector2(130, 100)  # Размещаем оружие
-	weapon.scale = Vector2(0.3, 0.3)  # Уменьшаем оружие в 2 раза
-	print("Weapon position: ", weapon.position)  # Лог для проверки
-
-# Проверка, находится ли персонаж рядом с оружием
-func is_near_weapon() -> bool:
-	return position.distance_to(weapon.position) < PICKUP_DISTANCE
-
-# Функция для подбора оружия
-func collect_weapon():
-	print("Weapon collected!")  # Выводим сообщение для теста
-	weapon.queue_free()  # Удаляем оружие
-	weapon = null  # Обнуляем ссылку на оружие
+	
+# Функция подбора оружия
+func pickup_weapon(weapon):
+	carried_weapon = weapon
+	# Переносим оружие в слот персонажа
+	var slot = get_node("WeaponSlot")
+	weapon.get_parent().remove_child(weapon)
+	weapon.scale = Vector2(1.5, 1.5)
+	slot.add_child(weapon)
+	weapon.position = Vector2.ZERO  # Сбрасываем позицию относительно слота
+	
+	# Отключаем столкновения оружия, если они больше не нужны
+	if weapon.has_node("Area2D"):
+		weapon.get_node("Area2D").monitoring = false
+	
+	print("Подобрано оружие: ", weapon.weapon_name)
+	# После подбора очищаем переменную nearby_weapon, чтобы не подбирать его повторно
+	nearby_weapon = null
