@@ -1,18 +1,27 @@
 extends CharacterBody2D
 
-@onready var menu = $"../CanvasLayer/MainMenu" # Подключаем меню
+@onready var menu = $"../CanvasLayer/MainMenu"  # Подключаем меню
 
 const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")  # Загружаем сцену заранее
-
+const INVENTORY_SCENE = preload("res://scr/Utils/Inventory/Inventory.tscn")
 const SPEED = 100.0
 
 var max_hp = 100
 var current_hp = 100
 var hp_bar = null  # Здесь будем хранить ссылку на HealthBar
 
+var nearby_weapon = null   # Оружие, рядом с которым персонаж
+var inventory = null
+
 func _ready():
-	position = Vector2.ZERO # Устанавливает начальную позицию на (0, 0)
+	position = Vector2.ZERO  # Устанавливает начальную позицию на (0, 0)
+	add_to_group("player")
 	spawn_health_bar()
+	
+	# Создаем инвентарь и добавляем его в качестве дочернего узла
+	inventory = INVENTORY_SCENE.instantiate()
+	add_child(inventory)
+	inventory.position = Vector2(10, 0)
 
 func get_movement_direction():
 	var input_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -23,15 +32,22 @@ func _process(delta):
 		var direction = get_movement_direction()
 		velocity = direction * SPEED
 		move_and_slide()
+
 	if Input.is_action_just_pressed("damage"):
 		print("Take damage!")
 		take_damage(10)
+	
+	# Проверка на нажатие кнопки подбора оружия
+	if Input.is_action_just_pressed("pickup"):
+		print("Кнопка подбора нажата!")
+		if nearby_weapon:
+			inventory.pickup_weapon(nearby_weapon)
+			nearby_weapon = null
 
 func toggle_pause() -> void:
 	get_tree().paused = !get_tree().paused
 	menu.visible = !menu.visible
 	
-
 func spawn_health_bar():
 	hp_bar = HEALTHBAR_SCENE.instantiate()  # Создаём экземпляр HealthBar
 	add_child(hp_bar)  # Добавляем его как дочерний узел
