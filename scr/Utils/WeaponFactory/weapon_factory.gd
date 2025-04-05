@@ -5,7 +5,7 @@ var weapon_data = {
 	"Shotgun": {
 		"weapon_name": "Shotgun",
 		"cooldown_time": 1.0,
-		"damage": 10,
+		"damage": 25,
 		"sprite_target_height": 10.0,
 		"weapon_texture": preload("res://scr/Assets/weapon_sprite/shotgun.png")
 	},

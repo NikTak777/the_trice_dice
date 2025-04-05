@@ -47,24 +47,23 @@ func can_shoot() -> bool:
 
 # Функция для стрельбы (создаёт пулю, сбрасывает таймер)
 # Здесь мы принимаем позицию выстрела и целевую точку
+# Функция для стрельбы
 func shoot(origin: Vector2, target: Vector2) -> void:
 	if not can_shoot():
 		print("Weapon", weapon_name, "on cooldown, wait:", cooldown_time - time_since_last_shot)
 		return
 
-	# Создаем пулю (предполагается, что BULLET_SCENE уже загружена, либо передается как параметр)
 	var bullet_scene = preload("res://scr/Objects/Bullet/Bullet.tscn")
 	var bullet = bullet_scene.instantiate()
 	bullet.global_position = origin
 	bullet.direction = (target - origin).normalized()
+	bullet.damage = damage  # ← ПЕРЕДАЧА УРОНА ПУЛЕ!
 
-	# Добавляем пулю в игровую сцену (предполагается, что это корень)
 	get_tree().current_scene.add_child(bullet)
 
-	# Сбрасываем таймер
 	time_since_last_shot = 0.0
-
-	print("Weapon", weapon_name, "shot!")
+	
+	print("Weapon ", weapon_name, " shot!")
 	
 func _scale_sprite_to_height(sprite: Sprite2D, target_height: float) -> void:
 	if sprite.texture:

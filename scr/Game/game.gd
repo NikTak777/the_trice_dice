@@ -2,6 +2,7 @@ extends Node2D
 
 var player_scene = preload("res://scr/Entities/Player/dice.tscn")
 var weapon_spawner_scene = preload("res://scr/Utils/WeaponSpawner/WeaponSpawner.tscn")
+var enemy_scene = preload("res://scr/Entities/Enemies/Enemy.tscn")
 var weapon_spawner: Node  # Будем хранить ссылку здесь
 var weapon_spawner2: Node  # Будем хранить ссылку здесь
 
@@ -23,6 +24,8 @@ func _ready():
 	
 	spawn_weapons([2, 3])
 	
+	spawn_enemy()
+	
 	queue_redraw()
 	pass 
 	
@@ -34,6 +37,15 @@ func spawn_player():
 	var spawn_position = root_node.get_room_center(1) * tile_size
 	player.position = Vector2(spawn_position.x, spawn_position.y)
 	player.scale = Vector2(0.125, 0.125)
+	
+func spawn_enemy():
+	var enemy = enemy_scene.instantiate()
+	add_child(enemy)
+
+	# Устанавливает позицию персонажа в центр первой комнаты
+	var spawn_position = root_node.get_room_center(4) * tile_size
+	enemy.position = Vector2(spawn_position.x, spawn_position.y)
+	enemy.scale = Vector2(1.0, 1.0)
 	
 	
 func spawn_weapons(rooms: Array):
