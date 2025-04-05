@@ -2,6 +2,7 @@ extends Node2D
 
 var player_scene = preload("res://scr/Entities/Player/dice.tscn")
 var weapon_spawner_scene = preload("res://scr/Utils/WeaponSpawner/WeaponSpawner.tscn")
+var enemy_scene = preload("res://scr/Entities/Enemies/Enemy.tscn")
 var weapon_spawner: Node  # Будем хранить ссылку здесь
 var weapon_spawner2: Node  # Будем хранить ссылку здесь
 
@@ -21,17 +22,9 @@ func _ready():
 	
 	spawn_player() # Создание главное героя в игровом уровне
 	
-	# Создаём экземпляр WeaponSpawner и добавляем в сцену
-	weapon_spawner = weapon_spawner_scene.instantiate()
-	add_child(weapon_spawner)
-	# Вызываем спавн оружия в комнате №2
-	weapon_spawner.spawn_weapon_in_room(2, root_node)
+	spawn_weapons([2, 3])
 	
-	# Создаём экземпляр WeaponSpawner и добавляем в сцену
-	weapon_spawner2 = weapon_spawner_scene.instantiate()
-	add_child(weapon_spawner2)
-	# Вызываем спавн оружия в комнате №2
-	weapon_spawner2.spawn_weapon_in_room(3, root_node)
+	spawn_enemy()
 	
 	queue_redraw()
 	pass 
@@ -45,6 +38,27 @@ func spawn_player():
 	player.position = Vector2(spawn_position.x, spawn_position.y)
 	player.scale = Vector2(0.125, 0.125)
 	
+func spawn_enemy():
+	var enemy = enemy_scene.instantiate()
+	add_child(enemy)
+
+	# Устанавливает позицию персонажа в центр первой комнаты
+	var spawn_position = root_node.get_room_center(4) * tile_size
+	enemy.position = Vector2(spawn_position.x, spawn_position.y)
+	enemy.scale = Vector2(1.0, 1.0)
+	
+	
+func spawn_weapons(rooms: Array):
+	# Спавним "Shotgun" в комнате 2
+	var spawner = weapon_spawner_scene.instantiate()
+	add_child(spawner)
+	spawner.spawn_weapon_in_room(2, root_node, "Shotgun")
+	
+	# Спавним "Automat" в комнате 3
+	spawner = weapon_spawner_scene.instantiate()
+	add_child(spawner)
+	spawner.spawn_weapon_in_room(3, root_node, "Automat")
+
 
 func is_inside_padding(x, y, leaf, padding): #проверка на границу комнаты
 	return x <= padding.x or y <= padding.y or x >= leaf.size.x - padding.z or y >= leaf.size.y - padding.w 

@@ -4,6 +4,7 @@ extends CharacterBody2D
 
 const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")  # Загружаем сцену заранее
 const INVENTORY_SCENE = preload("res://scr/Utils/Inventory/Inventory.tscn")
+const BULLET_SCENE = preload("res://scr/Objects/Bullet/Bullet.tscn")
 const SPEED = 100.0
 
 var max_hp = 100
@@ -41,8 +42,15 @@ func _process(delta):
 	if Input.is_action_just_pressed("pickup"):
 		print("Кнопка подбора нажата!")
 		if nearby_weapon:
-			inventory.pickup_weapon(nearby_weapon)
+			var weapon_instance = nearby_weapon
+			inventory.pickup_weapon(weapon_instance)
+			weapon_instance.equip()
 			nearby_weapon = null
+			
+	if Input.is_action_pressed("shoot"):
+		if inventory.carried_weapon:
+			var weapon = inventory.carried_weapon
+			weapon.shoot(global_position, get_global_mouse_position())
 
 func toggle_pause() -> void:
 	get_tree().paused = !get_tree().paused
