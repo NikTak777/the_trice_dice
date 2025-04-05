@@ -21,17 +21,7 @@ func _ready():
 	
 	spawn_player() # Создание главное героя в игровом уровне
 	
-	# Создаём экземпляр WeaponSpawner и добавляем в сцену
-	weapon_spawner = weapon_spawner_scene.instantiate()
-	add_child(weapon_spawner)
-	# Вызываем спавн оружия в комнате №2
-	weapon_spawner.spawn_weapon_in_room(2, root_node)
-	
-	# Создаём экземпляр WeaponSpawner и добавляем в сцену
-	weapon_spawner2 = weapon_spawner_scene.instantiate()
-	add_child(weapon_spawner2)
-	# Вызываем спавн оружия в комнате №2
-	weapon_spawner2.spawn_weapon_in_room(3, root_node)
+	spawn_weapons([2, 3])
 	
 	queue_redraw()
 	pass 
@@ -45,6 +35,18 @@ func spawn_player():
 	player.position = Vector2(spawn_position.x, spawn_position.y)
 	player.scale = Vector2(0.125, 0.125)
 	
+	
+func spawn_weapons(rooms: Array):
+	# Спавним "Shotgun" в комнате 2
+	var spawner = weapon_spawner_scene.instantiate()
+	add_child(spawner)
+	spawner.spawn_weapon_in_room(2, root_node, "Shotgun")
+	
+	# Спавним "Automat" в комнате 3
+	spawner = weapon_spawner_scene.instantiate()
+	add_child(spawner)
+	spawner.spawn_weapon_in_room(3, root_node, "Automat")
+
 
 func is_inside_padding(x, y, leaf, padding): #проверка на границу комнаты
 	return x <= padding.x or y <= padding.y or x >= leaf.size.x - padding.z or y >= leaf.size.y - padding.w 
