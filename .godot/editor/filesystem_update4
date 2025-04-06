@@ -1,2 +1,3 @@
 res://scr/Game/game.tscn
 res://scr/Game/game.gd
+res://scr/Levels/map_generator.gd

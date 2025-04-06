@@ -12,13 +12,13 @@ var tile_size: int =  16
 var tilemap: TileMap
 var paths: Array = []
 var map_x: int = 60
-var map_y: int = 30
+var map_y: int = 75
 
 func _ready():
 	tilemap = get_node("TileMap")
 	
 	root_node  = map_generator.new(Vector2i(0, 0), Vector2i(map_x, map_y)) #устанавливаем размер карты
-	root_node.split(2, paths) #кол-во комнат = 2 в степени первого числа
+	root_node.split(2, paths) #кол-во комнат = 2 в (степень первого числа + 1)
 	
 	spawn_player() # Создание главное героя в игровом уровне
 	
@@ -39,15 +39,20 @@ func spawn_player():
 	player.scale = Vector2(0.125, 0.125)
 	
 func spawn_enemy():
-	var enemy = enemy_scene.instantiate()
-	add_child(enemy)
+	for room in range(2, 9): #количество комнат + 1
+		var room_corners = root_node.get_room_corners(room)
+		var x_min = room_corners[0][0]
+		var x_max = room_corners[1][0]
+		var y_min = room_corners[0][1]
+		var y_max = room_corners[1][1]
+		for i in range(4): #количество врагов
+			var enemy = enemy_scene.instantiate()
+			add_child(enemy)
+			var spawn_position = Vector2i(randf_range(x_min, x_max), randf_range(y_min, y_max)) * tile_size
+			print(spawn_position)
+			enemy.position = Vector2(spawn_position.x, spawn_position.y)
+			enemy.scale = Vector2(1.0, 1.0)
 
-	# Устанавливает позицию персонажа в центр первой комнаты
-	var spawn_position = root_node.get_room_center(4) * tile_size
-	enemy.position = Vector2(spawn_position.x, spawn_position.y)
-	enemy.scale = Vector2(1.0, 1.0)
-	
-	
 func spawn_weapons(rooms: Array):
 	# Спавним "Shotgun" в комнате 2
 	var spawner = weapon_spawner_scene.instantiate()
@@ -69,7 +74,7 @@ func _draw():
 				tilemap.set_cell(0, Vector2i(x, y), 0, Vector2i(5,7))
 	var rng = RandomNumberGenerator.new()
 	for leaf in root_node.get_leaves():
-		var padding = Vector4i(1, 1, 1, 1)
+		var padding = Vector4i(3, 3, 3, 3)
 		for x in range(leaf.size.x):
 			for y in range(leaf.size.y):
 				if not is_inside_padding(x,y, leaf, padding):
