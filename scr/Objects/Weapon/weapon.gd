@@ -41,23 +41,28 @@ func _rotate_weapon_to_cursor() -> void:
 	var direction = mouse_position - global_position
 	var angle = direction.angle()
 	$Sprite2D.rotation = angle
+	
+	if mouse_position.x < global_position.x:
+		$Sprite2D.scale.y = -abs($Sprite2D.scale.y)
+	else:
+		$Sprite2D.scale.y = abs($Sprite2D.scale.y)
+	
 
 func can_shoot() -> bool:
 	return time_since_last_shot >= cooldown_time
 
 # Функция для стрельбы (создаёт пулю, сбрасывает таймер)
 # Здесь мы принимаем позицию выстрела и целевую точку
-# Функция для стрельбы
 func shoot(origin: Vector2, target: Vector2) -> void:
 	if not can_shoot():
-		print("Weapon", weapon_name, "on cooldown, wait:", cooldown_time - time_since_last_shot)
+		print("Weapon ", weapon_name, " on cooldown, wait: ", cooldown_time - time_since_last_shot)
 		return
 
 	var bullet_scene = preload("res://scr/Objects/Bullet/Bullet.tscn")
 	var bullet = bullet_scene.instantiate()
 	bullet.global_position = origin
 	bullet.direction = (target - origin).normalized()
-	bullet.damage = damage  # ← ПЕРЕДАЧА УРОНА ПУЛЕ!
+	bullet.damage = damage
 
 	get_tree().current_scene.add_child(bullet)
 
