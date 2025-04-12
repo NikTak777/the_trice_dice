@@ -1,10 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://c7g0eiaac4p47"]
+[gd_scene load_steps=5 format=3 uid="uid://c7g0eiaac4p47"]
 
 [ext_resource type="Script" uid="uid://deq45ocyqf5rg" path="res://scr/Entities/Enemies/enemy.gd" id="1_huojb"]
 [ext_resource type="Texture2D" uid="uid://bmnuherdxotqv" path="res://scr/Assets/enemy.png" id="2_fyitw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7q301"]
 size = Vector2(18, 28)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fyitw"]
+radius = 20.0
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 4
@@ -17,3 +20,12 @@ texture = ExtResource("2_fyitw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_7q301")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 5
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_fyitw")
+
+[node name="Timer" type="Timer" parent="."]
