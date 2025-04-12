@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://doklb2bds55mk"]
+
+[ext_resource type="Script" uid="uid://cf3lpf7smlstj" path="res://scr/Objects/Weapon/weapon.gd" id="1_l63nd"]
+[ext_resource type="Texture2D" uid="uid://btgufo83bxdr8" path="res://scr/Assets/weapon_sprite/weapon.png" id="1_piqvu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l63nd"]
+radius = 46.2709
+
+[node name="Weapon" type="Node2D"]
+script = ExtResource("1_l63nd")
+weapon_name = null
+cooldown_time = null
+damage = null
+sprite_target_height = null
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_piqvu")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_l63nd")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
