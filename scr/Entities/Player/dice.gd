@@ -1,18 +1,27 @@
 extends CharacterBody2D
 
 @onready var menu = $"../CanvasLayer/MainMenu"  # Подключаем меню
+@onready var ability_manager = preload("res://scr/Utils/AbilityManager/ability_manager.gd").new()
+@onready var ability_scene = preload("res://scr/UserInterface/AbilityTitle/AbilityTitle.tscn")
 
 const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")  # Загружаем сцену заранее
 const INVENTORY_SCENE = preload("res://scr/Utils/Inventory/Inventory.tscn")
 const BULLET_SCENE = preload("res://scr/Objects/Bullet/Bullet.tscn")
-const SPEED = 100.0
+
 
 var max_hp = 100
 var current_hp = 100
 var hp_bar = null  # Здесь будем хранить ссылку на HealthBar
 
+var speed = 100.0
+var damage_bonus: float = 1.0
+
 var nearby_weapon = null   # Оружие, рядом с которым персонаж
 var inventory = null
+var ability_instance = null  # Экземпляр AbilityTitle
+var ability_label = null
+
+
 
 func _ready():
 	position = Vector2.ZERO  # Устанавливает начальную позицию на (0, 0)
@@ -23,6 +32,14 @@ func _ready():
 	inventory = INVENTORY_SCENE.instantiate()
 	add_child(inventory)
 	inventory.position = Vector2(10, 0)
+	
+	add_child(ability_manager)
+	
+	# Инстанцируем AbilityTitle и добавляем его в сцену
+	ability_instance = ability_scene.instantiate()
+	add_child(ability_instance)
+	# Получаем ссылку на Label внутри AbilityTitle
+	ability_label = ability_instance.get_node("Label") as Label
 
 func get_movement_direction():
 	var input_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -31,10 +48,11 @@ func get_movement_direction():
 func _process(delta):
 	if !get_tree().paused:
 		var direction = get_movement_direction()
-		velocity = direction * SPEED
+		velocity = direction * speed
 		move_and_slide()
 
 	if Input.is_action_just_pressed("damage"):
+		
 		print("Take damage!")
 		take_damage(10)
 	
@@ -62,9 +80,18 @@ func spawn_health_bar():
 	hp_bar.position = Vector2(-110, 100)  # Смещаем немного вверх
 
 func take_damage(amount: int):
+	# Смена способности при получении урона:
+	var upgrade_message = ability_manager.change_ability(self)
+	print("Новая способность: ", upgrade_message)
+	
 	current_hp -= amount
 	current_hp = max(current_hp, 0)
 	hp_bar.set_hp(current_hp)  # Обновляем шкалу HP
+	
+	print("Max: ", max_hp, " current: ", current_hp)
+	print("Max: ", hp_bar.max_hp, " current: ", hp_bar.current_hp)
+	
+	ability_label.text = upgrade_message
 
 	if current_hp == 0:
 		die()
