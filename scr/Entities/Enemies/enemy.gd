@@ -3,6 +3,13 @@ extends CharacterBody2D
 const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")
 const DAMAGE_POPUP_SCENE = preload("res://scr/FX/DamagePopup/DamagePopup.tscn")
 
+@onready var damage_dealer := DamageDealer.new()
+@onready var damage_area := $Area2D
+@onready var damage_timer := $Timer
+
+@export var damage_amount: int = 10
+@export var damage_interval: float = 0.5
+
 var max_hp: int = 100
 var current_hp: int = 100
 var hp_bar = null  # Здесь будем хранить ссылку на HealthBar
@@ -11,7 +18,14 @@ func _ready() -> void:
 	add_to_group("enemy")
 	position = Vector2.ZERO  # Устанавливает начальную позицию на (0, 0)
 	spawn_health_bar()
-	pass
+	
+	# Инициализируем DamageDealer, используя уже существующие узлы
+	add_child(damage_dealer)
+	damage_dealer.damage_amount = damage_amount
+	damage_dealer.damage_interval = damage_interval
+	damage_dealer.setup(damage_area, damage_timer)
+	damage_dealer.set_damage_callback(Callable(self, "_on_damage_dealt"))
+
 
 func _process(delta: float) -> void:
 	pass
