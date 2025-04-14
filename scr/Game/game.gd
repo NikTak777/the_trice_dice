@@ -2,7 +2,10 @@ extends Node2D
 
 var player_scene = preload("res://scr/Entities/Player/dice.tscn")
 var weapon_spawner_scene = preload("res://scr/Utils/WeaponSpawner/WeaponSpawner.tscn")
-var enemy_scene = preload("res://scr/Entities/Enemies/Enemy.tscn")
+
+var melee_enemy_scene = preload("res://scr/Entities/Enemies/MeleeEnemy/MeleeEnemy.tscn")
+var ranged_enemy_scene = preload("res://scr/Entities/Enemies/RangedEnemy/RangedEnemy.tscn")
+
 var weapon_spawner: Node  # Будем хранить ссылку здесь
 var weapon_spawner2: Node  # Будем хранить ссылку здесь
 
@@ -39,13 +42,19 @@ func spawn_player():
 	player.scale = Vector2(0.125, 0.125)
 	
 func spawn_enemy():
-	var enemy = enemy_scene.instantiate()
-	add_child(enemy)
+	# Враг ближнего боя в комнате 4
+	var melee_enemy = melee_enemy_scene.instantiate()
+	add_child(melee_enemy)
+	var melee_spawn_position = root_node.get_room_center(4) * tile_size
+	melee_enemy.position = Vector2(melee_spawn_position.x, melee_spawn_position.y)
+	melee_enemy.scale = Vector2(1.0, 1.0)
 
-	# Устанавливает позицию персонажа в центр первой комнаты
-	var spawn_position = root_node.get_room_center(4) * tile_size
-	enemy.position = Vector2(spawn_position.x, spawn_position.y)
-	enemy.scale = Vector2(1.0, 1.0)
+	# Враг дальнего боя в комнате 5
+	var ranged_enemy = ranged_enemy_scene.instantiate()
+	add_child(ranged_enemy)
+	var ranged_spawn_position = root_node.get_room_center(5) * tile_size
+	ranged_enemy.position = Vector2(ranged_spawn_position.x, ranged_spawn_position.y)
+	ranged_enemy.scale = Vector2(1.0, 1.0)
 	
 	
 func spawn_weapons(rooms: Array):
