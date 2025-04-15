@@ -87,11 +87,17 @@ func take_damage(amount: int):
 	current_hp = max(current_hp, 0)
 	hp_bar.set_hp(current_hp)  # Обновляем шкалу HP
 	
-	if current_hp == 0:
+	if current_hp < 1:
 		die()
 
 func die():
-	queue_free()  # Удаляем персонажа
+	queue_free()  # удаляем игрока и всё привязанное
+
+	# Создаём ноду с логикой смерти
+	var death_node = Node.new()
+	death_node.set_script(preload("res://scr/Entities/Player/death_player.gd"))
+	death_node.game_over_scene = preload("res://scr/UserInterface/GameOverLabel/GameOver.tscn")
+	get_tree().get_root().add_child(death_node)
 	
 func change_ability():
 	var upgrade_message = ability_manager.change_ability(self)
