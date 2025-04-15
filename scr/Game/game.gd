@@ -40,6 +40,7 @@ func spawn_player():
 	var spawn_position = root_node.get_room_center(1) * tile_size
 	player.position = Vector2(spawn_position.x, spawn_position.y)
 	player.scale = Vector2(0.125, 0.125)
+	player.change_ability()
 	
 func spawn_enemy():
 	# Враг ближнего боя в комнате 4

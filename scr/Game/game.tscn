@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://v1rnlq673a2p" path="res://scr/Game/game.gd" id="1_wivpw"]
 [ext_resource type="Texture2D" uid="uid://sm46o3s7m408" path="res://scr/Assets/pictures/CosmicLilac_Tiles.png" id="2_ssiyq"]
-[ext_resource type="PackedScene" uid="uid://bsjjvkp0oeg4a" path="res://scr/UserInterface/InGameMenu/InGameMenu.tscn" id="3_8kvvk"]
+[ext_resource type="PackedScene" uid="uid://bsjjvkp0oeg4a" path="res://scr/UserInterface/MainMenu/main_menu.tscn" id="3_8kvvk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8kvvk"]
 texture = ExtResource("2_ssiyq")
