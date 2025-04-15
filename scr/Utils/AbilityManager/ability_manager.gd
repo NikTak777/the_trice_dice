@@ -10,11 +10,13 @@ var abilities = {
 		"activate": func(player):
 			player.max_hp *= 1.2
 			player.current_hp *= 1.2
-			player.hp_bar.set_hp(player.current_hp) # Обновляем прогресс бар через метод set_hp()
-			player.hp_bar.bar.max_value = player.max_hp, # Обновляем максимальное значение прогресс бара
+			player.hp_bar.max_hp = player.max_hp        # Обновляем переменную в самом скрипте прогресс-бара
+			player.hp_bar.bar.max_value = player.max_hp # Обновляем максимальное значение прогресс бара
+			player.hp_bar.set_hp(player.current_hp), # Обновляем прогресс бар через метод set_hp()
 		"deactivate": func(player):
 			# Возвращаем бонус HP назад
 			player.max_hp /= 1.2
+			player.current_hp *= 0.9
 			player.hp_bar.bar.max_value = player.max_hp,
 	},
 	"damage_boost": {
@@ -30,7 +32,18 @@ var abilities = {
 			player.speed = 115,
 		"deactivate": func(player):
 			player.speed = 100,
-	}
+	},
+	"cooldown_time_boost": {
+	"description": "Увеличивает скорострельность оружия",
+	"activate": func(player):
+		if player.inventory.carried_weapon:
+			player.inventory.carried_weapon.cooldown_time *= 0.8
+		player.inventory.cooldown_multiplier = 0.8,  
+	"deactivate": func(player):
+		if player.inventory.carried_weapon:
+			player.inventory.carried_weapon.cooldown_time /= 0.8
+		player.inventory.cooldown_multiplier = 1.0,
+	},
 }
 
 func change_ability(player):

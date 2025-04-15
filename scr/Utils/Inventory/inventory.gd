@@ -2,6 +2,8 @@ extends Node2D
 
 var carried_weapon = null # Инвентарь с одним слотом
 
+var cooldown_multiplier := 1.0
+
 func pickup_weapon(new_weapon): # Функция подбора оружия
 	
 	if carried_weapon: # Проверка заполненности слота инвентаря
@@ -15,7 +17,10 @@ func pickup_weapon(new_weapon): # Функция подбора оружия
 		
 	if new_weapon.has_node("Area2D"): # Отключаем столкновения
 		new_weapon.get_node("Area2D").monitoring = false
-		
+	
+	if cooldown_multiplier != 1.0:
+		new_weapon.cooldown_time *= cooldown_multiplier
+	
 	print("Подобрано оружие: ", new_weapon.weapon_name)
 		
 
