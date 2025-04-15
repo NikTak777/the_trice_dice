@@ -4,7 +4,7 @@ func _ready() -> void:
 	visible = false  # Меню скрыто по умолчанию
 
 func _process(_delta):
-	if Input.is_action_just_pressed("pause"):
+	if Input.is_action_just_pressed("pause") and not Global.is_game_over:
 		toggle_menu()
 
 func toggle_menu():
