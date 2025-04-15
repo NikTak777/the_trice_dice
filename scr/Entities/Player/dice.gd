@@ -81,20 +81,18 @@ func spawn_health_bar():
 
 func take_damage(amount: int):
 	# Смена способности при получении урона:
-	var upgrade_message = ability_manager.change_ability(self)
-	print("Новая способность: ", upgrade_message)
+	change_ability()
 	
 	current_hp -= amount
 	current_hp = max(current_hp, 0)
 	hp_bar.set_hp(current_hp)  # Обновляем шкалу HP
 	
-	print("Max: ", max_hp, " current: ", current_hp)
-	print("Max: ", hp_bar.max_hp, " current: ", hp_bar.current_hp)
-	
-	ability_label.text = upgrade_message
-
 	if current_hp == 0:
 		die()
 
 func die():
 	queue_free()  # Удаляем персонажа
+	
+func change_ability():
+	var upgrade_message = ability_manager.change_ability(self)
+	ability_label.text = upgrade_message
