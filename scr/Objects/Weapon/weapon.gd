@@ -62,7 +62,8 @@ func shoot(origin: Vector2, target: Vector2) -> void:
 	var bullet = bullet_scene.instantiate()
 	bullet.global_position = origin
 	bullet.direction = (target - origin).normalized()
-	bullet.damage = damage * (get_tree().current_scene.get_node("Dice").damage_bonus) 
+	# bullet.damage = damage * (get_tree().current_scene.get_node("dice").damage_bonus) # Старый вариант
+	bullet.damage = damage * (get_tree().get_nodes_in_group("player")[0].damage_bonus) 
 
 	get_tree().current_scene.add_child(bullet)
 

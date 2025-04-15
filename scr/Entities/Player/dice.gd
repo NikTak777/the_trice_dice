@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@onready var menu = $"../CanvasLayer/MainMenu"  # Подключаем меню
+@onready var menu = $"../CanvasLayer/InGameMenu"  # Подключаем меню
 @onready var ability_manager = preload("res://scr/Utils/AbilityManager/ability_manager.gd").new()
 @onready var ability_scene = preload("res://scr/UserInterface/AbilityTitle/AbilityTitle.tscn")
 

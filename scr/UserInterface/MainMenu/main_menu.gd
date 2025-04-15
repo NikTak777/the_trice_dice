@@ -1,20 +1,13 @@
 extends Control
 
-func _ready() -> void:
-	visible = false  # Меню скрыто по умолчанию
+func _ready():
+	# Подключаем сигналы, если не через редактор
+	$VBoxContainer/Button.pressed.connect(_on_start_button_pressed)
+	$VBoxContainer/Button3.pressed.connect(_on_exit_button_pressed)
 
-func _process(_delta):
-	if Input.is_action_just_pressed("pause"):
-		toggle_menu()
+func _on_start_button_pressed():
+	get_tree().change_scene_to_file("res://scr/Game/game.tscn")
+	queue_free()  # Удаляем меню
 
-func toggle_menu():
-	visible = !visible
-	get_tree().paused = visible  # Ставим или снимаем паузу
-
-func _on_start_pressed() -> void:
-	get_tree().paused = false  # Убираем паузу
-	visible = false  # Скрываем меню
-	get_tree().reload_current_scene()  # Перезапускаем игру
-
-func _on_exit_pressed() -> void:
-	get_tree().quit()  # Закрываем игру
+func _on_exit_button_pressed():
+	get_tree().quit()
