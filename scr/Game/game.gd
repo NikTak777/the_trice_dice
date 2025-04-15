@@ -41,21 +41,16 @@ func spawn_player():
 	player.position = Vector2(spawn_position.x, spawn_position.y)
 	player.scale = Vector2(0.125, 0.125)
 	player.change_ability()
-	
-func spawn_enemy():
-	# Враг ближнего боя в комнате 4
-	var melee_enemy = melee_enemy_scene.instantiate()
-	add_child(melee_enemy)
-	var melee_spawn_position = root_node.get_room_center(4) * tile_size
-	melee_enemy.position = Vector2(melee_spawn_position.x, melee_spawn_position.y)
-	melee_enemy.scale = Vector2(1.0, 1.0)
 
-	# Враг дальнего боя в комнате 5
-	var ranged_enemy = ranged_enemy_scene.instantiate()
-	add_child(ranged_enemy)
-	var ranged_spawn_position = root_node.get_room_center(5) * tile_size
-	ranged_enemy.position = Vector2(ranged_spawn_position.x, ranged_spawn_position.y)
-	ranged_enemy.scale = Vector2(1.0, 1.0)
+func spawn_enemy():
+	var enemy_spawner_scene = preload("res://scr/Levels/EnemySpawner/EnemySpawner.tscn")
+	var enemy_spawner = enemy_spawner_scene.instantiate()
+	enemy_spawner.melee_enemy_scene = melee_enemy_scene
+	enemy_spawner.ranged_enemy_scene = ranged_enemy_scene
+	enemy_spawner.tile_size = tile_size
+	enemy_spawner.map_generator = root_node
+	enemy_spawner.room_area_scene = preload("res://scr/Levels/RoomArea/RoomArea.tscn")  # Путь к сцене RoomArea.tscn
+	add_child(enemy_spawner)
 	
 	
 func spawn_weapons(rooms: Array):

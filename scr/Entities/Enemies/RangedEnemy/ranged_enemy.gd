@@ -6,6 +6,8 @@ extends "res://scr/Entities/Enemies/BaseEnemy/base_enemy.gd"
 
 var attack_timer: Timer
 var player_in_range: bool = false
+var room_active: bool = false  # Флаг, показывающий, что игрок находится в той же комнате, что и враг
+@export var active: bool = false
 
 func _ready() -> void:
 	super._ready()
@@ -36,7 +38,7 @@ func _on_body_exited(body: Node) -> void:
 
 func _attack():
 	# Дополнительная проверка на случай, если по какой-то причине таймер сработал, а игрок уже не в зоне.
-	if not player_in_range:
+	if not player_in_range or not room_active:
 		return
 	
 	# Создаем снаряд

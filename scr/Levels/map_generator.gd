@@ -13,6 +13,11 @@ func _init(position, size):
 	
 func get_center():
 	return Vector2i(position.x + size.x / 2, position.y + size.y / 2)
+	
+func get_corners():
+	var corner_top = [position.x + 1 + 3, position.y + 1 + 3] #3 - прослойка между комнатами (padding), 4 - чтобы спрайты в комнате были
+	var corner_bottom = [position.x + size.x - 1 - 3, position.y + size.y - 1 - 3]
+	return [corner_top, corner_bottom]
 
 func get_leaves():
 	if not (left_child && right_child):
@@ -48,3 +53,18 @@ func get_room_center(room_number):
 	if leaves.size() > 0 and leaves.size() >= room_number:
 		return leaves[room_number-1].get_center()
 	return Vector2i(0, 0)  # Возвращаем (0,0), если нет комнат или выбранная несуществующая комната
+
+func get_room_corners(room_number):
+	var leaves = get_leaves()
+	if leaves.size() > 0 and leaves.size() >= room_number:
+		return leaves[room_number-1].get_corners()
+	return [[0, 0], [0, 0]]  # Возвращаем (0,0), если нет комнат или выбранная несуществующая комната
+	
+func get_room_bounds(room_number):
+	var leaves = get_leaves()
+	if leaves.size() > 0 and leaves.size() >= room_number:
+		var room = leaves[room_number - 1]
+		var top_left = room.position + Vector2i(1.0, 1.0) * 2
+		var bottom_right = room.position + room.size - Vector2i(1.0, 1.0) * 1
+		return [top_left, bottom_right]
+	return [[0, 0], [0, 0]]

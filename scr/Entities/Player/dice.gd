@@ -87,7 +87,7 @@ func take_damage(amount: int):
 	current_hp = max(current_hp, 0)
 	hp_bar.set_hp(current_hp)  # Обновляем шкалу HP
 	
-	if current_hp < 1:
+	if current_hp < 2:
 		die()
 
 func die():

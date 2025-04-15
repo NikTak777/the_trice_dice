@@ -2,6 +2,8 @@ extends "res://scr/Entities/Enemies/BaseEnemy/base_enemy.gd"
 
 @export var damage_amount: int = 10
 @export var damage_interval: float = 0.5
+@export var active: bool = false
+@export var room_active: bool = false
 
 @onready var damage_dealer := DamageDealer.new()
 @onready var damage_area := $Area2D
