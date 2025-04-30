@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://c7g0eiaac4p47"]
+
+[ext_resource type="Script" uid="uid://deq45ocyqf5rg" path="res://scr/Entities/Enemies/MeleeEnemy/melee_enemy.gd" id="1_huojb"]
+[ext_resource type="Texture2D" uid="uid://bmnuherdxotqv" path="res://scr/Assets/enemy.png" id="2_fyitw"]
+[ext_resource type="Script" uid="uid://c4n5pnrta2pwl" path="res://scr/Entities/Enemies/MeleeEnemy/melee_movement.gd" id="3_lmd72"]
+[ext_resource type="PackedScene" uid="uid://pr7cxwv571l8" path="res://scr/Utils/SeparationArea/SeparationArea.tscn" id="4_l5t34"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l5t34"]
+size = Vector2(18, 26)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fyitw"]
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mh0ci"]
+radius = 111.162
+
+[node name="MeleeEnemy" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_huojb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.0739437, 0.0739437)
+texture = ExtResource("2_fyitw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_l5t34")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 5
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_fyitw")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="MovementArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementArea"]
+shape = SubResource("CircleShape2D_mh0ci")
+
+[node name="MeleeMovement" type="Node2D" parent="."]
+script = ExtResource("3_lmd72")
+
+[node name="SeparationArea" parent="." instance=ExtResource("4_l5t34")]
+
+[connection signal="body_entered" from="MovementArea" to="MeleeMovement" method="_on_movement_area_body_entered"]
+[connection signal="body_exited" from="MovementArea" to="MeleeMovement" method="_on_movement_area_body_exited"]
+[connection signal="body_entered" from="SeparationArea" to="MeleeMovement" method="_on_separation_area_body_entered"]
+[connection signal="body_exited" from="SeparationArea" to="MeleeMovement" method="_on_separation_area_body_exited"]
