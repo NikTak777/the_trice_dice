@@ -15,6 +15,13 @@ var weapon_data = {
 		"damage": 8,
 		"sprite_target_height": 20.0,
 		"weapon_texture": preload("res://scr/Assets/weapon_sprite/automat.png")
+	},
+	"Pistol": {
+		"weapon_name": "Pistol",
+		"cooldown_time": 0.4,
+		"damage": 5,
+		"sprite_target_height": 12.0,
+		"weapon_texture": preload("res://scr/Assets/weapon_sprite/pistol.png")
 	}
 }
 

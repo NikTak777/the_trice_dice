@@ -25,7 +25,7 @@ func _ready():
 	root_node.split(2, paths) #кол-во комнат = 2 в степени первого числа
 	
 	spawn_player() # Создание главное героя в игровом уровне
-	spawn_weapons([2, 3])
+	spawn_weapons()
 	
 	 # Создаём EnemyManager (LevelManager)
 	var enemy_manager_instance = preload("res://scr/Levels/EnemyManager/EnemyManager.tscn").instantiate()
@@ -45,6 +45,11 @@ func spawn_player():
 	player.position = Vector2(spawn_position.x, spawn_position.y)
 	player.scale = Vector2(0.125, 0.125)
 	player.change_ability()
+	
+	# Показываем подсказку о сборе оружия
+	var hint = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn").instantiate()
+	add_child(hint)
+	hint.show_hint("Подойди и нажми E, чтобы подобрать оружие", 7.0)
 
 func spawn_enemy():
 	var enemy_spawner_scene = preload("res://scr/Levels/EnemySpawner/EnemySpawner.tscn")
@@ -60,16 +65,19 @@ func spawn_enemy():
 	
 	
 	
-func spawn_weapons(rooms: Array):
+func spawn_weapons():
 	# Спавним "Shotgun" в комнате 2
 	var spawner = weapon_spawner_scene.instantiate()
 	add_child(spawner)
 	spawner.spawn_weapon_in_room(2, root_node, "Shotgun")
 	
 	# Спавним "Automat" в комнате 3
-	spawner = weapon_spawner_scene.instantiate()
-	add_child(spawner)
+	# spawner = weapon_spawner_scene.instantiate()
+	# add_child(spawner)
 	spawner.spawn_weapon_in_room(3, root_node, "Automat")
+	
+	# Спавним "Pistol" в комнате 1 (начальное оружие)
+	spawner.spawn_weapon_in_room(1, root_node, "Pistol")
 
 
 func is_inside_padding(x, y, leaf, padding): #проверка на границу комнаты

@@ -11,7 +11,14 @@ func spawn_weapon_in_room(room_number: int, map_generator, weapon_type: String) 
 	add_child(weapon)
 	
 	var spawn_position = map_generator.get_room_center(room_number) * 16
+	
+	if room_number == 1:
+		spawn_position.y += 25
+		print(spawn_position.y)
+	
 	weapon.position = spawn_position
+	
 	
 	print("Оружие", weapon.weapon_name, "заспавнено в позиции:", weapon.position)
 	return weapon
+	
