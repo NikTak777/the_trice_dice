@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfrvulvrieggm"]
+
+[ext_resource type="Script" uid="uid://cbhjaftuvuvyw" path="res://scr/Utils/WeaponSpawner/weapon_spawner.gd" id="1_acbdt"]
+
+[node name="SpawnWeapon" type="Node2D"]
+script = ExtResource("1_acbdt")

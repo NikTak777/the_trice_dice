@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://di1tkyssemfgo"]
+
+[ext_resource type="Script" uid="uid://cej850ui0qtga" path="res://scr/Entities/Enemies/RangedEnemy/ranged_enemy.gd" id="1_8sxh2"]
+[ext_resource type="Texture2D" uid="uid://bmnuherdxotqv" path="res://scr/Assets/enemy.png" id="1_m7yw3"]
+[ext_resource type="Script" uid="uid://eg7m4ol0iro7" path="res://scr/Entities/Enemies/RangedEnemy/ranged_movement.gd" id="3_d31vk"]
+[ext_resource type="PackedScene" uid="uid://pr7cxwv571l8" path="res://scr/Utils/SeparationArea/SeparationArea.tscn" id="4_bbpuy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8sxh2"]
+size = Vector2(18, 28)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m7yw3"]
+radius = 92.0054
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bbpuy"]
+radius = 120.004
+
+[node name="RangedEnemy" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_8sxh2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.0739437, 0.0739437)
+texture = ExtResource("1_m7yw3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_8sxh2")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 5
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_m7yw3")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="MovementArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementArea"]
+shape = SubResource("CircleShape2D_bbpuy")
+
+[node name="RangedMovement" type="Node2D" parent="."]
+script = ExtResource("3_d31vk")
+
+[node name="SeparationArea" parent="." instance=ExtResource("4_bbpuy")]
+
+[connection signal="body_entered" from="MovementArea" to="RangedMovement" method="_on_movement_area_body_entered"]
+[connection signal="body_exited" from="MovementArea" to="RangedMovement" method="_on_movement_area_body_exited"]
+[connection signal="body_entered" from="SeparationArea" to="RangedMovement" method="_on_separation_area_body_entered"]
+[connection signal="body_exited" from="SeparationArea" to="RangedMovement" method="_on_separation_area_body_exited"]
