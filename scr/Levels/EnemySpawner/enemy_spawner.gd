@@ -11,6 +11,7 @@ extends Node2D
 
 # Словарь, где для каждой комнаты (номер) хранится массив врагов
 var room_enemies: Dictionary = {}
+@export var enemy_manager: Node       # передается из Game.gd
 
 func _ready() -> void:
 	spawn_enemies()
@@ -53,6 +54,8 @@ func spawn_enemies() -> void:
 				var enemy_scene = melee_enemy_scene if randi() % 2 == 0 else ranged_enemy_scene
 				var enemy = enemy_scene.instantiate()
 				add_child(enemy)
+				
+				enemy_manager.add_enemy()  # Регистрируем врага в LevelManager
 				
 				# Устанавливаем позицию в центре выбранного тайла
 				var spawn_position = tile_pos * tile_size
@@ -112,11 +115,23 @@ func spawn_room_areas() -> void:
 func _on_player_entered_room(room_number: int) -> void:
 	print("Игрок вошёл в комнату ", room_number)
 	if room_enemies.has(room_number):
-		for enemy in room_enemies[room_number]:
-			enemy.room_active = true
+		var enemies = room_enemies[room_number]
+		# Проходим от конца массива к началу
+		for i in range(enemies.size() - 1, -1, -1):
+			var enemy = enemies[i]
+			if not is_instance_valid(enemy):
+				# Если объект уже freed — убираем его из списка
+				enemies.remove_at(i)
+			else:
+				enemy.room_active = true
 
 func _on_player_exited_room(room_number: int) -> void:
 	print("Игрок вышел из комнаты ", room_number)
 	if room_enemies.has(room_number):
-		for enemy in room_enemies[room_number]:
-			enemy.room_active = false
+		var enemies = room_enemies[room_number]
+		for i in range(enemies.size() - 1, -1, -1):
+			var enemy = enemies[i]
+			if not is_instance_valid(enemy):
+				enemies.remove_at(i)
+			else:
+				enemy.room_active = false

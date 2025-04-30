@@ -3,11 +3,12 @@ extends "res://scr/Entities/Enemies/BaseEnemy/base_enemy.gd"
 @export var BULLET_SCENE = preload("res://scr/Objects/EnemyBullet/EnemyBullet.tscn")
 @export var attack_interval: float = 1.0   # Интервал атаки
 @export var projectile_speed: float = 300.0
+@export var room_active: bool = false  # Флаг, показывающий, что игрок находится в той же комнате, что и враг
 
 var attack_timer: Timer
 var player_in_range: bool = false
-var room_active: bool = false  # Флаг, показывающий, что игрок находится в той же комнате, что и враг
-@export var active: bool = false
+
+@onready var movement_script = $RangedMovement
 
 func _ready() -> void:
 	super._ready()
@@ -23,6 +24,10 @@ func _ready() -> void:
 	attack_timer.autostart = false
 	add_child(attack_timer)
 	attack_timer.connect("timeout", Callable(self, "_attack"))
+	
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		movement_script.target = players[0]
 
 func _on_body_entered(body: Node) -> void:
 	# Если в зону входит объект, принадлежащий группе "player", начинаем атаку
@@ -37,7 +42,7 @@ func _on_body_exited(body: Node) -> void:
 		attack_timer.stop()
 
 func _attack():
-	# Дополнительная проверка на случай, если по какой-то причине таймер сработал, а игрок уже не в зоне.
+	
 	if not player_in_range or not room_active:
 		return
 	

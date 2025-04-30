@@ -34,4 +34,10 @@ func take_damage(amount: int):
 		die()
 
 func die():
+	var scene = get_tree().get_current_scene()
+	if scene.has_node("EnemyManager"):
+		var manager = scene.get_node("EnemyManager")
+		manager.enemy_died()
+	else:
+		print("EnemyManager не найден в current_scene!")
 	queue_free()
