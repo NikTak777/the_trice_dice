@@ -54,7 +54,9 @@ func _process(delta):
 	var base_velocity = Vector2.ZERO
 
 	# 2a) если зашёл в MovementArea и близко — стоим
-	if player_in_range and dist <= stop_distance:
+	if not player_in_range or dist <= stop_distance:
+	# Для хардкора
+	# if player_in_range and dist <= stop_distance:
 		base_velocity = Vector2.ZERO
 	else:
 		# идём на игрока

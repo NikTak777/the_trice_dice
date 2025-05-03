@@ -14,6 +14,7 @@ var map_x: int = 180
 var map_y: int = 80
 
 @export var enemy_manager: Node
+var enemy_spawner: Node
 
 func _ready():
 	tilemap = get_node("TileMap")
@@ -31,6 +32,14 @@ func _ready():
 	enemy_manager = enemy_manager_instance
 
 	spawn_enemy()
+	
+	var door_manager_scene = load("res://scr/Levels/DoorManager/DoorManager.tscn")
+	var door_manager = door_manager_scene.instantiate()
+
+	door_manager.map_generator = root_node
+	door_manager.enemy_spawner = enemy_spawner
+	add_child(door_manager)
+	
 	queue_redraw()
 
 func build_corridor_graph():
@@ -85,14 +94,16 @@ func spawn_weapons():
 
 func spawn_enemy():
 	var enemy_spawner_scene = preload("res://scr/Levels/EnemySpawner/EnemySpawner.tscn")
-	var enemy_spawner = enemy_spawner_scene.instantiate()
-	enemy_spawner.melee_enemy_scene = melee_enemy_scene
-	enemy_spawner.ranged_enemy_scene = ranged_enemy_scene
-	enemy_spawner.tile_size = tile_size
-	enemy_spawner.map_generator = root_node
-	enemy_spawner.room_area_scene = preload("res://scr/Levels/RoomArea/RoomArea.tscn")
-	enemy_spawner.enemy_manager = enemy_manager
-	add_child(enemy_spawner)
+	var spawner = enemy_spawner_scene.instantiate()
+	spawner.melee_enemy_scene = melee_enemy_scene
+	spawner.ranged_enemy_scene = ranged_enemy_scene
+	spawner.tile_size = tile_size
+	spawner.map_generator = root_node
+	spawner.room_area_scene = preload("res://scr/Levels/RoomArea/RoomArea.tscn")
+	spawner.enemy_manager = enemy_manager
+	add_child(spawner)
+	
+	enemy_spawner = spawner
 
 func is_inside_padding(x, y, leaf, padding):
 	return x <= padding.x or y <= padding.y \
@@ -119,7 +130,7 @@ func _draw():
 
 		# L-образный маршрут: по X
 		for x in range(min(from.x, to.x), max(from.x, to.x) + 1):
-			for dy in range(-2, 2):  # -2, -1, 0, 1 => 4 тайла
+			for dy in range(-2, 2):
 				tilemap.set_cell(0, Vector2i(x, from.y + dy), 0, Vector2i(2, 2))
 
 		# по Y

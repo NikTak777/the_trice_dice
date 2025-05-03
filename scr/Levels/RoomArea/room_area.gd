@@ -7,6 +7,8 @@ signal player_entered_room(room_number)
 signal player_exited_room(room_number)
 
 func _ready():
+	add_to_group("room_area")
+	
 	connect("body_entered", Callable(self, "_on_body_entered"))
 	connect("body_exited", Callable(self, "_on_body_exited"))
 	
