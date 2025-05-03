@@ -44,7 +44,6 @@ func _on_room_cleared(room_number: int) -> void:
 	cleared_rooms[room_number] = true
 
 func _close_room(room_number: int) -> void:
-	print("Закрытие комнаты!!!!")
 	var bounds = map_generator.get_room_bounds(room_number)
 	var tl = bounds[0]
 	var br = bounds[1]
@@ -55,7 +54,6 @@ func _close_room(room_number: int) -> void:
 				block_layer.set_cell(0, Vector2i(x, y), 0, Vector2i(5, 7))
 
 func _open_room(room_number: int) -> void:
-	print("Открытие комнаты!!!!")
 	var bounds = map_generator.get_room_bounds(room_number)
 	var tl = bounds[0]
 	var br = bounds[1]

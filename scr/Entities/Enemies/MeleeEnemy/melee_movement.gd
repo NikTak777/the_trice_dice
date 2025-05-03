@@ -29,7 +29,7 @@ func _on_movement_area_body_entered(body: Node2D) -> void:
 
 func _on_movement_area_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		player_in_range = false
+		player_in_range = false 
 		
 func _on_separation_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy") and body != enemy_body:

@@ -88,9 +88,10 @@ func spawn_player():
 func spawn_weapons():
 	var spawner = weapon_spawner_scene.instantiate()
 	add_child(spawner)
-	spawner.spawn_weapon_in_room(2, root_node, "Shotgun")
-	spawner.spawn_weapon_in_room(3, root_node, "Automat")
+	# spawner.spawn_weapon_in_room(2, root_node, "Shotgun")
+	# spawner.spawn_weapon_in_room(3, root_node, "Automat")
 	spawner.spawn_weapon_in_room(1, root_node, "Pistol")
+	weapon_spawner = spawner
 
 func spawn_enemy():
 	var enemy_spawner_scene = preload("res://scr/Levels/EnemySpawner/EnemySpawner.tscn")
@@ -101,6 +102,7 @@ func spawn_enemy():
 	spawner.map_generator = root_node
 	spawner.room_area_scene = preload("res://scr/Levels/RoomArea/RoomArea.tscn")
 	spawner.enemy_manager = enemy_manager
+	spawner.weapon_spawner = weapon_spawner
 	add_child(spawner)
 	
 	enemy_spawner = spawner
