@@ -147,4 +147,4 @@ func _on_player_exited_room(room_number: int) -> void:
 			if not is_instance_valid(enemy):
 				enemies.remove_at(i)
 			else:
-				enemy.room_active = false
+				enemy.room_active = true # !!! Было изначально false, пока костыль чтобы нельзя было спрятаться около двери
