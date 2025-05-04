@@ -1,6 +1,6 @@
 extends Node
 
-@export var speed: float = 40.0
+@export var speed: float = 70.0 # Была изначально 40, пока увеличена для теста
 @export var stop_distance: float = 25.0  # минимальная дистанция до игрока
 @export var separation_radius: float = 32.0     # радиус зоны SeparationArea
 @export var separation_strength: float = 200.0  # сила отталкивания
