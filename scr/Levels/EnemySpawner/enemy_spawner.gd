@@ -33,7 +33,7 @@ func spawn_enemies() -> void:
 		var y_max = room_corners[1][1]
 		
 		# Количество врагов для данной комнаты (можно менять по необходимости)
-		var enemy_count = 1 # room + 3
+		var enemy_count = room + 3
 		# Список уже занятых позиций, чтобы избежать наложений
 		var used_tiles: Array = []
 		var attempts := 0

@@ -21,4 +21,3 @@ func spawn_weapon_in_room(room_number: int, map_generator, weapon_type: String) 
 	
 	print("Оружие", weapon.weapon_name, "заспавнено в позиции:", weapon.position)
 	return weapon
-	
