@@ -50,11 +50,6 @@ func _process(delta):
 		var direction = get_movement_direction()
 		velocity = direction * speed
 		move_and_slide()
-
-	if Input.is_action_just_pressed("damage"):
-		
-		print("Take damage!")
-		take_damage(10)
 	
 	# Проверка на нажатие кнопки подбора оружия
 	if Input.is_action_just_pressed("pickup"):
