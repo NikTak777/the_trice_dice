@@ -44,12 +44,14 @@ func _process(delta):
 		enemy_body.velocity = Vector2.ZERO
 		enemy_body.move_and_slide()
 		return
-
+		
 	var velocity = Vector2.ZERO
 	var distance_to_player = enemy_body.global_position.distance_to(target.global_position)
 
 	# Двигаемся к игроку, если он вне зоны атаки, но не ближе чем stop_distance
-	if not player_in_range and distance_to_player > stop_distance:
+	if player_in_range and distance_to_player > stop_distance:
+	# Для хардкора
+	# if not player_in_range and distance_to_player > stop_distance:
 		var direction = (target.global_position - enemy_body.global_position).normalized()
 		velocity = direction * speed
 	

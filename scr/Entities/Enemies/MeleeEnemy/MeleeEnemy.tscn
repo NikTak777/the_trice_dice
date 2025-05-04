@@ -12,7 +12,7 @@ size = Vector2(18, 26)
 radius = 24.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mh0ci"]
-radius = 111.162
+radius = 186.011
 
 [node name="MeleeEnemy" type="CharacterBody2D"]
 collision_layer = 4

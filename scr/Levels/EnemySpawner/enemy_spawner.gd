@@ -6,12 +6,18 @@ extends Node2D
 @export var tile_size: int = 16
 @export var room_start: int = 2
 @export var room_end: int = 8
-@export var map_generator: Node  # передаётся из game.gd
-@export var room_area_scene: PackedScene  # preload("res://Utils/RoomArea.tscn")
+@export var map_generator: Node
+@export var enemy_manager: Node
+@export var weapon_spawner: Node
+@export var room_area_scene: PackedScene
+var count_room_cleared: int = 1
+
+var is_first_entered: bool = false # Флаг первого вхождения в любую комнату
 
 # Словарь, где для каждой комнаты (номер) хранится массив врагов
 var room_enemies: Dictionary = {}
-@export var enemy_manager: Node       # передается из Game.gd
+
+signal room_cleared(room_number)
 
 func _ready() -> void:
 	spawn_enemies()
@@ -112,8 +118,24 @@ func spawn_room_areas() -> void:
 		area_instance.connect("player_entered_room", Callable(self, "_on_player_entered_room"))
 		area_instance.connect("player_exited_room", Callable(self, "_on_player_exited_room"))
 		
+func _check_room_cleared(room_number: int) -> void:
+	if room_enemies.has(room_number):
+		room_enemies[room_number] = room_enemies[room_number].filter(func(e): return is_instance_valid(e))
+
+		var remaining = room_enemies[room_number].size() - 1  # <- костыль
+		print("Оставшиеся враги в комнате ", room_number, ": ", remaining)
+
+		if remaining <= 0:
+			print("Комната очищена: ", room_number)
+			_spawn_weapon_in_room(room_number)
+			emit_signal("room_cleared", room_number)
+		
 func _on_player_entered_room(room_number: int) -> void:
 	print("Игрок вошёл в комнату ", room_number)
+	
+	if not is_first_entered:
+		hint_label()
+	
 	if room_enemies.has(room_number):
 		var enemies = room_enemies[room_number]
 		# Проходим от конца массива к началу
@@ -134,4 +156,19 @@ func _on_player_exited_room(room_number: int) -> void:
 			if not is_instance_valid(enemy):
 				enemies.remove_at(i)
 			else:
-				enemy.room_active = false
+				enemy.room_active = true # !!! Было изначально false, пока костыль чтобы нельзя было спрятаться около двери
+
+func hint_label():
+	var hint = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn").instantiate()
+	add_child(hint)
+	hint.show_hint("Чтобы стрелять, зажмите ЛКМ", 7.0)
+	is_first_entered = true
+	
+func _spawn_weapon_in_room(room_number: int) -> void:
+	count_room_cleared += 1
+
+	if count_room_cleared == 2:
+		weapon_spawner.spawn_weapon_in_room(room_number, map_generator, "Shotgun")
+	elif count_room_cleared == 5:
+		weapon_spawner.spawn_weapon_in_room(room_number, map_generator, "Automat")
+	

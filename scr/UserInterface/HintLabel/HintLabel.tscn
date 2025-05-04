@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bma73qgir6u4t"]
+
+[ext_resource type="Script" uid="uid://buhnivk8fwlpi" path="res://scr/UserInterface/HintLabel/hint_label.gd" id="1_ijd30"]
+
+[node name="HintLabel" type="CanvasLayer"]
+script = ExtResource("1_ijd30")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -0.5
+offset_top = -23.0
+offset_right = 0.5
+grow_horizontal = 2
+grow_vertical = 0

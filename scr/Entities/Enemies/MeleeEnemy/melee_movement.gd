@@ -29,7 +29,7 @@ func _on_movement_area_body_entered(body: Node2D) -> void:
 
 func _on_movement_area_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		player_in_range = false
+		player_in_range = false 
 		
 func _on_separation_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("enemy") and body != enemy_body:
@@ -54,7 +54,9 @@ func _process(delta):
 	var base_velocity = Vector2.ZERO
 
 	# 2a) если зашёл в MovementArea и близко — стоим
-	if player_in_range and dist <= stop_distance:
+	if not player_in_range or dist <= stop_distance:
+	# Для хардкора
+	# if player_in_range and dist <= stop_distance:
 		base_velocity = Vector2.ZERO
 	else:
 		# идём на игрока

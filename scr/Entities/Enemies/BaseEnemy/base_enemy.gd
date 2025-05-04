@@ -4,6 +4,8 @@ extends CharacterBody2D
 var current_hp: int = 0
 var hp_bar = null
 
+@export var room_number: int = -1  # номер комнаты, в которой находится враг
+
 const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")
 const DAMAGE_POPUP_SCENE = preload("res://scr/FX/DamagePopup/DamagePopup.tscn")
 
@@ -40,4 +42,12 @@ func die():
 		manager.enemy_died()
 	else:
 		print("EnemyManager не найден в current_scene!")
+	
+	# Уведомим EnemySpawner
+	if scene.has_node("EnemySpawner"):
+		var spawner = scene.get_node("EnemySpawner")
+		spawner._check_room_cleared(room_number)
+	else:
+		print("EnemySpawner не найден в current_scene!")
+		
 	queue_free()
