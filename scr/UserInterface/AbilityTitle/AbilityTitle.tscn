@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxiqbg8afwbob"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_m1ntg"]
+font_size = 20
+font_color = Color(0.932499, 0.0081133, 5.77569e-07, 1)
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="AbilityTitle" type="CanvasLayer"]
+offset = Vector2(20, 20)
+transform = Transform2D(1, 0, 0, 1, 20, 20)
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Способность"
+label_settings = SubResource("LabelSettings_m1ntg")

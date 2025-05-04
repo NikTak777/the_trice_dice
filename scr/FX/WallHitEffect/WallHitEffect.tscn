@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://s5qkqsmmcgv5"]
+
+[ext_resource type="Script" uid="uid://bx1yew4li6lgt" path="res://scr/FX/WallHitEffect/wall_hit_effect.gd" id="1_4hsce"]
+[ext_resource type="Texture2D" uid="uid://hb0cgcg0bivk" path="res://scr/Assets/wall_hit.png" id="2_5yq6u"]
+
+[node name="WallHitEffect" type="Node2D"]
+script = ExtResource("1_4hsce")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_5yq6u")
