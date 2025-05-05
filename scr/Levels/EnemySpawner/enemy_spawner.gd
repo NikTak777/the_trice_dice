@@ -117,6 +117,7 @@ func spawn_room_areas() -> void:
 		# Подключаем сигналы
 		area_instance.connect("player_entered_room", Callable(self, "_on_player_entered_room"))
 		area_instance.connect("player_exited_room", Callable(self, "_on_player_exited_room"))
+
 		
 func _check_room_cleared(room_number: int) -> void:
 	if room_enemies.has(room_number):
@@ -136,6 +137,9 @@ func _on_player_entered_room(room_number: int) -> void:
 	if not is_first_entered:
 		hint_label()
 	
+	var player = get_tree().get_first_node_in_group("player")
+	player.is_inside_room = true
+	
 	if room_enemies.has(room_number):
 		var enemies = room_enemies[room_number]
 		# Проходим от конца массива к началу
@@ -149,6 +153,10 @@ func _on_player_entered_room(room_number: int) -> void:
 
 func _on_player_exited_room(room_number: int) -> void:
 	print("Игрок вышел из комнаты ", room_number)
+	
+	var player = get_tree().get_first_node_in_group("player")
+	player.is_inside_room = false
+	
 	if room_enemies.has(room_number):
 		var enemies = room_enemies[room_number]
 		for i in range(enemies.size() - 1, -1, -1):

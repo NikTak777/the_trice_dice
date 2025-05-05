@@ -21,7 +21,7 @@ var inventory = null
 var ability_instance = null  # Экземпляр AbilityTitle
 var ability_label = null
 
-
+var is_inside_room: bool = false
 
 func _ready():
 	position = Vector2.ZERO  # Устанавливает начальную позицию на (0, 0)
@@ -60,10 +60,11 @@ func _process(delta):
 			weapon_instance.equip()
 			nearby_weapon = null
 			
-	if Input.is_action_pressed("shoot"):
+	if Input.is_action_pressed("shoot") and is_inside_room:
 		if inventory.carried_weapon:
 			var weapon = inventory.carried_weapon
 			weapon.shoot(global_position, get_global_mouse_position())
+
 
 func toggle_pause() -> void:
 	get_tree().paused = !get_tree().paused
