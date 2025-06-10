@@ -34,15 +34,26 @@ var abilities = {
 			player.speed = 100,
 	},
 	"cooldown_time_boost": {
-	"description": "Увеличивает скорострельность оружия",
-	"activate": func(player):
-		if player.inventory.carried_weapon:
-			player.inventory.carried_weapon.cooldown_time *= 0.8
-		player.inventory.cooldown_multiplier = 0.8,  
-	"deactivate": func(player):
-		if player.inventory.carried_weapon:
-			player.inventory.carried_weapon.cooldown_time /= 0.8
-		player.inventory.cooldown_multiplier = 1.0,
+		"description": "Увеличивает скорострельность оружия",
+		"activate": func(player):
+			if player.inventory.carried_weapon:
+				player.inventory.carried_weapon.cooldown_time *= 0.8
+			player.inventory.cooldown_multiplier = 0.8,  
+		"deactivate": func(player):
+			if player.inventory.carried_weapon:
+				player.inventory.carried_weapon.cooldown_time /= 0.8
+			player.inventory.cooldown_multiplier = 1.0,
+	},
+	#---------------------------------------
+	# Новая способность: усиленная броня
+	# Меняет коэффициент усиления (умноженный на количество урона от врага) с 1.0 до 0.8 и обратно
+	#---------------------------------------
+	"armor_boost": { # Название и описание предварительные 
+		"description": "Увеличивает прочность брони",
+		"activate": func(player):
+			player.armor_bonus = 0.6,
+		"deactivate": func(player):
+			player.armor_bonus = 1.0,
 	},
 }
 
