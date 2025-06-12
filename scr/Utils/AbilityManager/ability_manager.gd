@@ -51,10 +51,27 @@ var abilities = {
 	"armor_boost": { # Название и описание предварительные 
 		"description": "Увеличивает прочность брони",
 		"activate": func(player):
+			# player.speed = 85
 			player.armor_bonus = 0.6,
 		"deactivate": func(player):
+			# player.speed = 100
 			player.armor_bonus = 1.0,
 	},
+	#---------------------------------------
+	# Новая способность: снижение разброса оружия
+	# Меняет максимальный угол отклонения пули с 10.0 до 0.0 и обратно
+	#---------------------------------------
+	"no_spread": {
+	"description": "Убирает разброс оружия",
+	"activate": func(player):
+		if player.inventory.carried_weapon:
+			player.inventory.carried_weapon.bullet_spread_degrees = 0.0
+		player.inventory.spread_disabled = true,
+	"deactivate": func(player):
+		if player.inventory.carried_weapon:
+			player.inventory.carried_weapon.bullet_spread_degrees = 10.0
+		player.inventory.spread_disabled = false,
+},
 }
 
 func change_ability(player):

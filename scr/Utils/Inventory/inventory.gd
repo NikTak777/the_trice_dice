@@ -3,6 +3,7 @@ extends Node2D
 var carried_weapon = null # Инвентарь с одним слотом
 
 var cooldown_multiplier := 1.0
+var spread_disabled: bool = false
 
 func pickup_weapon(new_weapon): # Функция подбора оружия
 	
@@ -20,6 +21,9 @@ func pickup_weapon(new_weapon): # Функция подбора оружия
 	
 	if cooldown_multiplier != 1.0:
 		new_weapon.cooldown_time *= cooldown_multiplier
+	
+	if spread_disabled:
+		new_weapon.bullet_spread_degrees = 0.0
 	
 	print("Подобрано оружие: ", new_weapon.weapon_name)
 		
