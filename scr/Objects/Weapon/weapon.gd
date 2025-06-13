@@ -5,6 +5,8 @@ extends Node2D
 @export var damage: int = 10            # Урон оружия
 @export var weapon_texture: Texture2D
 @export var sprite_target_height: float = 100.0
+@export var bullet_spread_degrees: float = 10.0  # Максимальный разброс пули
+@export var original_bullet_spread_degrees: float = 10.0
 
 var is_equipped: bool = false
 
@@ -50,26 +52,35 @@ func _rotate_weapon_to_cursor() -> void:
 
 func can_shoot() -> bool:
 	return time_since_last_shot >= cooldown_time
+	
+# Вычисление направление полёта пули с разбросом
+# Принимает базовое направление полёта, общий угол отклонения
+# Возвращает изменённое направление
+func get_direction_with_spread(base_direction: Vector2, spread_degrees: float) -> Vector2:
+	var spread_radians = deg_to_rad(randf_range(-spread_degrees / 2.0, spread_degrees / 2.0))
+	print(spread_radians)
+	return base_direction.rotated(spread_radians)
 
 # Функция для стрельбы (создаёт пулю, сбрасывает таймер)
 # Здесь мы принимаем позицию выстрела и целевую точку
 func shoot(origin: Vector2, target: Vector2) -> void:
 	if not can_shoot():
-		print("Weapon ", weapon_name, " on cooldown, wait: ", cooldown_time - time_since_last_shot)
 		return
 
 	var bullet_scene = preload("res://scr/Objects/Bullet/Bullet.tscn")
 	var bullet = bullet_scene.instantiate()
+	
 	bullet.global_position = origin
-	bullet.direction = (target - origin).normalized()
-	# bullet.damage = damage * (get_tree().current_scene.get_node("dice").damage_bonus) # Старый вариант
+	
+	var base_direction = (target - origin).normalized()
+	var final_direction = get_direction_with_spread(base_direction, bullet_spread_degrees)
+	bullet.direction = final_direction
+	
 	bullet.damage = damage * (get_tree().get_nodes_in_group("player")[0].damage_bonus) 
 
 	get_tree().current_scene.add_child(bullet)
 
 	time_since_last_shot = 0.0
-	
-	print("Weapon ", weapon_name, " shot!")
 	
 func _scale_sprite_to_height(sprite: Sprite2D, target_height: float) -> void:
 	if sprite.texture:

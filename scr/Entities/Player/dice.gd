@@ -16,6 +16,8 @@ var hp_bar = null  # Здесь будем хранить ссылку на Heal
 var speed = 100.0
 var damage_bonus: float = 1.0
 
+var armor_bonus: float = 1.0 # Бонус усиления брони (уменьшает урон)
+
 var nearby_weapon = null   # Оружие, рядом с которым персонаж
 var inventory = null
 var ability_instance = null  # Экземпляр AbilityTitle
@@ -76,12 +78,12 @@ func spawn_health_bar():
 	hp_bar.position = Vector2(-110, 100)  # Смещаем немного вверх
 
 func take_damage(amount: int):
-	# Смена способности при получении урона:
-	change_ability()
 	
-	current_hp -= amount
+	current_hp -= amount * armor_bonus
 	current_hp = max(current_hp, 0)
 	hp_bar.set_hp(current_hp)  # Обновляем шкалу HP
+	
+	change_ability() # Смена способности при получении урона
 	
 	if current_hp < 2:
 		die()
