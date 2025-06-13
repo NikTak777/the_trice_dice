@@ -57,14 +57,14 @@ var abilities = {
 		"activate": func(player):
 			if player.inventory.carried_weapon:
 				player.inventory.carried_weapon.cooldown_time *= 0.8
-				player.inventory.carried_weapon.bullet_spread_degrees = 15.0
-			player.inventory.spread_disabled = true
+				player.inventory.carried_weapon.bullet_spread_degrees *= 1.5
+			player.inventory.spread_increased = true
 			player.inventory.cooldown_multiplier = 0.8,  
 		"deactivate": func(player):
 			if player.inventory.carried_weapon:
 				player.inventory.carried_weapon.cooldown_time /= 0.8
-				player.inventory.carried_weapon.bullet_spread_degrees = 10.0
-			player.inventory.spread_disabled = false
+				player.inventory.carried_weapon.bullet_spread_degrees /= 1.5
+			player.inventory.spread_increased = false
 			player.inventory.cooldown_multiplier = 1.0,
 	},
 	#---------------------------------------------------------
@@ -89,15 +89,17 @@ var abilities = {
 	"no_spread": {
 	"description": "Убирает разброс оружия",
 	"activate": func(player):
-		if player.inventory.carried_weapon:
-			player.inventory.carried_weapon.bullet_spread_degrees = 0.0
-			player.inventory.carried_weapon.cooldown_time *= 1.2
+		var weapon = player.inventory.carried_weapon
+		if weapon:
+			weapon.bullet_spread_degrees = 0.0
+			weapon.cooldown_time *= 1.2
 		player.inventory.spread_disabled = true
 		player.inventory.cooldown_multiplier = 1.2,
 	"deactivate": func(player):
-		if player.inventory.carried_weapon:
-			player.inventory.carried_weapon.bullet_spread_degrees = 10.0
-			player.inventory.carried_weapon.cooldown_time /= 1.2
+		var weapon = player.inventory.carried_weapon
+		if weapon:
+			weapon.bullet_spread_degrees = weapon.original_bullet_spread_degrees
+			weapon.cooldown_time /= 1.2
 		player.inventory.spread_disabled = false
 		player.inventory.cooldown_multiplier = 1.0,
 },

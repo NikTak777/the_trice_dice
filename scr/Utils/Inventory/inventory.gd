@@ -4,10 +4,14 @@ var carried_weapon = null # Инвентарь с одним слотом
 
 var cooldown_multiplier := 1.0
 var spread_disabled: bool = false
+var spread_increased: bool = false
 
 func pickup_weapon(new_weapon): # Функция подбора оружия
 	
 	if carried_weapon: # Проверка заполненности слота инвентаря
+		if spread_disabled or spread_increased:
+			carried_weapon.bullet_spread_degrees = carried_weapon.original_bullet_spread_degrees
+			print("Возвращение разброса на ", carried_weapon.bullet_spread_degrees)
 		drop_current_weapon()
 		
 	carried_weapon = new_weapon # Добавление оружия в пустой слот
@@ -24,10 +28,13 @@ func pickup_weapon(new_weapon): # Функция подбора оружия
 	
 	if spread_disabled:
 		new_weapon.bullet_spread_degrees = 0.0
+		print("Онулирование разброса на ", new_weapon.bullet_spread_degrees)
+	if spread_increased:
+		new_weapon.bullet_spread_degrees = new_weapon.original_bullet_spread_degrees * 1.5
+		print("Увеличение разброса на ", new_weapon.bullet_spread_degrees)
 	
 	print("Подобрано оружие: ", new_weapon.weapon_name)
 		
-
 
 func drop_current_weapon(): # Функция сброса текущего оружия
 	if carried_weapon: # Проверяем заполненность слота инвентаря 

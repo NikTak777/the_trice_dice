@@ -6,6 +6,7 @@ extends Node2D
 @export var weapon_texture: Texture2D
 @export var sprite_target_height: float = 100.0
 @export var bullet_spread_degrees: float = 10.0  # Максимальный разброс пули
+@export var original_bullet_spread_degrees: float = 10.0
 
 var is_equipped: bool = false
 
