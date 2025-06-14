@@ -65,7 +65,7 @@ func get_room_bounds(room_number):
 	var leaves = get_leaves()
 	if leaves.size() >= room_number:
 		var room = leaves[room_number - 1]
-		var top_left = room.position + Vector2i(2, 2)
+		var top_left = room.position + Vector2i(1, 1)
 		var bottom_right = room.position + room.size - Vector2i(1, 1)
 		return [top_left, bottom_right]
 	return [[0, 0], [0, 0]]
