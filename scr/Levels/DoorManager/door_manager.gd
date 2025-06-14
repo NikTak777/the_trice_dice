@@ -8,7 +8,7 @@ extends Node2D
 @export var wall_tile: int = 0
 @export var wall_autotile_coord: Vector2 = Vector2(5,7)
 
-@export var floor_layer: int = 0
+@export var floor_layer: TileMap
 @export var floor_tile: int = 1
 @export var floor_autotile_coord: Vector2 = Vector2(2,2)
 
@@ -22,6 +22,7 @@ func _ready():
 	if block_layer == null:
 		block_layer = $BlockLayer
 	print(block_layer)
+	print(floor_layer)
 	# Подпишемся на все зоны (RoomArea) по группе
 	for area in get_tree().get_nodes_in_group("room_area"):
 		area.connect("player_entered_room", Callable(self, "_on_player_entered_room"))
@@ -51,7 +52,9 @@ func _close_room(room_number: int) -> void:
 	for x in range(tl.x - 2, br.x + 2):
 		for y in range(tl.y - 2, br.y + 2):
 			if x == tl.x - 2 or x == br.x + 1 or y == tl.y - 2 or y == br.y + 1:
-				block_layer.set_cell(0, Vector2i(x, y), 0, Vector2i(5, 7))
+				var pos = Vector2i(x, y)
+				if floor_layer.get_cell_source_id(0, pos) == 0 and floor_layer.get_cell_atlas_coords(0, pos) == Vector2i(2, 2):
+					block_layer.set_cell(0, pos, 0, Vector2i(5, 7))
 
 func _open_room(room_number: int) -> void:
 	var bounds = map_generator.get_room_bounds(room_number)

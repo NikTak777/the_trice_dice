@@ -16,6 +16,8 @@ var map_y: int = 80
 @export var enemy_manager: Node
 var enemy_spawner: Node
 
+var room_exit_dirs := {} # room_number -> Array<Vector2>
+
 func _ready():
 	tilemap = get_node("TileMap")
 	root_node = map_generator.new(Vector2i(0, 0), Vector2i(map_x, map_y)) # Устанавливаем размер карты
@@ -38,6 +40,8 @@ func _ready():
 
 	door_manager.map_generator = root_node
 	door_manager.enemy_spawner = enemy_spawner
+	door_manager.floor_layer = tilemap
+
 	add_child(door_manager)
 	
 	queue_redraw()
@@ -47,31 +51,69 @@ func build_corridor_graph():
 	for leaf in root_node.get_leaves():
 		rooms.append(leaf.get_center())
 
-	var rng = RandomNumberGenerator.new()
-	rng.randomize()
-
-	var unvisited = rooms.duplicate()
-	var visited = []
 	corridors.clear()
-
-	# Из первой комнаты ровно один путь
-	visited.append(unvisited[0])
-	unvisited.remove_at(0)
-	var to_first = unvisited[rng.randi_range(0, unvisited.size() - 1)]
-	corridors.append({'from': visited[0], 'to': to_first})
-	visited.append(to_first)
-	unvisited.erase(to_first)
-
-	# Дерево без возвращений в первую
+	
+	# Для MST — выбираем первую комнату как стартовую
+	var visited = [rooms[0]]
+	var unvisited = rooms.duplicate()
+	unvisited.erase(rooms[0])
+	
 	while unvisited.size() > 0:
-		# выбираем случайную комнату из visited[1..] (чтобы первая не давала новых веток)
-		var idx_v = rng.randi_range(1, visited.size() - 1)
-		var from = visited[idx_v]
-		var idx_u = rng.randi_range(0, unvisited.size() - 1)
-		var to = unvisited[idx_u]
-		corridors.append({'from': from, 'to': to})
-		visited.append(to)
-		unvisited.remove_at(idx_u)
+		var min_dist = INF
+		var min_pair = null
+		for v in visited:
+			for u in unvisited:
+				var dist = v.distance_squared_to(u)
+				if dist < min_dist:
+					min_dist = dist
+					min_pair = [v, u]
+		if min_pair != null:
+			add_corridor_unique(min_pair[0], min_pair[1])
+			visited.append(min_pair[1])
+			unvisited.erase(min_pair[1])
+
+func add_corridor_unique(a: Vector2i, b: Vector2i):
+	var key = [a, b]
+	if vector2i_less(b, a):
+		key = [b, a]
+
+	for c in corridors:
+		if c[0] == key[0] and c[1] == key[1]:
+			return
+
+	corridors.append(key)
+
+	# Добавим направление выхода для комнат
+	var rooms = root_node.get_leaves()
+	var a_idx = get_room_index_by_center(a, rooms)
+	var b_idx = get_room_index_by_center(b, rooms)
+	
+	if a_idx != -1 and b_idx != -1:
+		var dir_ab = (b - a).sign()
+		var dir_ba = (a - b).sign()
+
+		if not room_exit_dirs.has(a_idx + 1):
+			room_exit_dirs[a_idx + 1] = []
+		room_exit_dirs[a_idx + 1].append(dir_ab)
+
+		if not room_exit_dirs.has(b_idx + 1):
+			room_exit_dirs[b_idx + 1] = []
+		room_exit_dirs[b_idx + 1].append(dir_ba)
+
+func get_room_index_by_center(center: Vector2i, rooms: Array) -> int:
+	for i in range(rooms.size()):
+		if Vector2i(rooms[i].get_center()) == center:
+			return i
+	return -1
+
+func vector2i_less(a: Vector2i, b: Vector2i) -> bool:
+	if a.x < b.x:
+		return true
+	elif a.x > b.x:
+		return false
+	else:
+		return a.y < b.y
+
 
 func spawn_player():
 	var player = player_scene.instantiate()
@@ -88,8 +130,6 @@ func spawn_player():
 func spawn_weapons():
 	var spawner = weapon_spawner_scene.instantiate()
 	add_child(spawner)
-	# spawner.spawn_weapon_in_room(2, root_node, "Shotgun")
-	# spawner.spawn_weapon_in_room(3, root_node, "Automat")
 	spawner.spawn_weapon_in_room(1, root_node, "Pistol")
 	weapon_spawner = spawner
 
@@ -111,31 +151,67 @@ func is_inside_padding(x, y, leaf, padding):
 	return x <= padding.x or y <= padding.y \
 		or x >= leaf.size.x - padding.z or y >= leaf.size.y - padding.w
 
-func _draw():
-	# Заполнение карты стенами
-	for x in range(map_x):
-		for y in range(map_y):
-			tilemap.set_cell(0, Vector2i(x, y), 0, Vector2i(5, 7))
+var floor_map := {}
 
-	# Отрисовка комнат
+func _draw():
+	floor_map.clear()
+
 	var padding = Vector4i(1, 1, 1, 1)
 	for leaf in root_node.get_leaves():
-		for x in range(leaf.size.x):
-			for y in range(leaf.size.y):
-				if not is_inside_padding(x, y, leaf, padding):
-					tilemap.set_cell(0, Vector2i(x + leaf.position.x, y + leaf.position.y), 0, Vector2i(2, 2))
+		for x in range(leaf.position.x + padding.x, leaf.position.x + leaf.size.x - padding.z):
+			for y in range(leaf.position.y + padding.y, leaf.position.y + leaf.size.y - padding.w):
+				var pos = Vector2i(x, y)
+				tilemap.set_cell(0, pos, 0, Vector2i(2, 2)) # пол
+				floor_map[pos] = true
 
-	# Отрисовка коридоров
+	# Отрисовка коридоров (только один маршрут X → Y)
 	for c in corridors:
-		var from = c.from
-		var to   = c.to
+		var from = c[0]
+		var to = c[1]
+		var corridor_half_width = 2
+		var corner = Vector2i(to.x, from.y)
 
-		# L-образный маршрут: по X
-		for x in range(min(from.x, to.x), max(from.x, to.x) + 1):
-			for dy in range(-2, 2):
-				tilemap.set_cell(0, Vector2i(x, from.y + dy), 0, Vector2i(2, 2))
+		# Горизонтальный сегмент
+		for x in range(min(from.x, corner.x), max(from.x, corner.x) + 1):
+			for dy in range(-corridor_half_width, corridor_half_width):
+				var pos = Vector2i(x, from.y + dy)
+				tilemap.set_cell(0, pos, 0, Vector2i(2, 2))
+				floor_map[pos] = true
 
-		# по Y
-		for y in range(min(from.y, to.y), max(from.y, to.y) + 1):
-			for dx in range(-2, 2):
-				tilemap.set_cell(0, Vector2i(to.x + dx, y), 0, Vector2i(2, 2))
+		# Вертикальный сегмент
+		for y in range(min(corner.y, to.y), max(corner.y, to.y) + 1):
+			for dx in range(-corridor_half_width, corridor_half_width):
+				var pos = Vector2i(to.x + dx, y)
+				tilemap.set_cell(0, pos, 0, Vector2i(2, 2))
+				floor_map[pos] = true
+
+	# Стены по краям пола
+	var directions = [
+		Vector2i(-1, 0), Vector2i(1, 0),
+		Vector2i(0, -1), Vector2i(0, 1),
+		Vector2i(-1, -1), Vector2i(1, -1),
+		Vector2i(-1, 1), Vector2i(1, 1),
+	]
+
+	for pos in floor_map.keys():
+		for dir in directions:
+			var npos = pos + dir
+			if not floor_map.has(npos):
+				var tile_id = get_wall_tile_id(dir)
+				tilemap.set_cell(0, npos, 0, tile_id)
+
+				
+func get_wall_tile_id(dir: Vector2i) -> Vector2i:
+	# Примерная раскладка, подбери по своей тайл-сетке!
+	if dir == Vector2i(-1, 0): return Vector2i(5, 7)  # слева — вертикальная стена
+	if dir == Vector2i(1, 0):  return Vector2i(5, 7)  # справа
+	if dir == Vector2i(0, -1): return Vector2i(5, 7)  # сверху — горизонтальная
+	if dir == Vector2i(0, 1):  return Vector2i(5, 7)  # снизу
+
+	# Диагонали — углы
+	if dir == Vector2i(-1, -1): return Vector2i(5, 7) # верх-лево
+	if dir == Vector2i(1, -1):  return Vector2i(5, 7) # верх-право
+	if dir == Vector2i(-1, 1):  return Vector2i(5, 7) # низ-лево
+	if dir == Vector2i(1, 1):   return Vector2i(5, 7) # низ-право
+
+	return Vector2i(5, 7) # default wall
