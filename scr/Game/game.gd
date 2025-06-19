@@ -153,65 +153,129 @@ func is_inside_padding(x, y, leaf, padding):
 
 var floor_map := {}
 
-func _draw():
-	floor_map.clear()
+# над _draw():
+enum FloorType { NONE, ROOM, CORRIDOR }
+var floor_type := {}  # Map<Vector2i, FloorType>
+const FOUNDATION_TILE = Vector2i(5, 3)  # Координаты тайла основания (настройте под ваш тайлсет)
 
-	var padding = Vector4i(1, 1, 1, 1)
+var bottom_wall_positions: Array = []
+
+
+func _draw():
+	floor_type.clear()
+	tilemap.clear()
+
+	# 1) Отрисовка полов (комнаты и коридоры)
+	var padding = Vector4i(1,1,1,1)
 	for leaf in root_node.get_leaves():
 		for x in range(leaf.position.x + padding.x, leaf.position.x + leaf.size.x - padding.z):
 			for y in range(leaf.position.y + padding.y, leaf.position.y + leaf.size.y - padding.w):
-				var pos = Vector2i(x, y)
-				tilemap.set_cell(0, pos, 0, Vector2i(2, 2)) # пол
-				floor_map[pos] = true
+				var p = Vector2i(x,y)
+				tilemap.set_cell(0, p, 0, Vector2i(2,2))
+				floor_type[p] = FloorType.ROOM
 
-	# Отрисовка коридоров (только один маршрут X → Y)
 	for c in corridors:
-		var from = c[0]
-		var to = c[1]
-		var corridor_half_width = 2
+		var from = c[0]; var to = c[1]
 		var corner = Vector2i(to.x, from.y)
+		for x in range(min(from.x, corner.x), max(from.x, corner.x)+1):
+			for dy in range(-2,2):
+				var p = Vector2i(x, from.y+dy)
+				tilemap.set_cell(0, p, 0, Vector2i(2,2))
+				floor_type[p] = FloorType.CORRIDOR
+		for y in range(min(corner.y, to.y), max(corner.y, to.y)+1):
+			for dx in range(-2,2):
+				var p = Vector2i(to.x+dx, y)
+				tilemap.set_cell(0, p, 0, Vector2i(2,2))
+				floor_type[p] = FloorType.CORRIDOR
 
-		# Горизонтальный сегмент
-		for x in range(min(from.x, corner.x), max(from.x, corner.x) + 1):
-			for dy in range(-corridor_half_width, corridor_half_width):
-				var pos = Vector2i(x, from.y + dy)
-				tilemap.set_cell(0, pos, 0, Vector2i(2, 2))
-				floor_map[pos] = true
+	# 2) Отрисовка внутренних углов
+	var corner_dirs = {
+		Vector2i(-1,-1): [Vector2i(-1,0), Vector2i(0,-1)],
+		Vector2i( 1,-1): [Vector2i( 1,0), Vector2i(0,-1)],
+		Vector2i(-1, 1): [Vector2i(-1,0), Vector2i(0, 1)],
+		Vector2i( 1, 1): [Vector2i( 1,0), Vector2i(0, 1)],
+	}
+	for pos in floor_type.keys():
+		for diag in corner_dirs.keys():
+			var wpos = pos + diag
+			if tilemap.get_cell_atlas_coords(0, wpos) != Vector2i(-1,-1):
+				continue
+			var needs = corner_dirs[diag]
+			var ft1 = floor_type.get(pos + needs[0], FloorType.NONE)
+			var ft2 = floor_type.get(pos + needs[1], FloorType.NONE)
+			if ft1 != FloorType.NONE and ft2 != FloorType.NONE:
+				if ft1 != ft2:
+					tilemap.set_cell(0, wpos, 0, get_transition_corner_tile_id(diag))
+				else:
+					tilemap.set_cell(0, wpos, 0, get_wall_tile_id(diag))
 
-		# Вертикальный сегмент
-		for y in range(min(corner.y, to.y), max(corner.y, to.y) + 1):
-			for dx in range(-corridor_half_width, corridor_half_width):
-				var pos = Vector2i(to.x + dx, y)
-				tilemap.set_cell(0, pos, 0, Vector2i(2, 2))
-				floor_map[pos] = true
+	# 3) Основные стены (прямые)
+	var straight = [Vector2i(-1,0), Vector2i(1,0), Vector2i(0,-1), Vector2i(0,1)]
+	for pos in floor_type.keys():
+		for d in straight:
+			var wpos = pos + d
+			if tilemap.get_cell_atlas_coords(0, wpos) == Vector2i(-1, -1):
+				tilemap.set_cell(0, wpos, 0, get_wall_tile_id(d))
+				# **сохраняем только нижние стены**
+				if d == Vector2i(0,1):
+					bottom_wall_positions.append(wpos)
 
-	# Стены по краям пола
-	var directions = [
-		Vector2i(-1, 0), Vector2i(1, 0),
-		Vector2i(0, -1), Vector2i(0, 1),
+	# 4) Отрисовка ВНЕШНИХ УГЛОВ
+	var external_corners = [
 		Vector2i(-1, -1), Vector2i(1, -1),
-		Vector2i(-1, 1), Vector2i(1, 1),
+		Vector2i(-1, 1), Vector2i(1, 1)
 	]
 
-	for pos in floor_map.keys():
-		for dir in directions:
-			var npos = pos + dir
-			if not floor_map.has(npos):
-				var tile_id = get_wall_tile_id(dir)
-				tilemap.set_cell(0, npos, 0, tile_id)
-
+	for pos in floor_type.keys():
+		for diag in external_corners:
+			var wpos = pos + diag
+			if tilemap.get_cell_atlas_coords(0, wpos) != Vector2i(-1,-1):
+				continue
 				
+			var check_dirs = []
+			if diag == Vector2i(-1,-1):
+				check_dirs = [Vector2i(1,0), Vector2i(0,1)]
+			elif diag == Vector2i(1,-1):
+				check_dirs = [Vector2i(-1,0), Vector2i(0,1)]
+			elif diag == Vector2i(-1,1):
+				check_dirs = [Vector2i(1,0), Vector2i(0,-1)]
+			elif diag == Vector2i(1,1):
+				check_dirs = [Vector2i(-1,0), Vector2i(0,-1)]
+			
+			var neighbor1 = wpos + check_dirs[0]
+			var neighbor2 = wpos + check_dirs[1]
+			
+			if tilemap.get_cell_atlas_coords(0, neighbor1) != Vector2i(-1,-1) and \
+			   tilemap.get_cell_atlas_coords(0, neighbor2) != Vector2i(-1,-1):
+				# Используем функцию для ВНЕШНИХ углов
+				tilemap.set_cell(0, wpos, 0, get_external_corner_tile_id(diag))
+
+#================================================================
+# Вспомогательные методы для выбора тайла
+#================================================================
 func get_wall_tile_id(dir: Vector2i) -> Vector2i:
-	# Примерная раскладка, подбери по своей тайл-сетке!
-	if dir == Vector2i(-1, 0): return Vector2i(5, 7)  # слева — вертикальная стена
-	if dir == Vector2i(1, 0):  return Vector2i(5, 7)  # справа
-	if dir == Vector2i(0, -1): return Vector2i(5, 7)  # сверху — горизонтальная
-	if dir == Vector2i(0, 1):  return Vector2i(5, 7)  # снизу
+	if dir == Vector2i(-1, 0): return Vector2i(4, 1)
+	if dir == Vector2i(1,  0): return Vector2i(6, 1)
+	if dir == Vector2i(0, -1): return Vector2i(5, 2)
+	if dir == Vector2i(0,  1): return Vector2i(5, 2)
+	if dir == Vector2i(-1,-1): return Vector2i(4, 0)
+	if dir == Vector2i( 1,-1): return Vector2i(6, 0)
+	if dir == Vector2i(-1, 1): return Vector2i(4, 2)
+	if dir == Vector2i( 1, 1): return Vector2i(6, 2)
+	return Vector2i(5, 7)
 
-	# Диагонали — углы
-	if dir == Vector2i(-1, -1): return Vector2i(5, 7) # верх-лево
-	if dir == Vector2i(1, -1):  return Vector2i(5, 7) # верх-право
-	if dir == Vector2i(-1, 1):  return Vector2i(5, 7) # низ-лево
-	if dir == Vector2i(1, 1):   return Vector2i(5, 7) # низ-право
-
-	return Vector2i(5, 7) # default wall
+func get_transition_corner_tile_id(diag: Vector2i) -> Vector2i:
+	# вставь тут координаты тайлов для переходных углов
+	if diag == Vector2i(-1,-1): return Vector2i(12, 2)
+	if diag == Vector2i( 1,-1): return Vector2i(10, 2)
+	if diag == Vector2i(-1, 1): return Vector2i(12, 0)
+	if diag == Vector2i( 1, 1): return Vector2i(10, 0)
+	return Vector2i(5, 7)
+	
+func get_external_corner_tile_id(diag: Vector2i) -> Vector2i:
+	# Внешние угловые тайлы
+	if diag == Vector2i(-1,-1): return Vector2i(4, 0)  # Левый верхний внешний угол
+	if diag == Vector2i( 1,-1): return Vector2i(6, 0)  # Правый верхний внешний угол
+	if diag == Vector2i(-1, 1): return Vector2i(4, 2)  # Левый нижний внешний угол
+	if diag == Vector2i( 1, 1): return Vector2i(6, 2)  # Правый нижний внешний угол
+	return Vector2i(5, 7)  # Запасной вариант
