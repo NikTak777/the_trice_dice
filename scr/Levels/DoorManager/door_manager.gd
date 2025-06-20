@@ -1,4 +1,3 @@
-# DoorManager.gd
 extends Node2D
 
 @export var map_generator: map_generator
@@ -12,7 +11,6 @@ extends Node2D
 @export var floor_tile: int = 1
 @export var floor_autotile_coord: Vector2 = Vector2(2,2)
 
-# Добавим новый слой TileMap для преграды
 @export var block_layer: TileMap
 
 var _closed_rooms := {}
@@ -21,8 +19,6 @@ var cleared_rooms := {}
 func _ready():
 	if block_layer == null:
 		block_layer = $BlockLayer
-	print(block_layer)
-	print(floor_layer)
 	# Подпишемся на все зоны (RoomArea) по группе
 	for area in get_tree().get_nodes_in_group("room_area"):
 		area.connect("player_entered_room", Callable(self, "_on_player_entered_room"))
