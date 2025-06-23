@@ -103,5 +103,4 @@ func _open_room(room_number: int) -> void:
 			var pos_above = Vector2i(x, y - 1)
 			var pos_below = Vector2i(x, y + 1)
 			# Удаляем возможный горизонтальный объём (снизу)
-			if block_layer.get_cell_atlas_coords(0, pos_below) == Vector2i(5, 7):
-				block_layer.set_cell(0, pos_below, -1)
+			block_layer.set_cell(0, pos_below, -1)
