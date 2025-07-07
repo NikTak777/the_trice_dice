@@ -37,8 +37,6 @@ func _ready():
 	add_child(map_drawer)  # если нужно
 	map_drawer.draw_map(tilemap, root_node, corridor_graph.corridors)
 
-	# build_corridor_graph()
-
 	spawn_player() # Создание главное героя в игровом уровне
 	spawn_weapons() # Создание оружия в игровом уровне
 
@@ -46,8 +44,11 @@ func _ready():
 	enemy_manager_instance.name = "EnemyManager"
 	add_child(enemy_manager_instance)
 	enemy_manager = enemy_manager_instance
+	
+	var farthest_room = corridor_graph.get_farthest_room(root_node, 1)
+	spawn_boss(farthest_room)
 
-	spawn_enemy()
+	spawn_enemy(farthest_room)
 	
 	var door_manager_scene = load("res://scr/Levels/DoorManager/DoorManager.tscn")
 	var door_manager = door_manager_scene.instantiate()
@@ -57,9 +58,6 @@ func _ready():
 	door_manager.floor_layer = tilemap
 
 	add_child(door_manager)
-	
-	var farthest_room = corridor_graph.get_farthest_room(root_node, 1)
-	spawn_boss(farthest_room)
 	
 	queue_redraw()
 
@@ -81,7 +79,7 @@ func spawn_weapons():
 	spawner.spawn_weapon_in_room(1, root_node, "Pistol")
 	weapon_spawner = spawner
 
-func spawn_enemy():
+func spawn_enemy(room_boss: int):
 	var enemy_spawner_scene = preload("res://scr/Levels/EnemySpawner/EnemySpawner.tscn")
 	var spawner = enemy_spawner_scene.instantiate()
 	spawner.melee_enemy_scene = melee_enemy_scene
@@ -91,6 +89,7 @@ func spawn_enemy():
 	spawner.room_area_scene = preload("res://scr/Levels/RoomArea/RoomArea.tscn")
 	spawner.enemy_manager = enemy_manager
 	spawner.weapon_spawner = weapon_spawner
+	spawner.room_boss = room_boss
 	add_child(spawner)
 	
 	enemy_spawner = spawner

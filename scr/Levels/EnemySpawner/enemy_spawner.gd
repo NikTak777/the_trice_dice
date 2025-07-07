@@ -6,6 +6,7 @@ extends Node2D
 @export var tile_size: int = 16
 @export var room_start: int = 2
 @export var room_end: int = 8
+@export var room_boss: int = 0
 @export var map_generator: Node
 @export var enemy_manager: Node
 @export var weapon_spawner: Node
@@ -26,6 +27,8 @@ func _ready() -> void:
 # Функция спавна врагов для каждой комнаты
 func spawn_enemies() -> void:
 	for room in range(room_start, room_end + 1):
+		if room == room_boss:
+			continue
 		var room_corners = map_generator.get_room_corners(room)
 		var x_min = room_corners[0][0]
 		var y_min = room_corners[0][1]
