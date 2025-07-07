@@ -4,7 +4,6 @@ extends Node
 
 var floor_map := {}
 
-# над _draw():
 enum FloorType { NONE, ROOM, CORRIDOR }
 var floor_type := {}  # Map<Vector2i, FloorType>
 const FOUNDATION_TILE = Vector2i(5, 3)  # Координаты тайла основания (настройте под ваш тайлсет)

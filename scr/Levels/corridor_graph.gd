@@ -71,3 +71,42 @@ func vector2i_less(a: Vector2i, b: Vector2i) -> bool:
 		return false
 	else:
 		return a.y < b.y
+
+func get_farthest_room(root_node, start_idx: int) -> int:
+	var graph = {}
+	
+	# Строим граф смежности (индексы комнат)
+	for corridor in corridors:
+		var a = get_room_index_by_center(corridor[0], root_node.get_leaves()) + 1
+		var b = get_room_index_by_center(corridor[1], root_node.get_leaves()) + 1
+		
+		if not graph.has(a):
+			graph[a] = []
+		if not graph.has(b):
+			graph[b] = []
+		graph[a].append(b)
+		graph[b].append(a)
+
+	# BFS от start_idx
+	var visited = {}
+	var queue = [ [start_idx, 0] ]  # [room_idx, distance]
+	visited[start_idx] = true
+	var farthest = start_idx
+	var max_dist = 0
+
+	while queue.size() > 0:
+		var current = queue.pop_front()
+		var room = current[0]
+		var dist = current[1]
+
+		if dist > max_dist:
+			max_dist = dist
+			farthest = room
+
+		if graph.has(room):
+			for neighbor in graph[room]:
+				if not visited.has(neighbor):
+					visited[neighbor] = true
+					queue.append([neighbor, dist + 1])
+
+	return farthest

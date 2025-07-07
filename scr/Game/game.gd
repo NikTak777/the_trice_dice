@@ -58,6 +58,9 @@ func _ready():
 
 	add_child(door_manager)
 	
+	var farthest_room = corridor_graph.get_farthest_room(root_node, 1)
+	spawn_boss(farthest_room)
+	
 	queue_redraw()
 
 func spawn_player():
@@ -91,7 +94,9 @@ func spawn_enemy():
 	add_child(spawner)
 	
 	enemy_spawner = spawner
-
-#func is_inside_padding(x, y, leaf, padding):
-#	return x <= padding.x or y <= padding.y \
-#		or x >= leaf.size.x - padding.z or y >= leaf.size.y - padding.w
+	
+func spawn_boss(room_index: int):
+	var boss_scene = preload("res://scr/Entities/Boss/Boss.tscn")
+	var boss = boss_scene.instantiate()
+	add_child(boss)
+	boss.position = root_node.get_room_center(room_index) * tile_size
