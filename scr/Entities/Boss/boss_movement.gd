@@ -25,8 +25,10 @@ func _on_movement_area_body_entered(body: Node2D) -> void:
 		player_in_range = true
 
 func _on_movement_area_body_exited(body: Node2D) -> void:
-	if body.is_in_group("player"):
-		player_in_range = false 
+	# Усложнение: босс будет двигаться даже при выходе из его зоны видимости
+	#if body.is_in_group("player"): # Босс продолжает двигаться
+		# player_in_range = false 
+	pass
 
 func _process(delta):
 

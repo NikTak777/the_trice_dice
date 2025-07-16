@@ -1,12 +1,14 @@
 extends Node2D
 
 @export var BULLET_SCENE = preload("res://scr/Objects/EnemyBullet/EnemyBullet.tscn")
+
 @export var attack_interval: float = 0.5  # Интервал атаки
 @export var projectile_speed: float = 300.0
+@export var min_inaccuracy_angle_deg: float = 3.0  # Минимальный разброс в градусах
+@export var max_inaccuracy_angle_deg: float = 7.0  # Максимальный разброс в градусах
 
 var attack_timer: Timer
 var player_in_range: bool = false
-
 @onready var attack_area = get_parent().get_node("MovementArea")
 
 func _ready() -> void:
@@ -34,9 +36,6 @@ func _on_movement_area_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		player_in_range = false
 		attack_timer.stop()
-
-@export var min_inaccuracy_angle_deg: float = 3.0  # Минимальный разброс в градусах
-@export var max_inaccuracy_angle_deg: float = 7.0  # Максимальный разброс в градусах
 
 func _attack():
 	if not player_in_range or not get_parent().room_active:
