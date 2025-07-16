@@ -27,7 +27,7 @@ var abilities = {
 	"damage_boost": {
 		"description": "Увеличивает урон оружия",
 		"activate": func(player):
-			player.damage_bonus = 1.2 # Увеличиваем бонус урона у персонажа
+			player.damage_bonus = 1.4 # Увеличиваем бонус урона у персонажа
 			player.armor_bonus = 1.2,
 		"deactivate": func(player):
 			player.damage_bonus = 1.0 # Сбрасываем бонус до исходного состояния
