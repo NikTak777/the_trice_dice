@@ -66,6 +66,17 @@ func _process(delta):
 		if inventory.carried_weapon:
 			var weapon = inventory.carried_weapon
 			weapon.shoot(global_position, get_global_mouse_position())
+	
+	if Input.is_action_just_pressed("spawn_weapon"):
+		print("Кнопка спавна оружия нажата!")
+		var weapon_factory_scene = preload("res://scr/Utils/WeaponFactory/WeaponFactory.tscn")
+		var weapon_factory = weapon_factory_scene.instantiate()
+		add_child(weapon_factory)
+		var new_weapon = weapon_factory.create_weapon("Automat")
+		add_child(new_weapon)
+		inventory.pickup_weapon(new_weapon)
+		new_weapon.equip()
+		nearby_weapon = null
 
 
 func toggle_pause() -> void:

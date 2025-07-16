@@ -46,7 +46,6 @@ func _ready():
 	enemy_manager = enemy_manager_instance
 	
 	var farthest_room = corridor_graph.get_farthest_room(root_node, 1)
-	spawn_boss(farthest_room)
 
 	spawn_enemy(farthest_room)
 	
@@ -93,9 +92,3 @@ func spawn_enemy(room_boss: int):
 	add_child(spawner)
 	
 	enemy_spawner = spawner
-	
-func spawn_boss(room_index: int):
-	var boss_scene = preload("res://scr/Entities/Boss/Boss.tscn")
-	var boss = boss_scene.instantiate()
-	add_child(boss)
-	boss.position = root_node.get_room_center(room_index) * tile_size
