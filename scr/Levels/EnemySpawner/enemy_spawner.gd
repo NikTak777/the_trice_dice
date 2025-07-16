@@ -27,7 +27,24 @@ func _ready() -> void:
 # Функция спавна врагов для каждой комнаты
 func spawn_enemies() -> void:
 	for room in range(room_start, room_end + 1):
+		
+		# Инициализируем массив врагов для этой комнаты
+		room_enemies[room] = []
+		
 		if room == room_boss:
+			var boss_scene = preload("res://scr/Entities/Boss/Boss.tscn")
+			var boss = boss_scene.instantiate()
+			add_child(boss)
+			boss.position = map_generator.get_room_center(room_boss) * tile_size
+			boss.scale = Vector2(0.2, 0.2)
+			print(boss.position)
+			
+			# Добавляем свойство room_number для врага, чтобы знать его комнату
+			boss.set("room_number", room)
+			# И изначально враг деактивирован (его логика в _process должна проверять active)
+			boss.set("active", false)
+				
+			room_enemies[room].append(boss)
 			continue
 		var room_corners = map_generator.get_room_corners(room)
 		var x_min = room_corners[0][0]
@@ -41,9 +58,6 @@ func spawn_enemies() -> void:
 		var used_tiles: Array = []
 		var attempts := 0
 		var max_attempts := 1000
-		
-		# Инициализируем массив врагов для этой комнаты
-		room_enemies[room] = []
 		
 		while enemy_count > 0 and attempts < max_attempts:
 			attempts += 1

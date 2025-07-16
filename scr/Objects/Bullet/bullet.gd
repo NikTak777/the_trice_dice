@@ -17,7 +17,7 @@ func _process(delta: float) -> void:
 	if collision:
 		var collider = collision.get_collider()
 		
-		if collider.is_in_group("enemy"):
+		if collider.is_in_group("enemy") or collider.is_in_group("boss"):
 			collider.take_damage(damage)
 		else:
 			# Эффект столкновения со стеной

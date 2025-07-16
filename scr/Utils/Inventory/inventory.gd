@@ -53,3 +53,4 @@ func drop_current_weapon(): # Функция сброса текущего ор�
 		
 		print("Выброшено оружие: ", carried_weapon.weapon_name)
 		carried_weapon = null
+	
