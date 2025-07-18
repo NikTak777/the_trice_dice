@@ -4,8 +4,8 @@ extends Node2D
 
 @export var attack_interval: float = 0.5  # Интервал атаки
 @export var projectile_speed: float = 300.0
-@export var min_inaccuracy_angle_deg: float = 3.0  # Минимальный разброс в градусах
-@export var max_inaccuracy_angle_deg: float = 7.0  # Максимальный разброс в градусах
+@export var min_inaccuracy_angle_deg: float = 7.0  # Минимальный разброс в градусах
+@export var max_inaccuracy_angle_deg: float = 10.0  # Максимальный разброс в градусах
 
 var attack_timer: Timer
 var player_in_range: bool = false

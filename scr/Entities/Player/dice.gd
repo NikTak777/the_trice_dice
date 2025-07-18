@@ -25,6 +25,10 @@ var ability_label = null
 
 var is_inside_room: bool = false
 
+var knockback_velocity = Vector2.ZERO
+var knockback_timer = 0.0
+var knockback_duration = 0.2
+
 func _ready():
 	position = Vector2.ZERO  # Устанавливает начальную позицию на (0, 0)
 	add_to_group("player")
@@ -48,10 +52,10 @@ func get_movement_direction():
 	return input_direction
 	
 func _process(delta):
-	if !get_tree().paused:
-		var direction = get_movement_direction()
-		velocity = direction * speed
-		move_and_slide()
+	#if !get_tree().paused:
+	#	var direction = get_movement_direction()
+	#	velocity = direction * speed
+	#	move_and_slide()
 	
 	# Проверка на нажатие кнопки подбора оружия
 	if Input.is_action_just_pressed("pickup"):
@@ -77,6 +81,25 @@ func _process(delta):
 		inventory.pickup_weapon(new_weapon)
 		new_weapon.equip()
 		nearby_weapon = null
+	
+	if Input.is_action_just_pressed("change_ability"):
+		print("Кнопка смены способности нажата!")
+		change_ability()
+
+func _physics_process(delta):
+	# Отталкивание (если активно)
+	if knockback_timer > 0.0:
+		# Плавное замедление отлёта
+		velocity = knockback_velocity
+		knockback_timer -= delta
+		# Можно плавно уменьшать силу:
+		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 1000 * delta)
+	else:
+		# Обычное движение
+		var direction = get_movement_direction()
+		velocity = direction * speed
+	
+	move_and_slide()
 
 
 func toggle_pause() -> void:
@@ -88,7 +111,7 @@ func spawn_health_bar():
 	add_child(hp_bar)  # Добавляем его как дочерний узел
 	hp_bar.position = Vector2(-110, 100)  # Смещаем немного вверх
 
-func take_damage(amount: int):
+func take_damage(amount: int, source_position: Vector2 = global_position):
 	
 	current_hp -= amount * armor_bonus
 	current_hp = max(current_hp, 0)
@@ -96,8 +119,28 @@ func take_damage(amount: int):
 	
 	change_ability() # Смена способности при получении урона
 	
+	apply_knockback(source_position)
+	
 	if current_hp < 2:
 		die()
+		
+func apply_knockback(from_position: Vector2):
+	var direction = (global_position - from_position).normalized()
+	var knockback_force = 400.0
+	
+	knockback_velocity = direction * knockback_force
+	knockback_timer = knockback_duration
+	
+	# Вращаем игрока (только визуально, sprite)
+	if has_node("Sprite2D"):
+		var sprite = $Sprite2D
+		var tween = create_tween()
+		
+		tween.tween_property(sprite, "rotation", sprite.rotation + deg_to_rad(360), knockback_duration)\
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		
+		# Возврат в исходное состояние в конце
+		tween.tween_property(sprite, "rotation", 0.0, 0.0).set_delay(knockback_duration)
 
 func die():
 	queue_free()  # удаляем игрока и всё привязанное

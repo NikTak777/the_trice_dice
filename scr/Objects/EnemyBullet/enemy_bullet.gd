@@ -20,7 +20,7 @@ func _physics_process(delta: float) -> void:
 		var collider = collision.get_collider()
 		if collider.is_in_group("player"):
 			if collider.has_method("take_damage"):
-				collider.take_damage(damage)
+				collider.take_damage(damage, global_position)
 		else:
 			var fx_scene = preload("res://scr/FX/WallHitEffect/WallHitEffect.tscn")
 			var fx = fx_scene.instantiate()
