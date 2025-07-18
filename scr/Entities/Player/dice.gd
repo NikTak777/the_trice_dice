@@ -27,7 +27,7 @@ var is_inside_room: bool = false
 
 var knockback_velocity = Vector2.ZERO
 var knockback_timer = 0.0
-var knockback_duration = 0.2
+var knockback_duration = 0.4
 
 func _ready():
 	position = Vector2.ZERO  # Устанавливает начальную позицию на (0, 0)
@@ -136,7 +136,7 @@ func apply_knockback(from_position: Vector2):
 		var sprite = $Sprite2D
 		var tween = create_tween()
 		
-		tween.tween_property(sprite, "rotation", sprite.rotation + deg_to_rad(360), knockback_duration)\
+		tween.tween_property(sprite, "rotation", sprite.rotation + deg_to_rad(360 * 2), knockback_duration)\
 			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		
 		# Возврат в исходное состояние в конце
