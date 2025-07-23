@@ -66,6 +66,15 @@ func spawn_player():
 	var spawn_position = root_node.get_room_center(1) * tile_size
 	player.position = Vector2(spawn_position)
 	player.scale = Vector2(0.125, 0.125)
+	
+	# Добавляем HealthBar в CanvasLayer (UI)
+	var health_bar = preload("res://scr/UserInterface/HealthBar/PlayerHealthBar/PlayerHealthBar.tscn").instantiate()
+	var canvas_layer = get_node("CanvasLayer")
+	canvas_layer.add_child(health_bar)
+	health_bar.position = Vector2(20, 60) # верхний левый угол, можешь настроить под себя
+	player.hp_bar = health_bar
+	player.hp_bar.set_max_hp(player.max_hp)
+	
 	player.change_ability()
 
 	var hint = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn").instantiate()

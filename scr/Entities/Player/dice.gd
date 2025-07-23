@@ -4,7 +4,8 @@ extends CharacterBody2D
 @onready var ability_manager = preload("res://scr/Utils/AbilityManager/ability_manager.gd").new()
 @onready var ability_scene = preload("res://scr/UserInterface/AbilityTitle/AbilityTitle.tscn")
 
-const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")  # Загружаем сцену заранее
+# const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")
+const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/PlayerHealthBar/PlayerHealthBar.tscn")
 const INVENTORY_SCENE = preload("res://scr/Utils/Inventory/Inventory.tscn")
 const BULLET_SCENE = preload("res://scr/Objects/Bullet/Bullet.tscn")
 
@@ -32,7 +33,7 @@ var knockback_duration = 0.4
 func _ready():
 	position = Vector2.ZERO  # Устанавливает начальную позицию на (0, 0)
 	add_to_group("player")
-	spawn_health_bar()
+	# spawn_health_bar()
 	
 	# Создаем инвентарь и добавляем его в качестве дочернего узла
 	inventory = INVENTORY_SCENE.instantiate()
@@ -110,6 +111,7 @@ func spawn_health_bar():
 	hp_bar = HEALTHBAR_SCENE.instantiate()  # Создаём экземпляр HealthBar
 	add_child(hp_bar)  # Добавляем его как дочерний узел
 	hp_bar.position = Vector2(-110, 100)  # Смещаем немного вверх
+	hp_bar.set_max_hp(max_hp) # Новая строка
 
 func take_damage(amount: int, source_position: Vector2 = global_position):
 	

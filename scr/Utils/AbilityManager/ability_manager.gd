@@ -10,14 +10,17 @@ var abilities = {
 		"activate": func(player):
 			player.max_hp *= 1.2
 			player.current_hp *= 1.2
-			player.hp_bar.max_hp = player.max_hp        # Обновляем переменную в самом скрипте прогресс-бара
-			player.hp_bar.bar.max_value = player.max_hp # Обновляем максимальное значение прогресс бара
+			# player.hp_bar.max_hp = player.max_hp        # Обновляем переменную в самом скрипте прогресс-бара
+			player.hp_bar.set_max_hp(player.max_hp)
+			# player.hp_bar.bar.max_value = player.max_hp # Обновляем максимальное значение прогресс бара
 			player.hp_bar.set_hp(player.current_hp), # Обновляем прогресс бар через метод set_hp()
 		"deactivate": func(player):
 			# Возвращаем бонус HP назад
 			player.max_hp /= 1.2
 			player.current_hp *= 0.9
-			player.hp_bar.bar.max_value = player.max_hp,
+			# player.hp_bar.bar.max_value = player.max_hp,
+			player.hp_bar.set_max_hp(player.max_hp)
+			player.hp_bar.set_hp(player.current_hp),
 	},
 	#---------------------------------------------------------
 	# Способность: увеличение урона оружия
