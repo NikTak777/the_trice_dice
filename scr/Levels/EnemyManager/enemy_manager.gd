@@ -18,7 +18,8 @@ func enemy_died():
 		
 
 func _on_all_enemies_killed():
-	var victory_node = Node.new()
-	victory_node.set_script(preload("res://scr/Entities/Player/victory_player.gd"))
-	victory_node.victory_scene = preload("res://scr/UserInterface/VictoryLabel/Victory.tscn")
-	get_tree().get_root().add_child(victory_node)
+	# var victory_node = Node.new()
+	# victory_node.set_script(preload("res://scr/Entities/Player/victory_player.gd"))
+	# victory_node.victory_scene = preload("res://scr/UserInterface/VictoryLabel/Victory.tscn")
+	# get_tree().get_root().add_child(victory_node)
+	pass

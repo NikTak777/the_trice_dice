@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://btqw7dciasfpf"]
+
+[ext_resource type="Script" uid="uid://bge54j6erp8td" path="res://scr/Entities/Boss/boss.gd" id="1_lg0ro"]
+[ext_resource type="Texture2D" uid="uid://c3ofvu2vf7jbk" path="res://scr/Assets/boss.png" id="2_2rv13"]
+[ext_resource type="PackedScene" uid="uid://rxmbvxumdo58" path="res://scr/Utils/SpriteFlipper/SpriteFlipper.tscn" id="3_x7oej"]
+[ext_resource type="Script" uid="uid://btbwaw4dirhsg" path="res://scr/Entities/Boss/boss_movement.gd" id="4_x7oej"]
+[ext_resource type="Script" uid="uid://cxbtrn0afnv76" path="res://scr/Entities/Boss/boss_attack.gd" id="5_52sx7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2rv13"]
+size = Vector2(173, 346)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_52sx7"]
+radius = 1153.1
+
+[node name="Boss" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_lg0ro")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_2rv13")
+
+[node name="SpriteFlipper" parent="." instance=ExtResource("3_x7oej")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2.5, -72)
+shape = SubResource("RectangleShape2D_2rv13")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="MovementArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovementArea"]
+shape = SubResource("CircleShape2D_52sx7")
+
+[node name="BossMovement" type="Node2D" parent="."]
+script = ExtResource("4_x7oej")
+
+[node name="BossAttack" type="Node2D" parent="."]
+script = ExtResource("5_52sx7")
+
+[connection signal="body_entered" from="MovementArea" to="BossMovement" method="_on_movement_area_body_entered"]
+[connection signal="body_entered" from="MovementArea" to="BossAttack" method="_on_movement_area_body_entered"]
+[connection signal="body_exited" from="MovementArea" to="BossMovement" method="_on_movement_area_body_exited"]
+[connection signal="body_exited" from="MovementArea" to="BossAttack" method="_on_movement_area_body_exited"]

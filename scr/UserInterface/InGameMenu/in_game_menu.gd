@@ -16,5 +16,8 @@ func _on_start_pressed() -> void:
 	visible = false  # Скрываем меню
 	get_tree().reload_current_scene()  # Перезапускаем игру
 
+func _on_resume_pressed() -> void:
+	toggle_menu() # Возобновление игры
+
 func _on_exit_pressed() -> void:
 	get_tree().quit()  # Закрываем игру

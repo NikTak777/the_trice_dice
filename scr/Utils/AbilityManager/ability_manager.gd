@@ -5,19 +5,29 @@ var current_ability = null
 var last_ability_key = null  # Ключ последней способности
 
 var abilities = {
+	#---------------------------------------------------------
+	# Способность: увеличение текущего и максимального здоровья
+	# Улучшает: увеличивает количество единиц здоровья на 20 процентов
+	# Ухудшает: ничего
+	#---------------------------------------------------------
 	"hp_boost": {
 		"description": "Увеличивает текущее и максимальное HP",
 		"activate": func(player):
-			player.max_hp *= 1.2
-			player.current_hp *= 1.2
-			player.hp_bar.max_hp = player.max_hp        # Обновляем переменную в самом скрипте прогресс-бара
-			player.hp_bar.bar.max_value = player.max_hp # Обновляем максимальное значение прогресс бара
-			player.hp_bar.set_hp(player.current_hp), # Обновляем прогресс бар через метод set_hp()
+			# player.max_hp *= 1.2
+			# player.current_hp *= 1.2
+			player.max_hp += 20.0
+			player.current_hp += 20.0
+			player.hp_bar.set_max_hp(player.max_hp)
+			player.hp_bar.set_hp(player.current_hp),
 		"deactivate": func(player):
-			# Возвращаем бонус HP назад
-			player.max_hp /= 1.2
-			player.current_hp *= 0.9
-			player.hp_bar.bar.max_value = player.max_hp,
+			print("Было:", player.max_hp, " ", player.current_hp)
+			# player.max_hp /= 1.2
+			player.max_hp -= 20.0
+			if player.current_hp > 100.0: player.current_hp = 100.0
+			# player.current_hp *= 0.9
+			player.hp_bar.set_max_hp(player.max_hp)
+			player.hp_bar.set_hp(player.current_hp)
+			print("Стало:", player.max_hp, " ", player.current_hp),
 	},
 	#---------------------------------------------------------
 	# Способность: увеличение урона оружия
@@ -27,7 +37,7 @@ var abilities = {
 	"damage_boost": {
 		"description": "Увеличивает урон оружия",
 		"activate": func(player):
-			player.damage_bonus = 1.2 # Увеличиваем бонус урона у персонажа
+			player.damage_bonus = 1.4 # Увеличиваем бонус урона у персонажа
 			player.armor_bonus = 1.2,
 		"deactivate": func(player):
 			player.damage_bonus = 1.0 # Сбрасываем бонус до исходного состояния

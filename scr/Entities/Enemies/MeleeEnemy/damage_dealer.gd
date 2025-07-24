@@ -35,7 +35,7 @@ func _on_body_exited(body):
 func _on_timer_timeout():
 	if is_player_in_area and player != null:
 		if player.has_method("take_damage"):
-			player.take_damage(damage_amount)
+			player.take_damage(damage_amount, get_parent().global_position)
 		timer.start(damage_interval)
 
 func set_damage_callback(cb: Callable):

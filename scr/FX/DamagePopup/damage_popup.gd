@@ -5,10 +5,14 @@ extends Node2D
 var lifetime := 0.8
 var float_speed := -30.0
 
-func setup(damage_amount: int):
+func setup(damage_amount: int, is_boss: bool = false):
 	label.text = "-" + str(damage_amount)
 	label.modulate = Color(1, 0.1, 0.1)
-	scale = Vector2(0.5, 0.5)
+	if is_boss:
+		scale = Vector2(2.2, 2.2)
+		float_speed = -100.0
+	else:
+		scale = Vector2(0.5, 0.5)
 
 func _process(delta: float):
 	position.y += float_speed * delta
