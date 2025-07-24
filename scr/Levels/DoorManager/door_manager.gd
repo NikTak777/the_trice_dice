@@ -50,8 +50,8 @@ func _close_room(room_number: int) -> void:
 
 	# 1. Ставим двери и собираем координаты для анализа направлений
 	for x in range(tl.x - 2, br.x + 2):
-		for y in range(tl.y - 2, br.y + 2):
-			if x == tl.x - 2 or x == br.x + 1 or y == tl.y - 2 or y == br.y + 1:
+		for y in range(tl.y - 3, br.y + 2):
+			if x == tl.x - 2 or x == br.x + 1 or y == tl.y - 3 or y == br.y + 1:
 				var pos = Vector2i(x, y)
 				if floor_layer.get_cell_source_id(0, pos) == 0 and floor_layer.get_cell_atlas_coords(0, pos) == Vector2i(2, 2):
 					block_layer.set_cell(0, pos, 0, Vector2i(5, 7))
@@ -92,9 +92,9 @@ func _open_room(room_number: int) -> void:
 	var br = bounds[1]
 
 	for x in range(tl.x - 2, br.x + 2):
-		for y in range(tl.y - 2, br.y + 2):
+		for y in range(tl.y - 3, br.y + 2):
 			# Основной периметр
-			if x == tl.x - 2 or x == br.x + 1 or y == tl.y - 2 or y == br.y + 1:
+			if x == tl.x - 2 or x == br.x + 1 or y == tl.y - 3 or y == br.y + 1:
 				block_layer.set_cell(0, Vector2i(x, y), -1)
 
 	# Дополнительно удалим возможные "объёмные" тайлы:
