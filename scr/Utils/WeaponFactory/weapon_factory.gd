@@ -6,8 +6,8 @@ var weapon_data = {
 		"weapon_name": "Shotgun",
 		"weapon_type": "shotgun",
 		"cooldown_time": 1.0,
-		"damage": 25,
-		"bullet_spread_degrees": 5.0,
+		"damage": 5, # Было 25.0
+		"bullet_spread_degrees": 25.0, # Было 5.0
 		"sprite_target_height": 10.0,
 		"weapon_texture": preload("res://scr/Assets/weapon_sprite/shotgun.png")
 	},
@@ -42,6 +42,7 @@ func create_weapon(weapon_type: String) -> Node:
 	
 	# Устанавливаем параметры, которые экспортированы в базовом скрипте оружия
 	weapon.weapon_name = config["weapon_name"]
+	weapon.weapon_type = config["weapon_type"]
 	weapon.cooldown_time = config["cooldown_time"]
 	weapon.damage = config["damage"]
 	weapon.bullet_spread_degrees = config["bullet_spread_degrees"]
