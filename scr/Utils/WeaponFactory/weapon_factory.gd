@@ -4,6 +4,7 @@ extends Node2D
 var weapon_data = {
 	"Shotgun": {
 		"weapon_name": "Shotgun",
+		"weapon_type": "shotgun",
 		"cooldown_time": 1.0,
 		"damage": 25,
 		"bullet_spread_degrees": 5.0,
@@ -12,6 +13,7 @@ var weapon_data = {
 	},
 	"Automat": {
 		"weapon_name": "Automat",
+		"weapon_type": "automat",
 		"cooldown_time": 0.2,
 		"damage": 8,
 		"bullet_spread_degrees": 20.0,
@@ -20,6 +22,7 @@ var weapon_data = {
 	},
 	"Pistol": {
 		"weapon_name": "Pistol",
+		"weapon_type": "pistol",
 		"cooldown_time": 0.4,
 		"damage": 5,
 		"bullet_spread_degrees": 10.0,
