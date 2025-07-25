@@ -8,6 +8,9 @@ extends Node2D
 @export var bullet_spread_degrees: float = 10.0  # Максимальный разброс пули
 @export var original_bullet_spread_degrees: float = 10.0
 
+@export var weapon_type: String = "default" # Может быть: "pistol", "automat", "shotgun"
+@export var pellets: int = 6 # Только для дробовика
+
 var is_equipped: bool = false
 
 var time_since_last_shot: float = 0.0
@@ -58,30 +61,44 @@ func can_shoot() -> bool:
 # Возвращает изменённое направление
 func get_direction_with_spread(base_direction: Vector2, spread_degrees: float) -> Vector2:
 	var spread_radians = deg_to_rad(randf_range(-spread_degrees / 2.0, spread_degrees / 2.0))
-	print(spread_radians)
 	return base_direction.rotated(spread_radians)
 
 # Функция для стрельбы (создаёт пулю, сбрасывает таймер)
 # Здесь мы принимаем позицию выстрела и целевую точку
-func shoot(origin: Vector2, target: Vector2) -> void:
+func shoot(origin: Vector2, target: Vector2, ) -> void:
 	if not can_shoot():
 		return
-
-	var bullet_scene = preload("res://scr/Objects/Bullet/Bullet.tscn")
-	var bullet = bullet_scene.instantiate()
-	
-	bullet.global_position = origin
-	
+		
 	var base_direction = (target - origin).normalized()
-	var final_direction = get_direction_with_spread(base_direction, bullet_spread_degrees)
-	bullet.direction = final_direction
+	var final_damage = damage * (get_tree().get_nodes_in_group("player")[0].damage_bonus)
 	
-	bullet.damage = damage * (get_tree().get_nodes_in_group("player")[0].damage_bonus) 
-
-	get_tree().current_scene.add_child(bullet)
+	print("Type of weapon: ", weapon_type)
+	if weapon_type == "shotgun":
+		shoot_shotgun(origin, base_direction, final_damage)
+	else:
+		shoot_single_bullet(origin, base_direction, final_damage)
 
 	time_since_last_shot = 0.0
 	
+func shoot_single_bullet(origin: Vector2, base_direction: Vector2, damage: int) -> void:
+	var bullet_scene = preload("res://scr/Objects/Bullet/Bullet.tscn")
+	var bullet = bullet_scene.instantiate()
+	var final_direction = get_direction_with_spread(base_direction, bullet_spread_degrees)
+	bullet.global_position = origin
+	bullet.direction = final_direction
+	bullet.damage = damage
+	get_tree().current_scene.add_child(bullet)
+	
+func shoot_shotgun(origin: Vector2, base_direction: Vector2, dmg: int) -> void:
+	var bullet_scene = preload("res://scr/Objects/Bullet/Bullet.tscn")
+
+	for i in pellets:
+		var bullet = bullet_scene.instantiate()
+		bullet.global_position = origin
+		bullet.direction = get_direction_with_spread(base_direction, bullet_spread_degrees)
+		bullet.damage = dmg # Или dmg * 0.5 для баланса
+		get_tree().current_scene.add_child(bullet)
+
 func _scale_sprite_to_height(sprite: Sprite2D, target_height: float) -> void:
 	if sprite.texture:
 		var texture_size = sprite.texture.get_size()
