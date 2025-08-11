@@ -26,6 +26,7 @@ func _ready() -> void:
 
 # Функция спавна врагов для каждой комнаты
 func spawn_enemies() -> void:
+	var current_enemy_count = 0
 	for room in range(room_start, room_end + 1):
 		
 		# Инициализируем массив врагов для этой комнаты
@@ -37,7 +38,6 @@ func spawn_enemies() -> void:
 			add_child(boss)
 			boss.position = map_generator.get_room_center(room_boss) * tile_size
 			boss.scale = Vector2(0.2, 0.2)
-			print(boss.position)
 			
 			# Добавляем свойство room_number для врага, чтобы знать его комнату
 			boss.set("room_number", room)
@@ -53,14 +53,15 @@ func spawn_enemies() -> void:
 		var y_max = room_corners[1][1]
 		
 		# Количество врагов для данной комнаты (можно менять по необходимости)
-		var enemy_count = room + 3
+		var enemy_count_in_room = room + 3
 		# Список уже занятых позиций, чтобы избежать наложений
 		var used_tiles: Array = []
 		var attempts := 0
 		var max_attempts := 1000
 		
-		while enemy_count > 0 and attempts < max_attempts:
+		while enemy_count_in_room > 0 and attempts < max_attempts:
 			attempts += 1
+			
 			var tile_x = randi_range(x_min, x_max)
 			var tile_y = randi_range(y_min, y_max)
 			var tile_pos = Vector2i(tile_x, tile_y)
@@ -73,8 +74,10 @@ func spawn_enemies() -> void:
 			if valid:
 				used_tiles.append(tile_pos)
 				
-				# Выбираем тип врага случайно (50/50)
-				var enemy_scene = melee_enemy_scene if randi() % 2 == 0 else ranged_enemy_scene
+				# var enemy_scene = melee_enemy_scene if randi() % 2 == 0 else ranged_enemy_scene
+				# Выбираем тип врага (50/50)
+				current_enemy_count += 1
+				var enemy_scene = melee_enemy_scene if current_enemy_count % 2 == 0 else ranged_enemy_scene
 				var enemy = enemy_scene.instantiate()
 				add_child(enemy)
 				
@@ -92,8 +95,8 @@ func spawn_enemies() -> void:
 				
 				room_enemies[room].append(enemy)
 				
-				enemy_count -= 1
-		if attempts >= max_attempts and enemy_count > 0:
+				enemy_count_in_room -= 1
+		if attempts >= max_attempts and enemy_count_in_room > 0:
 			print("Warning: Не удалось разместить все врагов в комнате ", room)
 
 # Функция создания зон (Area2D) для каждой комнаты, основанных на углах
