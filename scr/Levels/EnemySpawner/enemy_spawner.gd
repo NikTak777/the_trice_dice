@@ -11,6 +11,7 @@ extends Node2D
 @export var enemy_manager: Node
 @export var weapon_spawner: Node
 @export var room_area_scene: PackedScene
+@export var hint_label: Node
 var count_room_cleared: int = 1
 
 var is_first_entered: bool = false # Флаг первого вхождения в любую комнату
@@ -155,7 +156,7 @@ func _on_player_entered_room(room_number: int) -> void:
 	print("Игрок вошёл в комнату ", room_number)
 	
 	if not is_first_entered:
-		hint_label()
+		show_first_hint()
 	
 	var player = get_tree().get_first_node_in_group("player")
 	player.is_inside_room = true
@@ -186,10 +187,8 @@ func _on_player_exited_room(room_number: int) -> void:
 			else:
 				enemy.room_active = true # !!! Было изначально false, пока костыль чтобы нельзя было спрятаться около двери
 
-func hint_label():
-	var hint = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn").instantiate()
-	add_child(hint)
-	hint.show_hint("Чтобы стрелять, зажмите ЛКМ", 7.0)
+func show_first_hint():
+	hint_label.show_hint("Чтобы стрелять, зажмите ЛКМ", 7.0)
 	is_first_entered = true
 	
 func _spawn_weapon_in_room(room_number: int) -> void:

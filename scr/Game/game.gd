@@ -5,6 +5,7 @@ var player_scene = preload("res://scr/Entities/Player/dice.tscn")
 var weapon_spawner_scene = preload("res://scr/Utils/WeaponSpawner/WeaponSpawner.tscn")
 var melee_enemy_scene = preload("res://scr/Entities/Enemies/MeleeEnemy/MeleeEnemy.tscn")
 var ranged_enemy_scene = preload("res://scr/Entities/Enemies/RangedEnemy/RangedEnemy.tscn")
+var hint_scene = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn")
 
 var corridor_graph = preload("res://scr/Levels/corridor_graph.gd").new()
 var map_drawer = preload("res://scr/Levels/map_drawer.gd").new()
@@ -22,6 +23,8 @@ var map_y: int = 80
 var enemy_manager: Node
 var enemy_spawner: Node
 
+var hint_label: Node = null
+
 # Словарь с направлениями выхода из каждой комнаты (room_number -> Array<Vector2>)
 var room_exit_dirs := {}
 
@@ -36,6 +39,8 @@ func _ready():
 	map_drawer = MapDrawer.new()
 	add_child(map_drawer)  # если нужно
 	map_drawer.draw_map(tilemap, root_node, corridor_graph.corridors)
+	
+	spawn_hint() 
 
 	spawn_player() # Создание главное героя в игровом уровне
 	spawn_weapons() # Создание оружия в игровом уровне
@@ -60,6 +65,10 @@ func _ready():
 	
 	queue_redraw()
 
+func spawn_hint():
+	hint_label = hint_scene.instantiate()
+	add_child(hint_label)
+
 func spawn_player():
 	var player = player_scene.instantiate()
 	add_child(player)
@@ -72,14 +81,13 @@ func spawn_player():
 	var canvas_layer = get_node("CanvasLayer")
 	canvas_layer.add_child(health_bar)
 	health_bar.position = Vector2(20, 60) # верхний левый угол, можешь настроить под себя
+	# health_bar.position += Vector2(-250, -60)
 	player.hp_bar = health_bar
 	player.hp_bar.set_max_hp(player.max_hp)
 	
 	player.change_ability()
-
-	var hint = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn").instantiate()
-	add_child(hint)
-	hint.show_hint("Подойди и нажми E, чтобы подобрать оружие", 7.0)
+	
+	hint_label.show_hint("Подойди и нажми E, чтобы подобрать оружие", 7.0)
 
 func spawn_weapons():
 	var spawner = weapon_spawner_scene.instantiate()
@@ -98,6 +106,7 @@ func spawn_enemy(room_boss: int):
 	spawner.enemy_manager = enemy_manager
 	spawner.weapon_spawner = weapon_spawner
 	spawner.room_boss = room_boss
+	spawner.hint_label = hint_label
 	add_child(spawner)
 	
 	enemy_spawner = spawner

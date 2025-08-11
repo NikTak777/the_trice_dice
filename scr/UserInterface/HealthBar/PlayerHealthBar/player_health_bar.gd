@@ -4,7 +4,7 @@ extends Control
 @onready var white_bar = $WhiteBar
 var tween: Tween
 
-var base_width: float = 350.0
+var base_width: float = 500.0
 
 func _ready():
 	tween = create_tween()
