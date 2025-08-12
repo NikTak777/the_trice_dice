@@ -101,7 +101,10 @@ var abilities = {
 	"activate": func(player):
 		var weapon = player.inventory.carried_weapon
 		if weapon:
-			weapon.bullet_spread_degrees = 0.0
+			if weapon.weapon_type == "shotgun":
+				weapon.bullet_spread_degrees /= 5.0
+			else:
+				weapon.bullet_spread_degrees = 0.0
 			weapon.cooldown_time *= 1.2
 		player.inventory.spread_disabled = true
 		player.inventory.cooldown_multiplier = 1.2,
