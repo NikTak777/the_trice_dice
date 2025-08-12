@@ -4,7 +4,7 @@ extends Control
 @onready var white_bar = $WhiteBar
 var tween: Tween
 
-var base_width: float = 350.0
+var base_width: float = 500.0
 
 func _ready():
 	tween = create_tween()
@@ -32,3 +32,18 @@ func set_hp(value: int):
 	tween.kill()
 	tween = create_tween()
 	tween.tween_property(white_bar, "value", value, 0.3).set_delay(0.25)
+	
+	update_color()
+	
+func update_color():
+	var fill_style = green_bar.get_theme_stylebox("fill").duplicate()
+	var hp_percent = float(green_bar.value) / float(green_bar.max_value) * 100.0
+
+	if hp_percent > 50:
+		fill_style.bg_color = Color(0, 1, 0)  # Зелёный
+	elif hp_percent > 20:
+		fill_style.bg_color = Color(1, 1, 0)  # Жёлтый
+	else:
+		fill_style.bg_color = Color(1, 0, 0)  # Красный
+
+	green_bar.add_theme_stylebox_override("fill", fill_style)

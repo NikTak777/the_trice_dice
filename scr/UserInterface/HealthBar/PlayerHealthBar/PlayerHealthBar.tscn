@@ -9,23 +9,29 @@ bg_color = Color(0.227386, 0.669394, 3.85046e-07, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_whuq7"]
 bg_color = Color(0.147672, 0.147672, 0.147672, 1)
-expand_margin_left = 2.0
-expand_margin_top = 2.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+expand_margin_bottom = 3.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aso76"]
 bg_color = Color(0.804743, 0.804743, 0.804743, 1)
 
 [node name="PlayerHealthBar" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
 script = ExtResource("1_xfn3q")
 
 [node name="GreenBar" type="ProgressBar" parent="."]
 z_index = 1
 layout_mode = 0
-offset_right = 350.0
+offset_right = 500.0
 offset_bottom = 27.0
 theme_override_styles/background = SubResource("StyleBoxEmpty_pfuvr")
 theme_override_styles/fill = SubResource("StyleBoxFlat_0a0rm")
@@ -35,7 +41,7 @@ show_percentage = false
 
 [node name="WhiteBar" type="ProgressBar" parent="."]
 layout_mode = 0
-offset_right = 350.0
+offset_right = 500.0
 offset_bottom = 27.0
 theme_override_styles/background = SubResource("StyleBoxFlat_whuq7")
 theme_override_styles/fill = SubResource("StyleBoxFlat_aso76")

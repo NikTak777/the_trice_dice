@@ -5,6 +5,7 @@ var player_scene = preload("res://scr/Entities/Player/dice.tscn")
 var weapon_spawner_scene = preload("res://scr/Utils/WeaponSpawner/WeaponSpawner.tscn")
 var melee_enemy_scene = preload("res://scr/Entities/Enemies/MeleeEnemy/MeleeEnemy.tscn")
 var ranged_enemy_scene = preload("res://scr/Entities/Enemies/RangedEnemy/RangedEnemy.tscn")
+var hint_scene = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn")
 
 var corridor_graph = preload("res://scr/Levels/corridor_graph.gd").new()
 var map_drawer = preload("res://scr/Levels/map_drawer.gd").new()
@@ -22,6 +23,8 @@ var map_y: int = 80
 var enemy_manager: Node
 var enemy_spawner: Node
 
+var hint_label: Node = null
+
 # Словарь с направлениями выхода из каждой комнаты (room_number -> Array<Vector2>)
 var room_exit_dirs := {}
 
@@ -36,6 +39,8 @@ func _ready():
 	map_drawer = MapDrawer.new()
 	add_child(map_drawer)  # если нужно
 	map_drawer.draw_map(tilemap, root_node, corridor_graph.corridors)
+	
+	spawn_hint() 
 
 	spawn_player() # Создание главное героя в игровом уровне
 	spawn_weapons() # Создание оружия в игровом уровне
@@ -60,26 +65,72 @@ func _ready():
 	
 	queue_redraw()
 
+func spawn_hint():
+	hint_label = hint_scene.instantiate()
+	add_child(hint_label)
+
 func spawn_player():
 	var player = player_scene.instantiate()
 	add_child(player)
-	var spawn_position = root_node.get_room_center(1) * tile_size
-	player.position = Vector2(spawn_position)
-	player.scale = Vector2(0.125, 0.125)
 	
 	# Добавляем HealthBar в CanvasLayer (UI)
 	var health_bar = preload("res://scr/UserInterface/HealthBar/PlayerHealthBar/PlayerHealthBar.tscn").instantiate()
 	var canvas_layer = get_node("CanvasLayer")
 	canvas_layer.add_child(health_bar)
 	health_bar.position = Vector2(20, 60) # верхний левый угол, можешь настроить под себя
+	# health_bar.position += Vector2(-250, -60)
 	player.hp_bar = health_bar
 	player.hp_bar.set_max_hp(player.max_hp)
 	
 	player.change_ability()
 
-	var hint = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn").instantiate()
-	add_child(hint)
-	hint.show_hint("Подойди и нажми E, чтобы подобрать оружие", 7.0)
+	# Позиции
+	var spawn_position: Vector2 = root_node.get_room_center(1) * tile_size
+	var start_position: Vector2 = spawn_position + Vector2(0, -500)
+	player.position = start_position
+	player.scale = Vector2(0.125, 0.125)
+
+	# --- Временное отвязывание камеры ---
+	var cam: Camera2D = player.get_node("Camera2D")
+	if cam:
+		player.remove_child(cam)
+		add_child(cam)
+
+		# Ставим камеру прямо в точку спавна без плавного движения
+		cam.global_position = spawn_position
+		cam.make_current()
+		cam.force_update_transform() # мгновенное обновление позиции
+
+	# Находим спрайт игрока
+	var sprite: Sprite2D = null
+	if player.has_node("Sprite2D"):
+		sprite = player.get_node("Sprite2D")
+	
+	# --- Анимация падения игрока ---
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_BOUNCE)
+	tween.set_ease(Tween.EASE_OUT)
+	tween.tween_property(player, "position", spawn_position, 2.0)
+	
+		# Анимация вращения (одновременно с падением)
+	if sprite:
+		var spin_tween = create_tween().set_parallel(true)
+		spin_tween.tween_property(sprite, "rotation", sprite.rotation + deg_to_rad(360 * 10), 2.0) \
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		# Возвращаем в ноль в конце
+		spin_tween.tween_property(sprite, "rotation", 0.0, 0.0).set_delay(2.0)
+
+	await tween.finished
+
+	# --- Возвращаем камеру обратно ---
+	if cam:
+		remove_child(cam)
+		player.add_child(cam)
+		cam.position = Vector2.ZERO
+		cam.make_current()
+		cam.force_update_transform()
+	
+	hint_label.show_hint("Подойди и нажми E, чтобы подобрать оружие", 7.0)
 
 func spawn_weapons():
 	var spawner = weapon_spawner_scene.instantiate()
@@ -98,6 +149,7 @@ func spawn_enemy(room_boss: int):
 	spawner.enemy_manager = enemy_manager
 	spawner.weapon_spawner = weapon_spawner
 	spawner.room_boss = room_boss
+	spawner.hint_label = hint_label
 	add_child(spawner)
 	
 	enemy_spawner = spawner

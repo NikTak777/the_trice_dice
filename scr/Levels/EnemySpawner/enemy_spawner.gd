@@ -11,12 +11,14 @@ extends Node2D
 @export var enemy_manager: Node
 @export var weapon_spawner: Node
 @export var room_area_scene: PackedScene
+@export var hint_label: Node
 var count_room_cleared: int = 1
 
 var is_first_entered: bool = false # Флаг первого вхождения в любую комнату
 
 # Словарь, где для каждой комнаты (номер) хранится массив врагов
 var room_enemies: Dictionary = {}
+var cleared_rooms: Dictionary = {} # room_number -> bool
 
 signal room_cleared(room_number)
 
@@ -26,6 +28,7 @@ func _ready() -> void:
 
 # Функция спавна врагов для каждой комнаты
 func spawn_enemies() -> void:
+	var current_enemy_count = 0
 	for room in range(room_start, room_end + 1):
 		
 		# Инициализируем массив врагов для этой комнаты
@@ -37,7 +40,6 @@ func spawn_enemies() -> void:
 			add_child(boss)
 			boss.position = map_generator.get_room_center(room_boss) * tile_size
 			boss.scale = Vector2(0.2, 0.2)
-			print(boss.position)
 			
 			# Добавляем свойство room_number для врага, чтобы знать его комнату
 			boss.set("room_number", room)
@@ -53,14 +55,15 @@ func spawn_enemies() -> void:
 		var y_max = room_corners[1][1]
 		
 		# Количество врагов для данной комнаты (можно менять по необходимости)
-		var enemy_count = room + 3
+		var enemy_count_in_room = room + 3
 		# Список уже занятых позиций, чтобы избежать наложений
 		var used_tiles: Array = []
 		var attempts := 0
 		var max_attempts := 1000
 		
-		while enemy_count > 0 and attempts < max_attempts:
+		while enemy_count_in_room > 0 and attempts < max_attempts:
 			attempts += 1
+			
 			var tile_x = randi_range(x_min, x_max)
 			var tile_y = randi_range(y_min, y_max)
 			var tile_pos = Vector2i(tile_x, tile_y)
@@ -73,8 +76,10 @@ func spawn_enemies() -> void:
 			if valid:
 				used_tiles.append(tile_pos)
 				
-				# Выбираем тип врага случайно (50/50)
-				var enemy_scene = melee_enemy_scene if randi() % 2 == 0 else ranged_enemy_scene
+				# var enemy_scene = melee_enemy_scene if randi() % 2 == 0 else ranged_enemy_scene
+				# Выбираем тип врага (50/50)
+				current_enemy_count += 1
+				var enemy_scene = melee_enemy_scene if current_enemy_count % 2 == 0 else ranged_enemy_scene
 				var enemy = enemy_scene.instantiate()
 				add_child(enemy)
 				
@@ -92,8 +97,8 @@ func spawn_enemies() -> void:
 				
 				room_enemies[room].append(enemy)
 				
-				enemy_count -= 1
-		if attempts >= max_attempts and enemy_count > 0:
+				enemy_count_in_room -= 1
+		if attempts >= max_attempts and enemy_count_in_room > 0:
 			print("Warning: Не удалось разместить все врагов в комнате ", room)
 
 # Функция создания зон (Area2D) для каждой комнаты, основанных на углах
@@ -137,14 +142,22 @@ func spawn_room_areas() -> void:
 
 		
 func _check_room_cleared(room_number: int) -> void:
+	if cleared_rooms.get(room_number, false):
+		return
+	
 	if room_enemies.has(room_number):
-		room_enemies[room_number] = room_enemies[room_number].filter(func(e): return is_instance_valid(e))
-
-		var remaining = room_enemies[room_number].size() - 1  # <- костыль
+		# Убираем всех врагов, которые уже не существуют
+		var enemies = room_enemies[room_number]
+		for i in range(enemies.size() - 1, -1, -1):
+			if not is_instance_valid(enemies[i]):
+				enemies.remove_at(i)
+		
+		var remaining = enemies.size() - 1 # <- костыль
 		print("Оставшиеся враги в комнате ", room_number, ": ", remaining)
-
+		
 		if remaining <= 0:
 			print("Комната очищена: ", room_number)
+			cleared_rooms[room_number] = true
 			_spawn_weapon_in_room(room_number)
 			emit_signal("room_cleared", room_number)
 		
@@ -152,7 +165,7 @@ func _on_player_entered_room(room_number: int) -> void:
 	print("Игрок вошёл в комнату ", room_number)
 	
 	if not is_first_entered:
-		hint_label()
+		show_first_hint()
 	
 	var player = get_tree().get_first_node_in_group("player")
 	player.is_inside_room = true
@@ -183,15 +196,13 @@ func _on_player_exited_room(room_number: int) -> void:
 			else:
 				enemy.room_active = true # !!! Было изначально false, пока костыль чтобы нельзя было спрятаться около двери
 
-func hint_label():
-	var hint = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn").instantiate()
-	add_child(hint)
-	hint.show_hint("Чтобы стрелять, зажмите ЛКМ", 7.0)
+func show_first_hint():
+	hint_label.show_hint("Чтобы стрелять, зажмите ЛКМ", 7.0)
 	is_first_entered = true
 	
 func _spawn_weapon_in_room(room_number: int) -> void:
 	count_room_cleared += 1
-
+	print("Комнат отчищено: ", count_room_cleared)
 	if count_room_cleared == 2:
 		weapon_spawner.spawn_weapon_in_room(room_number, map_generator, "Shotgun")
 	elif count_room_cleared == 5:

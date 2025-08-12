@@ -71,7 +71,7 @@ texture = ExtResource("2_ssiyq")
 7:1/0 = 0
 7:1/0/terrain_set = 0
 7:1/0/terrain = 0
-7:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, 8, 8, -8, -8, -8, -8, 8)
+7:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, 0.539577, 8, -8, -8, -8, -8, 0.719435)
 7:1/0/terrains_peering_bit/right_side = 0
 7:1/0/terrains_peering_bit/bottom_side = 0
 8:1/0 = 0
@@ -246,3 +246,5 @@ format = 2
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="MainMenu" parent="CanvasLayer" instance=ExtResource("3_8kvvk")]
+
+[node name="Camera2D" type="Camera2D" parent="."]

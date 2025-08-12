@@ -47,3 +47,4 @@ func die():
 	victory_node.set_script(preload("res://scr/Entities/Player/victory_player.gd"))
 	victory_node.victory_scene = preload("res://scr/UserInterface/VictoryLabel/Victory.tscn")
 	get_tree().get_root().add_child(victory_node)
+	queue_free()

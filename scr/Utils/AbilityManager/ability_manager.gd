@@ -67,13 +67,13 @@ var abilities = {
 		"activate": func(player):
 			if player.inventory.carried_weapon:
 				player.inventory.carried_weapon.cooldown_time *= 0.8
-				player.inventory.carried_weapon.bullet_spread_degrees *= 1.5
+				player.inventory.carried_weapon.bullet_spread_degrees *= 1.8 # Тест: было 1.5
 			player.inventory.spread_increased = true
 			player.inventory.cooldown_multiplier = 0.8,  
 		"deactivate": func(player):
 			if player.inventory.carried_weapon:
 				player.inventory.carried_weapon.cooldown_time /= 0.8
-				player.inventory.carried_weapon.bullet_spread_degrees /= 1.5
+				player.inventory.carried_weapon.bullet_spread_degrees /= 1.8 # Тест: было 1.5
 			player.inventory.spread_increased = false
 			player.inventory.cooldown_multiplier = 1.0,
 	},
