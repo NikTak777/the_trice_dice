@@ -18,6 +18,7 @@ var is_first_entered: bool = false # Флаг первого вхождения 
 
 # Словарь, где для каждой комнаты (номер) хранится массив врагов
 var room_enemies: Dictionary = {}
+var cleared_rooms: Dictionary = {} # room_number -> bool
 
 signal room_cleared(room_number)
 
@@ -141,14 +142,22 @@ func spawn_room_areas() -> void:
 
 		
 func _check_room_cleared(room_number: int) -> void:
+	if cleared_rooms.get(room_number, false):
+		return
+	
 	if room_enemies.has(room_number):
-		room_enemies[room_number] = room_enemies[room_number].filter(func(e): return is_instance_valid(e))
-
-		var remaining = room_enemies[room_number].size() - 1  # <- костыль
+		# Убираем всех врагов, которые уже не существуют
+		var enemies = room_enemies[room_number]
+		for i in range(enemies.size() - 1, -1, -1):
+			if not is_instance_valid(enemies[i]):
+				enemies.remove_at(i)
+		
+		var remaining = enemies.size() - 1 # <- костыль
 		print("Оставшиеся враги в комнате ", room_number, ": ", remaining)
-
+		
 		if remaining <= 0:
 			print("Комната очищена: ", room_number)
+			cleared_rooms[room_number] = true
 			_spawn_weapon_in_room(room_number)
 			emit_signal("room_cleared", room_number)
 		
@@ -193,7 +202,7 @@ func show_first_hint():
 	
 func _spawn_weapon_in_room(room_number: int) -> void:
 	count_room_cleared += 1
-
+	print("Комнат отчищено: ", count_room_cleared)
 	if count_room_cleared == 2:
 		weapon_spawner.spawn_weapon_in_room(room_number, map_generator, "Shotgun")
 	elif count_room_cleared == 5:
