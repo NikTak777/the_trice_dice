@@ -26,6 +26,7 @@
 - **Звук и музыка**: собственные и бесплатные ресурсы
 
 ## Структура проекта
+```
 the_trice_dice/
 ├── .godot
 ├── src/
@@ -74,6 +75,7 @@ the_trice_dice/
 ├── icon.svg
 ├── icon.svg.import
 └── project.godot
+```
 
 ## Установка и запуск для работы с исходным кодом
 1. Установите движок Godot по [ссылке](https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_win64.exe.zip)
