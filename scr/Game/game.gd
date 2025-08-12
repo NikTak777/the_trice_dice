@@ -72,9 +72,6 @@ func spawn_hint():
 func spawn_player():
 	var player = player_scene.instantiate()
 	add_child(player)
-	var spawn_position = root_node.get_room_center(1) * tile_size
-	player.position = Vector2(spawn_position)
-	player.scale = Vector2(0.125, 0.125)
 	
 	# Добавляем HealthBar в CanvasLayer (UI)
 	var health_bar = preload("res://scr/UserInterface/HealthBar/PlayerHealthBar/PlayerHealthBar.tscn").instantiate()
@@ -86,6 +83,52 @@ func spawn_player():
 	player.hp_bar.set_max_hp(player.max_hp)
 	
 	player.change_ability()
+
+	# Позиции
+	var spawn_position: Vector2 = root_node.get_room_center(1) * tile_size
+	var start_position: Vector2 = spawn_position + Vector2(0, -500)
+	player.position = start_position
+	player.scale = Vector2(0.125, 0.125)
+
+	# --- Временное отвязывание камеры ---
+	var cam: Camera2D = player.get_node("Camera2D")
+	if cam:
+		player.remove_child(cam)
+		add_child(cam)
+
+		# Ставим камеру прямо в точку спавна без плавного движения
+		cam.global_position = spawn_position
+		cam.make_current()
+		cam.force_update_transform() # мгновенное обновление позиции
+
+	# Находим спрайт игрока
+	var sprite: Sprite2D = null
+	if player.has_node("Sprite2D"):
+		sprite = player.get_node("Sprite2D")
+	
+	# --- Анимация падения игрока ---
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_BOUNCE)
+	tween.set_ease(Tween.EASE_OUT)
+	tween.tween_property(player, "position", spawn_position, 2.0)
+	
+		# Анимация вращения (одновременно с падением)
+	if sprite:
+		var spin_tween = create_tween().set_parallel(true)
+		spin_tween.tween_property(sprite, "rotation", sprite.rotation + deg_to_rad(360 * 10), 2.0) \
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		# Возвращаем в ноль в конце
+		spin_tween.tween_property(sprite, "rotation", 0.0, 0.0).set_delay(2.0)
+
+	await tween.finished
+
+	# --- Возвращаем камеру обратно ---
+	if cam:
+		remove_child(cam)
+		player.add_child(cam)
+		cam.position = Vector2.ZERO
+		cam.make_current()
+		cam.force_update_transform()
 	
 	hint_label.show_hint("Подойди и нажми E, чтобы подобрать оружие", 7.0)
 
