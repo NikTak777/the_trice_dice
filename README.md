@@ -62,14 +62,14 @@ the_trice_dice/
 │   │   ├── MainMenu/
 │   │   └── VictoryLabel/
 │   └── Utils/
-│   │   ├── AbilityManager/
-│   │   ├── Inventory/
-│   │   ├── SeparationArea/
-│   │   ├── SpriteFlipper/
-│   │   ├── WeaponFactory/
-│   │   ├── WeaponSpawner/
-│   │   ├── ZoomController/
-│   │   └── Global.gd
+│       ├── AbilityManager/
+│       ├── Inventory/
+│       ├── SeparationArea/
+│       ├── SpriteFlipper/
+│       ├── WeaponFactory/
+│       ├── WeaponSpawner/
+│       ├── ZoomController/
+│       └── Global.gd
 ├── README.md
 ├── export_presets.cfg
 ├── icon.svg
