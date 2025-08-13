@@ -98,7 +98,7 @@ func spawn_enemies() -> void:
 				room_enemies[room].append(enemy)
 				
 				enemy_count_in_room -= 1
-				print(room, " ", room_enemies[room])
+
 		if attempts >= max_attempts and enemy_count_in_room > 0:
 			print("Warning: Не удалось разместить все врагов в комнате ", room)
 

@@ -23,6 +23,7 @@ var map_y: int = 80
 # Внешние менеджеры
 var enemy_manager: Node
 var enemy_spawner: Node
+var health_bar: Node
 
 var hint_label: Node = null
 
@@ -35,7 +36,6 @@ func _process(delta: float) -> void:
 		print("Console")
 
 func _ready():
-	init_console()
 	
 	tilemap = get_node("TileMap")
 	root_node = map_generator.new(Vector2i(0, 0), Vector2i(map_x, map_y)) # Устанавливаем размер карты
@@ -71,6 +71,8 @@ func _ready():
 
 	add_child(door_manager)
 	
+	init_console()
+	
 	queue_redraw()
 	
 func init_console():
@@ -88,9 +90,9 @@ func spawn_player():
 	var health_bar = preload("res://scr/UserInterface/HealthBar/PlayerHealthBar/PlayerHealthBar.tscn").instantiate()
 	var canvas_layer = get_node("CanvasLayer")
 	canvas_layer.add_child(health_bar)
-	health_bar.position = Vector2(20, 60) # верхний левый угол, можешь настроить под себя
-	# health_bar.position += Vector2(-250, -60)
+	health_bar.position = Vector2(20, 60)
 	player.hp_bar = health_bar
+	self.health_bar = health_bar
 	player.hp_bar.set_max_hp(player.max_hp)
 	
 	player.change_ability()

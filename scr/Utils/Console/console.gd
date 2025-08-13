@@ -3,124 +3,71 @@ extends CanvasLayer
 @onready var log_output: RichTextLabel = $PanelContainer/VBoxContainer/RichTextLabel
 @onready var input_field: LineEdit = $PanelContainer/VBoxContainer/LineEdit
 
-var commands := {}
-
+var commands = {}
 var is_console_open: bool = false
 
 func _ready():
-	# Увеличиваем размеры
-	log_output.custom_minimum_size = Vector2(600, 400) # ширина и высота
+	log_output.custom_minimum_size = Vector2(600, 400)
 	input_field.custom_minimum_size = Vector2(600, 30)
-	$PanelContainer.position.y = 100
+	$PanelContainer.position += Vector2(20, 110)
 	
 	visible = false
 	input_field.connect("text_submitted", Callable(self, "_on_command_entered"))
-	register_default_commands()
+
+	_load_commands("res://scr/Utils/Console/Commands/")
 
 func toggle():
 	visible = !visible
-	# get_tree().paused = visible
 	Global.is_console_open = visible
 	if visible:
-		input_field.grab_focus() # курсор сразу в поле
+		input_field.grab_focus()
 	else:
-		get_viewport().set_input_as_handled() # сброс ввода
+		get_viewport().set_input_as_handled()
 
-func register_command(name: String, func_ref: Callable):
-	commands[name] = func_ref
+func register_command(name: String, cmd_object):
+	commands[name] = cmd_object
 
-func register_default_commands():
-	register_command("help", func() -> void:
-		for cmd in commands.keys():
-			print_to_console(cmd)
-	)
+func _load_commands(path: String) -> void:
+	var dir = DirAccess.open(path)
+	if dir == null:
+		push_error("Не удалось открыть папку с командами: %s" % path)
+		return
 
-	register_command("clear", func() -> void:
-		log_output.clear()
-	)
-	
-	register_command("give", func(weapon_name: String) -> void:
-		var player = get_tree().get_nodes_in_group("player")[0]
-		var weapon_factory_scene = preload("res://scr/Utils/WeaponFactory/WeaponFactory.tscn")
-		var weapon_factory = weapon_factory_scene.instantiate()
-		add_child(weapon_factory)
-		
-		if weapon_name == "help":
-			var weapon_list = weapon_factory.weapon_data.keys()
-			print_to_console("Доступное оружие:")
-			for w in weapon_list:
-				print_to_console(" - " + w)
-			return
-			
-		if not weapon_factory.weapon_data.has(weapon_name):
-			print_to_console("Ошибка: оружие '" + weapon_name + "' не найдено.")
-			weapon_factory.queue_free()
-			return
-		
-		var new_weapon = weapon_factory.create_weapon(weapon_name)
-		add_child(new_weapon)
-		player.inventory.pickup_weapon(new_weapon)
-		new_weapon.equip()
-		player.nearby_weapon = null
-		
-		print_to_console("Игроку выдано оружие " + weapon_name)
-	)
-	
-	register_command("zoom", func(camera_zoom) -> void:
-		camera_zoom = float(camera_zoom)
-		if camera_zoom < 0.001:
-			print_to_console("Слишком маленькое значение зума")
-			return
-		if camera_zoom > 100.0:
-			print_to_console("Слишком большое значение зума")
-			return
-		var player = get_tree().get_nodes_in_group("player")[0]
-		var camera = player.get_node("@Camera2D@6")
-		camera.zoom = Vector2(camera_zoom, camera_zoom)
-	)
-	
-	register_command("show_nodes", func() -> void:
-		var player = get_tree().get_nodes_in_group("player")[0]
-		print_to_console("Дерево игрока:")
-		print_node_tree(player)
-	)
-	
-	register_command("restart", func() -> void:
-		toggle()
-		get_tree().reload_current_scene()
-	)
-	
-	register_command("kill", func(room_number) -> void:
-		var enemy_spawner = get_parent().enemy_spawner
-		if room_number == "all":
-			for i in range(2,9):
-				enemy_spawner.kill_room_enemies(int(i))
-		else:
-			enemy_spawner.kill_room_enemies(int(room_number))
-	)
+	for file_name in dir.get_files():
+		if file_name.ends_with(".gd"):
+			var full_path := path.path_join(file_name)
+			var script := load(full_path)
+			if script == null:
+				push_warning("Не удалось загрузить команду: %s" % file_name)
+				continue
 
-func print_node_tree(node: Node, prefix: String = ""):
-	print_to_console(prefix + node.name)
-	for child in node.get_children():
-		print_node_tree(child, prefix + "  ")
+			var cmd_script = script.new()
+			if not cmd_script.has_method("get_name") or not cmd_script.has_method("execute"):
+				push_warning("Файл %s не является корректной командой" % file_name)
+				continue
+
+			var cmd_name = cmd_script.get_name()
+			register_command(cmd_name, cmd_script)
+			print_to_console("[OK] Команда '%s' загружена" % cmd_name)
 
 func _on_command_entered(command: String):
 	if command.strip_edges() == "":
 		return
 
-	var parts = command.strip_edges().split(" ")
+	var parts: Array = Array(command.strip_edges().split(" "))
 	var cmd = parts[0]
-	var args = parts.slice(1, parts.size())
+	var args: Array = parts.slice(1, parts.size()).filter(func(a): return str(a).strip_edges() != "")
 
 	if commands.has(cmd):
-		var func_ref: Callable = commands[cmd]
-		var expected_args = func_ref.get_argument_count()
+		var cmd_script = commands[cmd]
+		# Проверка аргументов
+		if cmd_script.has_method("get_arg_count"):
+			var expected_args = cmd_script.get_arg_count()
+			if args.size() < expected_args:
+				print_to_console("Ошибка: команда '%s' требует %d аргумент(ов), введено %d" % [cmd, expected_args, args.size()])
+				return
 
-		if args.size() < expected_args:
-			print_to_console("Ошибка: команда '%s' требует %d аргумент(ов), введено %d" % [cmd, expected_args, args.size()])
-			return
-
-		func_ref.callv(args)
+		cmd_script.execute(args, self)
 	else:
 		print_to_console("Неизвестная команда: " + cmd)
 
