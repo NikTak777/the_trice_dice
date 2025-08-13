@@ -18,7 +18,6 @@ func _ready():
 		tween.tween_property(camera, "zoom", 
 			Vector2(target_zoom, target_zoom), duration
 		).from(Vector2(start_zoom, start_zoom))
-		# camera.zoom = Vector2(5.0, 5.0)
 		flag_zoom = true
 		
 func _process(delta: float) -> void:
@@ -29,6 +28,6 @@ func change_zoom():
 	if flag_zoom:
 		camera.zoom = Vector2(0.3, 0.3)
 	else:
-		camera.zoom = Vector2(7.0, 7.0)
+		camera.zoom = Vector2(5.0, 5.0)
 	flag_zoom = !flag_zoom
 		

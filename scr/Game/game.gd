@@ -6,6 +6,7 @@ var weapon_spawner_scene = preload("res://scr/Utils/WeaponSpawner/WeaponSpawner.
 var melee_enemy_scene = preload("res://scr/Entities/Enemies/MeleeEnemy/MeleeEnemy.tscn")
 var ranged_enemy_scene = preload("res://scr/Entities/Enemies/RangedEnemy/RangedEnemy.tscn")
 var hint_scene = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn")
+var console = preload("res://scr/Utils/Console/Console.tscn").instantiate()
 
 var corridor_graph = preload("res://scr/Levels/corridor_graph.gd").new()
 var map_drawer = preload("res://scr/Levels/map_drawer.gd").new()
@@ -28,7 +29,14 @@ var hint_label: Node = null
 # Словарь с направлениями выхода из каждой комнаты (room_number -> Array<Vector2>)
 var room_exit_dirs := {}
 
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("toggle_console"):
+		console.toggle()
+		print("Console")
+
 func _ready():
+	init_console()
+	
 	tilemap = get_node("TileMap")
 	root_node = map_generator.new(Vector2i(0, 0), Vector2i(map_x, map_y)) # Устанавливаем размер карты
 	root_node.split(2) # Кол-во комнат = 2 в степени числа
@@ -64,6 +72,9 @@ func _ready():
 	add_child(door_manager)
 	
 	queue_redraw()
+	
+func init_console():
+	add_child(console)
 
 func spawn_hint():
 	hint_label = hint_scene.instantiate()

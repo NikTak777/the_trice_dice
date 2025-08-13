@@ -30,6 +30,8 @@ var knockback_velocity = Vector2.ZERO
 var knockback_timer = 0.0
 var knockback_duration = 0.4
 
+var is_console_open: bool = false
+
 func _ready():
 	position = Vector2.ZERO  # Устанавливает начальную позицию на (0, 0)
 	add_to_group("player")
@@ -53,10 +55,8 @@ func get_movement_direction():
 	return input_direction
 	
 func _process(delta):
-	#if !get_tree().paused:
-	#	var direction = get_movement_direction()
-	#	velocity = direction * speed
-	#	move_and_slide()
+	if Global.is_console_open:
+		return
 	
 	# Проверка на нажатие кнопки подбора оружия
 	if Input.is_action_just_pressed("pickup"):
@@ -88,6 +88,9 @@ func _process(delta):
 		change_ability()
 
 func _physics_process(delta):
+	if Global.is_console_open:
+		return
+	
 	# Отталкивание (если активно)
 	if knockback_timer > 0.0:
 		# Плавное замедление отлёта
