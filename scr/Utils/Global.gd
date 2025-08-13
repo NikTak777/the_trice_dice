@@ -1,6 +1,7 @@
 extends Node
 
-var is_game_over := false
+var is_game_over: bool = false
 
-var enemies_killed := 0
-var player_lives := 0
+var is_console_open: bool = false
+
+var enemies_killed: int = 0
