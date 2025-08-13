@@ -98,6 +98,7 @@ func spawn_enemies() -> void:
 				room_enemies[room].append(enemy)
 				
 				enemy_count_in_room -= 1
+				print(room, " ", room_enemies[room])
 		if attempts >= max_attempts and enemy_count_in_room > 0:
 			print("Warning: Не удалось разместить все врагов в комнате ", room)
 
@@ -195,6 +196,14 @@ func _on_player_exited_room(room_number: int) -> void:
 				enemies.remove_at(i)
 			else:
 				enemy.room_active = true # !!! Было изначально false, пока костыль чтобы нельзя было спрятаться около двери
+
+func kill_room_enemies(room_number: int) -> void:
+	self.room_enemies = room_enemies
+	var enemies = room_enemies[room_number]
+	for i in range(enemies.size() - 1, -1, -1):
+		var enemy = enemies[i]
+		enemies.remove_at(i)
+		enemy.die()
 
 func show_first_hint():
 	hint_label.show_hint("Чтобы стрелять, зажмите ЛКМ", 7.0)
