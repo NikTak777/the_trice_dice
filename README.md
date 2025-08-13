@@ -24,12 +24,21 @@
 - **Язык программирования**: GDScript
 - **Графика**: 2D-растовая
 - **Звук и музыка**: собственные и бесплатные ресурсы
+- **Поддерживаемые платформы**: Windows
+- **Системные требования**:
+  - CPU: 2 ядра
+  - RAM: 2 ГБ
+  - GPU: поддержка OpenGL 3.3 / WebGL 2.0
+- **Система ввода**: клавиатура + мышь
+- **Сетевой режим**: отсутствует (одиночная игра)
+- **Система сборки**: встроенный экспорт Godot
 
 ## Структура проекта
 Обозначения:
 * 📁 — папка
 * 🎬 — сцена .tscn
 * 📜 — скрипт .gd
+* 🔑 — метаданные .gd.uid
 ```
 the_trice_dice/
 ├── .godot
@@ -99,8 +108,17 @@ the_trice_dice/
 │   │   └── 🎬 MapGenerator.tscn
 │   ├── 📁 Objects/
 │   │   ├── 📁 Bullet/
+│   │   │   ├── 📜 bullet.gd
+│   │   │   ├── 🔑 bullet.gd.uid
+│   │   │   └── 🎬 Bullet.tscn
 │   │   ├── 📁 EnemyBullet/
+│   │   │   ├── 📜 enemy_bullet.gd
+│   │   │   ├── 🔑 enemy_bullet.gd.uid
+│   │   │   └── 🎬 EnemyBullet.tscn
 │   │   └── 📁 Weapon/
+│   │   │   ├── 📜 weapon.gd
+│   │   │   ├── 🔑 weapon.gd.uid
+│   │   │   └── 🎬 weapon.tscn
 │   ├── 📁 UserInterface/
 │   │   ├── 📁 AbilityTitle/
 │   │   ├── 📁 GameOverLabel/
@@ -111,13 +129,55 @@ the_trice_dice/
 │   │   └── 📁 VictoryLabel/
 │   └── 📁 Utils/
 │       ├── 📁 AbilityManager/
+│       │   ├── 📜 ability_manager.gd
+│       │   └── 🔑 ability_manager.gd.uid
+│       ├── 📁 Console/
+│       │   ├── 📁 Commands/
+│       │   │   ├── 📜 cmd_ability.gd
+│       │   │   ├── 🔑 cmd_ability.gd.uid
+│       │   │   ├── 📜 cmd_default.gd
+│       │   │   ├── 🔑 cmd_default.gd.uid
+│       │   │   ├── 📜 cmd_give.gd
+│       │   │   ├── 🔑 cmd_give.gd.uid
+│       │   │   ├── 📜 cmd_health.gd
+│       │   │   ├── 🔑 cmd_health.gd.uid
+│       │   │   ├── 📜 cmd_help.gd
+│       │   │   ├── 🔑 cmd_help.gd.uid
+│       │   │   ├── 📜 cmd_kill.gd
+│       │   │   ├── 🔑 cmd_kill.gd.uid
+│       │   │   ├── 📜 cmd_restart.gd
+│       │   │   ├── 🔑 cmd_restart.gd.uid
+│       │   │   ├── 📜 cmd_show_nodes.gd
+│       │   │   ├── 🔑 cmd_show_nodes.gd.uid
+│       │   │   ├── 📜 md_zoom.gd
+│       │   │   └── 🔑 cmd_zoom.gd.uid
+│       │   ├── 📜 console.gd
+│       │   ├── 🔑 console.gd.uid
+│       │   └── 🎬 Console.tscn
 │       ├── 📁 Inventory/
+│       │   ├── 📜 inventory.gd
+│       │   ├── 🔑 inventory.gd.uid
+│       │   └── 🎬 Inventory.tscn
 │       ├── 📁 SeparationArea/
+│       │   └── 🎬 SeparationArea.tscn
 │       ├── 📁 SpriteFlipper/
+│       │   ├── 📜 sprite_flipper.gd
+│       │   ├── 🔑 sprite_flipper.gd.uid
+│       │   └── 🎬 SpriteFlipper.tscn
 │       ├── 📁 WeaponFactory/
+│       │   ├── 📜 weapon_factory.gd
+│       │   ├── 🔑 weapon_factory.gd.uid
+│       │   └── 🎬 WeaponFactory.tscn
 │       ├── 📁 WeaponSpawner/
+│       │   ├── 📜 weapon_spawner.gd
+│       │   ├── 🔑 weapon_spawner.gd.uid
+│       │   └── 🎬 WeaponSpawner.tscn
 │       ├── 📁 ZoomController/
-│       └── 📜 Global.gd
+│       │   ├── 📜zoom_controller.gd
+│       │   ├── 🔑 zoom_controller.gd.uid
+│       │   └── 🎬ZoomController.tscn
+│       ├── 📜 Global.gd
+│       └── 🔑 Global.gd.uid
 ├── README.md
 ├── export_presets.cfg
 ├── icon.svg
