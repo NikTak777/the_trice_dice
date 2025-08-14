@@ -47,8 +47,3 @@ shape = SubResource("RectangleShape2D_bbpuy")
 script = ExtResource("3_d31vk")
 
 [node name="SeparationArea" parent="." instance=ExtResource("4_bbpuy")]
-
-[connection signal="body_entered" from="MovementArea" to="RangedMovement" method="_on_movement_area_body_entered"]
-[connection signal="body_exited" from="MovementArea" to="RangedMovement" method="_on_movement_area_body_exited"]
-[connection signal="body_entered" from="SeparationArea" to="RangedMovement" method="_on_separation_area_body_entered"]
-[connection signal="body_exited" from="SeparationArea" to="RangedMovement" method="_on_separation_area_body_exited"]

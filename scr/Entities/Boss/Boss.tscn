@@ -40,8 +40,3 @@ script = ExtResource("4_x7oej")
 
 [node name="BossAttack" type="Node2D" parent="."]
 script = ExtResource("5_52sx7")
-
-[connection signal="body_entered" from="MovementArea" to="BossMovement" method="_on_movement_area_body_entered"]
-[connection signal="body_entered" from="MovementArea" to="BossAttack" method="_on_movement_area_body_entered"]
-[connection signal="body_exited" from="MovementArea" to="BossMovement" method="_on_movement_area_body_exited"]
-[connection signal="body_exited" from="MovementArea" to="BossAttack" method="_on_movement_area_body_exited"]
