@@ -13,6 +13,11 @@ var player_in_range: bool = false
 
 func _ready() -> void:
 	
+	var inaccuracy = SettingsManager.get_boss_inaccuracy()
+	min_inaccuracy_angle_deg = inaccuracy["min_ang"]
+	max_inaccuracy_angle_deg = inaccuracy["max_ang"]
+	attack_interval = inaccuracy["interval"]
+	
 	# Подключаем сигналы детектора (предполагается, что узел Area называется "DetectionArea")
 	attack_area.connect("body_entered", Callable(self, "_on_movement_area_body_entered"))
 	attack_area.connect("body_exited", Callable(self, "_on_movement_area_body_exited"))

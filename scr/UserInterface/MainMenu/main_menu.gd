@@ -1,13 +1,18 @@
 extends Control
 
 func _ready():
-	# Подключаем сигналы, если не через редактор
+	# Подключение сигналов
 	$VBoxContainer/Button.pressed.connect(_on_start_button_pressed)
+	$VBoxContainer/Button2.pressed.connect(_on_settings_button_pressed)
 	$VBoxContainer/Button3.pressed.connect(_on_exit_button_pressed)
 
 func _on_start_button_pressed():
 	get_tree().change_scene_to_file("res://scr/Game/game.tscn")
-	queue_free()  # Удаляем меню
+	queue_free()
+
+func _on_settings_button_pressed():
+	var settings_scene = preload("res://scr/UserInterface/SettingsMenu/SettingsMenu.tscn").instantiate()
+	get_tree().current_scene.add_child(settings_scene)
 
 func _on_exit_button_pressed():
 	get_tree().quit()

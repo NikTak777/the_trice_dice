@@ -6,6 +6,7 @@ var weapon_spawner_scene = preload("res://scr/Utils/WeaponSpawner/WeaponSpawner.
 var melee_enemy_scene = preload("res://scr/Entities/Enemies/MeleeEnemy/MeleeEnemy.tscn")
 var ranged_enemy_scene = preload("res://scr/Entities/Enemies/RangedEnemy/RangedEnemy.tscn")
 var hint_scene = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn")
+var console = preload("res://scr/Utils/Console/Console.tscn").instantiate()
 
 var corridor_graph = preload("res://scr/Levels/corridor_graph.gd").new()
 var map_drawer = preload("res://scr/Levels/map_drawer.gd").new()
@@ -22,13 +23,20 @@ var map_y: int = 80
 # Внешние менеджеры
 var enemy_manager: Node
 var enemy_spawner: Node
+var health_bar: Node
 
 var hint_label: Node = null
 
 # Словарь с направлениями выхода из каждой комнаты (room_number -> Array<Vector2>)
 var room_exit_dirs := {}
 
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("toggle_console"):
+		console.toggle()
+		print("Console")
+
 func _ready():
+	
 	tilemap = get_node("TileMap")
 	root_node = map_generator.new(Vector2i(0, 0), Vector2i(map_x, map_y)) # Устанавливаем размер карты
 	root_node.split(2) # Кол-во комнат = 2 в степени числа
@@ -63,7 +71,12 @@ func _ready():
 
 	add_child(door_manager)
 	
+	init_console()
+	
 	queue_redraw()
+	
+func init_console():
+	add_child(console)
 
 func spawn_hint():
 	hint_label = hint_scene.instantiate()
@@ -77,9 +90,9 @@ func spawn_player():
 	var health_bar = preload("res://scr/UserInterface/HealthBar/PlayerHealthBar/PlayerHealthBar.tscn").instantiate()
 	var canvas_layer = get_node("CanvasLayer")
 	canvas_layer.add_child(health_bar)
-	health_bar.position = Vector2(20, 60) # верхний левый угол, можешь настроить под себя
-	# health_bar.position += Vector2(-250, -60)
+	health_bar.position = Vector2(20, 60)
 	player.hp_bar = health_bar
+	self.health_bar = health_bar
 	player.hp_bar.set_max_hp(player.max_hp)
 	
 	player.change_ability()

@@ -6,8 +6,8 @@ var weapon_data = {
 		"weapon_name": "Shotgun",
 		"weapon_type": "shotgun",
 		"cooldown_time": 1.0,
-		"damage": 5, # Было 25.0
-		"bullet_spread_degrees": 25.0, # Было 5.0
+		"damage": 5,
+		"bullet_spread_degrees": 35.0, # Было 25.0
 		"sprite_target_height": 10.0,
 		"weapon_texture": preload("res://scr/Assets/weapon_sprite/shotgun.png")
 	},

@@ -1,18 +1,17 @@
 extends CharacterBody2D
 
-@onready var menu = $"../CanvasLayer/InGameMenu"  # Подключаем меню
 @onready var ability_manager = preload("res://scr/Utils/AbilityManager/ability_manager.gd").new()
 @onready var ability_scene = preload("res://scr/UserInterface/AbilityTitle/AbilityTitle.tscn")
+@onready var menu: Control  # Подключаем меню
 
 # const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")
 const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/PlayerHealthBar/PlayerHealthBar.tscn")
 const INVENTORY_SCENE = preload("res://scr/Utils/Inventory/Inventory.tscn")
 const BULLET_SCENE = preload("res://scr/Objects/Bullet/Bullet.tscn")
 
-
 var max_hp = 100
 var current_hp = 100
-var hp_bar = null  # Здесь будем хранить ссылку на HealthBar
+var hp_bar = null  # Здесь хранится ссылку на HealthBar
 
 var speed = 100.0
 var damage_bonus: float = 1.0
@@ -29,6 +28,8 @@ var is_inside_room: bool = false
 var knockback_velocity = Vector2.ZERO
 var knockback_timer = 0.0
 var knockback_duration = 0.4
+
+var is_console_open: bool = false
 
 func _ready():
 	position = Vector2.ZERO  # Устанавливает начальную позицию на (0, 0)
@@ -53,10 +54,8 @@ func get_movement_direction():
 	return input_direction
 	
 func _process(delta):
-	#if !get_tree().paused:
-	#	var direction = get_movement_direction()
-	#	velocity = direction * speed
-	#	move_and_slide()
+	if Global.is_console_open:
+		return
 	
 	# Проверка на нажатие кнопки подбора оружия
 	if Input.is_action_just_pressed("pickup"):
@@ -88,6 +87,9 @@ func _process(delta):
 		change_ability()
 
 func _physics_process(delta):
+	if Global.is_console_open:
+		return
+	
 	# Отталкивание (если активно)
 	if knockback_timer > 0.0:
 		# Плавное замедление отлёта
