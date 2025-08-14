@@ -116,7 +116,6 @@ layout_mode = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
 text = "Volume"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="VolumeSlider" type="HSlider" parent="VBoxContainer/VolumeSelector"]
@@ -126,6 +125,13 @@ tick_count = 11
 
 [node name="FullScreenSelector" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="FullScreenLabel" type="Label" parent="VBoxContainer/FullScreenSelector"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Full Screen Mode"
+vertical_alignment = 1
 
 [node name="FullScreenCheckBox" type="Button" parent="VBoxContainer/FullScreenSelector"]
 layout_mode = 2
@@ -145,6 +151,12 @@ text = "Full Screen Mode"
 layout_mode = 2
 theme_override_constants/separation = 3
 
+[node name="DifficultyLabel" type="Label" parent="VBoxContainer/DifficultySelector"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Difficulty"
+vertical_alignment = 1
+
 [node name="LeftArrow" type="Button" parent="VBoxContainer/DifficultySelector"]
 layout_mode = 2
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
@@ -158,7 +170,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_qu50g")
 theme_override_styles/normal = SubResource("StyleBoxFlat_dfilb")
 text = "◀"
 
-[node name="DifficultyLabel" type="Label" parent="VBoxContainer/DifficultySelector"]
+[node name="DifficultyMode" type="Label" parent="VBoxContainer/DifficultySelector"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -181,7 +193,11 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_agv25")
 theme_override_styles/normal = SubResource("StyleBoxFlat_refbm")
 text = "▶"
 
-[node name="BackButton" type="Button" parent="VBoxContainer"]
+[node name="BackButtonContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="BackButton" type="Button" parent="VBoxContainer/BackButtonContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
