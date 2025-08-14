@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
-@onready var menu = $"../CanvasLayer/InGameMenu"  # Подключаем меню
 @onready var ability_manager = preload("res://scr/Utils/AbilityManager/ability_manager.gd").new()
 @onready var ability_scene = preload("res://scr/UserInterface/AbilityTitle/AbilityTitle.tscn")
+@onready var menu: Control  # Подключаем меню
 
 # const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")
 const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/PlayerHealthBar/PlayerHealthBar.tscn")
@@ -11,7 +11,7 @@ const BULLET_SCENE = preload("res://scr/Objects/Bullet/Bullet.tscn")
 
 var max_hp = 100
 var current_hp = 100
-var hp_bar = null  # Здесь будем хранить ссылку на HealthBar
+var hp_bar = null  # Здесь хранится ссылку на HealthBar
 
 var speed = 100.0
 var damage_bonus: float = 1.0
