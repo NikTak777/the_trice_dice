@@ -1,0 +1,196 @@
+[gd_scene load_steps=17 format=3 uid="uid://cr75vb48r4fo7"]
+
+[ext_resource type="Script" uid="uid://cydapy8dw6a2t" path="res://scr/UserInterface/SettingsMenu/settings_menu.gd" id="1_u8glf"]
+[ext_resource type="Texture2D" uid="uid://bmwyqjrnco08n" path="res://scr/Assets/menu_background.png" id="2_qts30"]
+[ext_resource type="FontFile" uid="uid://cmjjk4hriqcck" path="res://scr/Assets/GrapeSoda.ttf" id="3_dfilb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dfilb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7fld1"]
+bg_color = Color(0.593134, 0.593134, 0.593134, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dh5y3"]
+bg_color = Color(0.205117, 0.205117, 0.205117, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3envu"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7fld1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8u6w2"]
+bg_color = Color(0.592157, 0.592157, 0.592157, 1)
+corner_radius_top_left = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qu50g"]
+bg_color = Color(0.203922, 0.203922, 0.203922, 1)
+corner_radius_top_left = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dfilb"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bsitk"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bsitk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4n4tp"]
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_agv25"]
+bg_color = Color(0.203922, 0.203922, 0.203922, 1)
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_refbm"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+
+[node name="SettingsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_u8glf")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -967.0
+offset_top = -575.0
+offset_right = 569.0
+offset_bottom = 449.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("2_qts30")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 7
+theme_override_fonts/font = ExtResource("3_dfilb")
+theme_override_font_sizes/font_size = 81
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="VolumeSelector" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="VolumeLabel" type="Label" parent="VBoxContainer/VolumeSelector"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Volume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VolumeSlider" type="HSlider" parent="VBoxContainer/VolumeSelector"]
+layout_mode = 2
+step = 10.0
+tick_count = 11
+
+[node name="FullScreenSelector" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="FullScreenCheckBox" type="Button" parent="VBoxContainer/FullScreenSelector"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_dfilb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7fld1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dh5y3")
+theme_override_styles/normal = SubResource("StyleBoxFlat_3envu")
+text = "Full Screen Mode"
+
+[node name="DifficultySelector" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="LeftArrow" type="Button" parent="VBoxContainer/DifficultySelector"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7fld1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_8u6w2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_qu50g")
+theme_override_styles/normal = SubResource("StyleBoxFlat_dfilb")
+text = "◀"
+
+[node name="DifficultyLabel" type="Label" parent="VBoxContainer/DifficultySelector"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_bsitk")
+text = "Normal"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightArrow" type="Button" parent="VBoxContainer/DifficultySelector"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_bsitk")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4n4tp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_agv25")
+theme_override_styles/normal = SubResource("StyleBoxFlat_refbm")
+text = "▶"
+
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_dfilb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7fld1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_dh5y3")
+theme_override_styles/normal = SubResource("StyleBoxFlat_3envu")
+text = "Back to Menu"
