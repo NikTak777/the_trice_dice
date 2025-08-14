@@ -9,7 +9,6 @@ const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/PlayerHealthB
 const INVENTORY_SCENE = preload("res://scr/Utils/Inventory/Inventory.tscn")
 const BULLET_SCENE = preload("res://scr/Objects/Bullet/Bullet.tscn")
 
-
 var max_hp = 100
 var current_hp = 100
 var hp_bar = null  # Здесь будем хранить ссылку на HealthBar
