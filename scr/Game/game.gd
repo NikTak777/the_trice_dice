@@ -7,6 +7,7 @@ var melee_enemy_scene = preload("res://scr/Entities/Enemies/MeleeEnemy/MeleeEnem
 var ranged_enemy_scene = preload("res://scr/Entities/Enemies/RangedEnemy/RangedEnemy.tscn")
 var hint_scene = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn")
 var console = preload("res://scr/Utils/Console/Console.tscn").instantiate()
+var GameTimer = preload("res://scr/Game/game_timer.gd")
 
 var corridor_graph = preload("res://scr/Levels/corridor_graph.gd").new()
 var map_drawer = preload("res://scr/Levels/map_drawer.gd").new()
@@ -26,6 +27,8 @@ var enemy_spawner: Node
 var health_bar: Node
 
 var hint_label: Node = null
+
+var game_timer: Node
 
 # Словарь с направлениями выхода из каждой комнаты (room_number -> Array<Vector2>)
 var room_exit_dirs := {}
@@ -73,7 +76,16 @@ func _ready():
 	
 	init_console()
 	
+	game_timer = GameTimer.new()
+	add_child(game_timer)
+	game_timer.start_timer()
+	
 	queue_redraw()
+	
+func _on_boss_defeated():
+	var elapsed = game_timer.stop_timer()
+	Global.last_run_time = elapsed
+	print("Last game time: ", Global.last_run_time)
 	
 func init_console():
 	add_child(console)
