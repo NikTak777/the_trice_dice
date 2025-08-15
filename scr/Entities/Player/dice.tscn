@@ -19,10 +19,10 @@ texture = ExtResource("2_jp6y2")
 
 [node name="SpriteFlipper" parent="." instance=ExtResource("3_avock")]
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="PlayerCamera" type="Camera2D" parent="."]
 position_smoothing_enabled = true
 
-[node name="ZoomController" parent="Camera2D" node_paths=PackedStringArray("camera") instance=ExtResource("4_nmhnp")]
+[node name="ZoomController" parent="PlayerCamera" node_paths=PackedStringArray("camera") instance=ExtResource("4_nmhnp")]
 camera = NodePath("..")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

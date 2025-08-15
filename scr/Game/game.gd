@@ -114,7 +114,7 @@ func spawn_player():
 	player.scale = Vector2(0.125, 0.125)
 
 	# --- Временное отвязывание камеры ---
-	var cam: Camera2D = player.get_node("Camera2D")
+	var cam: Camera2D = player.get_node("PlayerCamera")
 	if cam:
 		player.remove_child(cam)
 		add_child(cam)
