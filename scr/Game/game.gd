@@ -40,16 +40,7 @@ func _process(delta: float) -> void:
 
 func _ready():
 	
-	tilemap = get_node("TileMap")
-	root_node = map_generator.new(Vector2i(0, 0), Vector2i(map_x, map_y)) # Устанавливаем размер карты
-	root_node.split(2) # Кол-во комнат = 2 в степени числа
-	
-	corridor_graph = CorridorGraph.new()
-	corridor_graph.build_corridor_graph(root_node)
-	
-	map_drawer = MapDrawer.new()
-	add_child(map_drawer)  # если нужно
-	map_drawer.draw_map(tilemap, root_node, corridor_graph.corridors)
+	create_level()
 	
 	spawn_hint() 
 
@@ -81,6 +72,18 @@ func _ready():
 	statistic_manager.start_game()
 	
 	queue_redraw()
+	
+func create_level():
+	tilemap = get_node("TileMap")
+	root_node = map_generator.new(Vector2i(0, 0), Vector2i(map_x, map_y)) # Устанавливаем размер карты
+	root_node.split(2) # Кол-во комнат = 2 в степени числа
+	
+	corridor_graph = CorridorGraph.new()
+	corridor_graph.build_corridor_graph(root_node)
+	
+	map_drawer = MapDrawer.new()
+	add_child(map_drawer)  # если нужно
+	map_drawer.draw_map(tilemap, root_node, corridor_graph.corridors)
 	
 func init_console():
 	add_child(console)
