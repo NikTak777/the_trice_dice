@@ -11,7 +11,8 @@ func _ready():
 	input_field.custom_minimum_size = Vector2(600, 30)
 	$PanelContainer.position += Vector2(20, 110)
 	
-	visible = false
+	toggle() # Костыль: убирает консоль с прошлой игры
+	
 	input_field.connect("text_submitted", Callable(self, "_on_command_entered"))
 
 	_load_commands("res://scr/Utils/Console/Commands/")
