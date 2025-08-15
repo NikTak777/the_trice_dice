@@ -23,8 +23,9 @@ func _on_exit_button_pressed():
 	
 func check_statistic():
 	if not Global.is_last_game_victory:
-		last_game_info.text = ""
+		last_game_info.visible = false
 	else:
+		last_game_info.visible = true
 		last_game_info.text = "Last game info:\nDifficulty: %s\nLast time: %.2f\nBest time: %.2f" % [
 			Global.last_game_difficulty,
 			Global.last_run_time,
