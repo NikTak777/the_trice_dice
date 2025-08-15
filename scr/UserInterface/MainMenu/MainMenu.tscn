@@ -138,3 +138,20 @@ theme_override_constants/shadow_offset_y = 7
 theme_override_fonts/font = ExtResource("2_7cont")
 theme_override_font_sizes/font_size = 81
 text = "The Trice Dice"
+
+[node name="LastGameInfoContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 600.0
+offset_top = -100.0
+offset_right = 800.0
+offset_bottom = 100.0
+
+[node name="LastGameInfoText" type="Label" parent="LastGameInfoContainer"]
+layout_mode = 2
+theme_override_constants/line_spacing = 7
+theme_override_font_sizes/font_size = 25
+text = "Last game info:
+Difficulty: hard
+Time: 99,99"
+horizontal_alignment = 1
+vertical_alignment = 1
