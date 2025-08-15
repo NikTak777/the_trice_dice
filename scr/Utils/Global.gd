@@ -11,3 +11,5 @@ var last_run_time: float = 0.0 # Время нахождения в послед
 var is_last_game_victory: bool = false # Статус последней игры (победа или проигрыш)
 
 var last_game_difficulty: String = "" # Название сложности последней игры
+
+var best_run_time: float = 0.0 
