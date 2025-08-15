@@ -13,21 +13,15 @@ var abilities = {
 	"hp_boost": {
 		"description": "Увеличивает текущее и максимальное HP",
 		"activate": func(player):
-			# player.max_hp *= 1.2
-			# player.current_hp *= 1.2
 			player.max_hp += 20.0
 			player.current_hp += 20.0
 			player.hp_bar.set_max_hp(player.max_hp)
 			player.hp_bar.set_hp(player.current_hp),
 		"deactivate": func(player):
-			print("Было:", player.max_hp, " ", player.current_hp)
-			# player.max_hp /= 1.2
 			player.max_hp -= 20.0
 			if player.current_hp > 100.0: player.current_hp = 100.0
-			# player.current_hp *= 0.9
 			player.hp_bar.set_max_hp(player.max_hp)
-			player.hp_bar.set_hp(player.current_hp)
-			print("Стало:", player.max_hp, " ", player.current_hp),
+			player.hp_bar.set_hp(player.current_hp),
 	},
 	#---------------------------------------------------------
 	# Способность: увеличение урона оружия
@@ -102,7 +96,7 @@ var abilities = {
 		var weapon = player.inventory.carried_weapon
 		if weapon:
 			if weapon.weapon_type == "shotgun":
-				weapon.bullet_spread_degrees /= 5.0
+				weapon.bullet_spread_degrees /= 3.0 # Тест: было 5.0
 			else:
 				weapon.bullet_spread_degrees = 0.0
 			weapon.cooldown_time *= 1.2
