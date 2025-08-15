@@ -25,8 +25,9 @@ func check_statistic():
 	if not Global.is_last_game_victory:
 		last_game_info.text = ""
 	else:
-		last_game_info.text = "Last game info:\nDifficulty: %s\nTime: %.2f" % [
+		last_game_info.text = "Last game info:\nDifficulty: %s\nLast time: %.2f\nBest time: %.2f" % [
 			Global.last_game_difficulty,
-			Global.last_run_time
+			Global.last_run_time,
+			Global.best_run_time
 		]
 	
