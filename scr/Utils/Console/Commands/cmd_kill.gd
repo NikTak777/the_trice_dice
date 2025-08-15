@@ -15,6 +15,8 @@ func execute(args: Array, console) -> void: # сама логика
 			if i == enemy_spawner.room_boss:
 				continue
 			enemy_spawner.kill_room_enemies(int(i))
+	elif room_number == "boss":
+		enemy_spawner.kill_room_enemies(int(enemy_spawner.room_boss))
 	elif room_number == "help":
 		console.print_to_console("Доступные аргументы команды 'kill':\nall")
 		for i in range(enemy_spawner.room_start, enemy_spawner.room_end + 1):
