@@ -43,6 +43,8 @@ func take_damage(amount: int):
 		die()
 
 func die():
+	var game_node = get_tree().current_scene
+	game_node.statistic_manager.end_game(true)
 	var victory_node = Node.new()
 	victory_node.set_script(preload("res://scr/Entities/Player/victory_player.gd"))
 	victory_node.victory_scene = preload("res://scr/UserInterface/VictoryLabel/Victory.tscn")

@@ -18,5 +18,8 @@ func execute(args: Array, console) -> void:
 
 	var player = console.get_tree().get_nodes_in_group("player")[0]
 	var camera = player.get_node("@Camera2D@6")
+	if not camera:
+		console.print_to_console("Ошибка: камера не найдена")
+		return
 	camera.zoom = Vector2(camera_zoom, camera_zoom)
 	console.print_to_console("Зум установлен: " + str(camera_zoom))

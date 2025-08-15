@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bol2q3lqvl0q1"]
+[gd_scene load_steps=9 format=3 uid="uid://bol2q3lqvl0q1"]
 
 [ext_resource type="Script" uid="uid://dkfvjuumnofo6" path="res://scr/UserInterface/MainMenu/main_menu.gd" id="1_13r8m"]
 [ext_resource type="FontFile" uid="uid://cmjjk4hriqcck" path="res://scr/Assets/GrapeSoda.ttf" id="2_7cont"]
@@ -32,6 +32,17 @@ corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 shadow_size = 5
 shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7cont"]
+bg_color = Color(0.360784, 0.0431373, 0, 0.458824)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_top = 26.0
+expand_margin_bottom = 26.0
+shadow_color = Color(0, 0, 0, 1)
+shadow_size = 4
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -138,3 +149,32 @@ theme_override_constants/shadow_offset_y = 7
 theme_override_fonts/font = ExtResource("2_7cont")
 theme_override_font_sizes/font_size = 81
 text = "The Trice Dice"
+
+[node name="LastGameInfoContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 250.0
+offset_top = -107.5
+offset_right = 500.0
+offset_bottom = 107.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="LastGameInfoText" type="Label" parent="LastGameInfoContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 7
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleBoxFlat_7cont")
+text = "Last game info:
+Difficulty: hard
+Last time: 99,99
+Best time: 19,09"
+horizontal_alignment = 1
+vertical_alignment = 1
