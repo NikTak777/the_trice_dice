@@ -120,7 +120,11 @@ the_trice_dice/
 │   │   ├── 📁 Game/
 │   │   │   ├── 📜 game.gd
 │   │   │   ├── 🔑 game.gd.uid
-│   │   │   └── 🎬 game.tscn
+│   │   │   ├── 🎬 game.tscn
+│   │   │   ├── 📜 game_timer.gd
+│   │   │   ├── 🔑 game_timer.gd.uid
+│   │   │   ├── 📜 statistic_manager.gd
+│   │   │   └── 🔑 statistic_manager.gd.uid
 │   │   └── 📁 Main/
 │   │       ├── 📜 main.gd
 │   │       ├── 🔑 main.gd.uid
@@ -247,9 +251,9 @@ the_trice_dice/
 │       │   ├── 🔑 weapon_spawner.gd.uid
 │       │   └── 🎬 WeaponSpawner.tscn
 │       ├── 📁 ZoomController/
-│       │   ├── 📜zoom_controller.gd
+│       │   ├── 📜 zoom_controller.gd
 │       │   ├── 🔑 zoom_controller.gd.uid
-│       │   └── 🎬ZoomController.tscn
+│       │   └── 🎬 ZoomController.tscn
 │       ├── 📜 Global.gd
 │       └── 🔑 Global.gd.uid
 ├── README.md
