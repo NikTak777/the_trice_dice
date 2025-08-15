@@ -7,7 +7,7 @@ var melee_enemy_scene = preload("res://scr/Entities/Enemies/MeleeEnemy/MeleeEnem
 var ranged_enemy_scene = preload("res://scr/Entities/Enemies/RangedEnemy/RangedEnemy.tscn")
 var hint_scene = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn")
 var console = preload("res://scr/Utils/Console/Console.tscn").instantiate()
-var GameTimer = preload("res://scr/Game/game_timer.gd")
+var StatisticManager = preload("res://scr/Game/statistic_manager.gd")
 
 var corridor_graph = preload("res://scr/Levels/corridor_graph.gd").new()
 var map_drawer = preload("res://scr/Levels/map_drawer.gd").new()
@@ -28,7 +28,7 @@ var health_bar: Node
 
 var hint_label: Node = null
 
-var game_timer: Node
+var statistic_manager: Node
 
 # Словарь с направлениями выхода из каждой комнаты (room_number -> Array<Vector2>)
 var room_exit_dirs := {}
@@ -76,18 +76,11 @@ func _ready():
 	
 	init_console()
 	
-	game_timer = GameTimer.new()
-	add_child(game_timer)
-	game_timer.start_timer()
+	statistic_manager = StatisticManager.new()
+	add_child(statistic_manager)
+	statistic_manager.start_game()
 	
 	queue_redraw()
-	
-func save_last_game_info(is_victory: bool = false):
-	var elapsed = game_timer.stop_timer()
-	Global.is_last_game_victory = is_victory
-	Global.last_run_time = elapsed
-	Global.last_game_difficulty = SettingsManager.get_current_difficulty()
-	print(Global.is_last_game_victory, " Last game time: ", Global.last_run_time)
 	
 func init_console():
 	add_child(console)
