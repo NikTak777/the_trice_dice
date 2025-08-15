@@ -82,10 +82,12 @@ func _ready():
 	
 	queue_redraw()
 	
-func _on_boss_defeated():
+func save_last_game_info(is_victory: bool = false):
 	var elapsed = game_timer.stop_timer()
+	Global.is_last_game_victory = is_victory
 	Global.last_run_time = elapsed
-	print("Last game time: ", Global.last_run_time)
+	Global.last_game_difficulty = SettingsManager.get_current_difficulty()
+	print(Global.is_last_game_victory, " Last game time: ", Global.last_run_time)
 	
 func init_console():
 	add_child(console)
