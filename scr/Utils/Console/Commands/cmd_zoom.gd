@@ -17,7 +17,7 @@ func execute(args: Array, console) -> void:
 		return
 
 	var player = console.get_tree().get_nodes_in_group("player")[0]
-	var camera = player.get_node("@Camera2D@6")
+	var camera = player.get_node("PlayerCamera")
 	if not camera:
 		console.print_to_console("Ошибка: камера не найдена")
 		return
