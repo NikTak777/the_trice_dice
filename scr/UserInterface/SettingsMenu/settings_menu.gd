@@ -52,7 +52,8 @@ func _ready():
 	fullscreen_check.toggled.connect(_on_fullscreen_check_toggled)
 	fullscreen_check.custom_minimum_size = Vector2(197, 75)
 	fullscreen_label.custom_minimum_size = Vector2(250, 75)
-	fullscreen_check.text = "Off"
+	fullscreen_check.text = "On" if SettingsManager.fullscreen else "Off"
+	
 	
 	# Обновляем текст сложности при запуске
 	update_label()
