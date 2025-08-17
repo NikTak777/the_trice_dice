@@ -7,7 +7,7 @@ var melee_enemy_scene = preload("res://scr/Entities/Enemies/MeleeEnemy/MeleeEnem
 var ranged_enemy_scene = preload("res://scr/Entities/Enemies/RangedEnemy/RangedEnemy.tscn")
 var hint_scene = preload("res://scr/UserInterface/HintLabel/HintLabel.tscn")
 var console = preload("res://scr/Utils/Console/Console.tscn").instantiate()
-var StatisticManager = preload("res://scr/Game/statistic_manager.gd")
+# var StatisticManager = preload("res://scr/Game/statistic_manager.gd")
 
 var corridor_graph = preload("res://scr/Levels/corridor_graph.gd").new()
 var map_drawer = preload("res://scr/Levels/map_drawer.gd").new()
@@ -67,9 +67,9 @@ func _ready():
 	
 	init_console()
 	
-	statistic_manager = StatisticManager.new()
-	add_child(statistic_manager)
-	statistic_manager.start_game()
+	#statistic_manager = StatisticManager.new()
+	#add_child(statistic_manager)
+	StatisticManager.start_game()
 	
 	queue_redraw()
 	
