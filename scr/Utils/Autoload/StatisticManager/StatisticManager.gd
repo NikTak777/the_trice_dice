@@ -84,6 +84,21 @@ func update_local_stats():
 	last_run_time = last_game_info["time"]
 	is_last_game_victory = last_game_info["is_victory"]
 	last_game_difficulty = last_game_info["difficulty"]
+	
+# Полная очистка статистики
+func reset_stats() -> void:
+	stats = {
+		"games": [],
+		"best_time": 0.0
+	}
+
+	enemies_killed = 0
+	last_run_time = 0.0
+	is_last_game_victory = false
+	last_game_difficulty = ""
+	best_run_time = 0.0
+
+	save_stats()
 
 # Получить лучший результат
 func get_best_time() -> float:
