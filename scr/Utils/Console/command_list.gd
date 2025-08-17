@@ -12,4 +12,5 @@ const COMMANDS = [
 	"res://scr/Utils/Console/Commands/cmd_restart.gd",
 	"res://scr/Utils/Console/Commands/cmd_show_nodes.gd",
 	"res://scr/Utils/Console/Commands/cmd_zoom.gd",
+	"res://scr/Utils/Console/Commands/cmd_reset_stats.gd",
 ]

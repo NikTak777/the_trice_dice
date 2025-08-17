@@ -79,11 +79,17 @@ func load_stats():
 	update_local_stats()
 
 func update_local_stats():
-	best_run_time = stats["best_time"]
-	var last_game_info = get_last_games(1)[0]
-	last_run_time = last_game_info["time"]
-	is_last_game_victory = last_game_info["is_victory"]
-	last_game_difficulty = last_game_info["difficulty"]
+	if has_any_game():
+		best_run_time = stats["best_time"]
+		var last_game_info = get_last_games(1)[0]
+		last_run_time = last_game_info["time"]
+		is_last_game_victory = last_game_info["is_victory"]
+		last_game_difficulty = last_game_info["difficulty"]
+	else:
+		best_run_time = 0.0
+		last_run_time = 0.0
+		is_last_game_victory = false
+		last_game_difficulty = ""
 	
 # Полная очистка статистики
 func reset_stats() -> void:
