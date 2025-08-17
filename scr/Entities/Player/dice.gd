@@ -149,7 +149,7 @@ func apply_knockback(from_position: Vector2):
 func die():
 	queue_free()  # удаляем игрока и всё привязанное
 	
-	get_parent().statistic_manager.end_game(false) # Передаёт статистику
+	StatisticManager.end_game(false) # Передаёт статистику
 	
 	# Создаём ноду с логикой смерти
 	var death_node = Node.new()
