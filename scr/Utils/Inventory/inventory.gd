@@ -26,12 +26,15 @@ func pickup_weapon(new_weapon): # Функция подбора оружия
 	if cooldown_multiplier != 1.0:
 		new_weapon.cooldown_time *= cooldown_multiplier
 	
-	if spread_disabled:
+	if spread_disabled and new_weapon.weapon_type != "shotgun":
 		new_weapon.bullet_spread_degrees = 0.0
-		print("Онулирование разброса на ", new_weapon.bullet_spread_degrees)
-	if spread_increased:
+		# print("Онулирование разброса (не дробовика) на ", new_weapon.bullet_spread_degrees)
+	if spread_increased and new_weapon.weapon_type != "shotgun":
 		new_weapon.bullet_spread_degrees = new_weapon.original_bullet_spread_degrees * 1.5
-		print("Увеличение разброса на ", new_weapon.bullet_spread_degrees)
+		# print("Увеличение разброса (не дробовика) на ", new_weapon.bullet_spread_degrees)
+	if spread_disabled and new_weapon.weapon_type == "shotgun":
+		new_weapon.bullet_spread_degrees /= 3.0
+		# print("Увеличение разброса дробовика на ", new_weapon.bullet_spread_degrees)
 	
 	print("Подобрано оружие: ", new_weapon.weapon_name)
 		
