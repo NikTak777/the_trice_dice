@@ -32,7 +32,7 @@ func spawn_damage_popup(amount: int):
 	add_child(popup)
 	popup.global_position = global_position + Vector2(0, -10)
 	popup.setup(amount, true)
-	get_tree().current_scene.add_child(popup)
+	# get_tree().current_scene.add_child(popup)
 
 func take_damage(amount: int):
 	current_hp -= amount
