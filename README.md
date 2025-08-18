@@ -122,9 +122,7 @@ the_trice_dice/
 │   │   │   ├── 🔑 game.gd.uid
 │   │   │   ├── 🎬 game.tscn
 │   │   │   ├── 📜 game_timer.gd
-│   │   │   ├── 🔑 game_timer.gd.uid
-│   │   │   ├── 📜 statistic_manager.gd
-│   │   │   └── 🔑 statistic_manager.gd.uid
+│   │   │   └──  🔑 game_timer.gd.uid
 │   │   └── 📁 Main/
 │   │       ├── 📜 main.gd
 │   │       ├── 🔑 main.gd.uid
@@ -207,8 +205,11 @@ the_trice_dice/
 │       │   └── 🔑 ability_manager.gd.uid
 │       ├── 📁 Autoload/
 │       │   └── 📁 SettingsManager/
-│       │       ├── 📜 SettingsManager.gd
-│       │       └── 🔑 SettingsManager.gd.uid
+│       │   │   ├── 📜 SettingsManager.gd
+│       │   │   └── 🔑 SettingsManager.gd.uid
+│       │   └── 📁 StatisticManager
+│       │       ├── 📜 StatisticManager.gd
+│       │       └── 🔑 StatisticManager.gd.uid
 │       ├── 📁 Console/
 │       │   ├── 📁 Commands/
 │       │   │   ├── 📜 cmd_ability.gd
@@ -229,6 +230,8 @@ the_trice_dice/
 │       │   │   ├── 🔑 cmd_show_nodes.gd.uid
 │       │   │   ├── 📜 md_zoom.gd
 │       │   │   └── 🔑 cmd_zoom.gd.uid
+│       │   ├── 📜 command_list.gd
+│       │   ├── 🔑 command_list.gd.uid
 │       │   ├── 📜 console.gd
 │       │   ├── 🔑 console.gd.uid
 │       │   └── 🎬 Console.tscn
@@ -281,3 +284,4 @@ the_trice_dice/
 - [**Кондрахин Никита**](https://github.com/NikTak777) — лидер проекта, программист, геймдизайнер
 - [**Подрабинович Максим**](https://github.com/psixonaut) — программист
 - [**Олещук Станислав**](https://github.com/lRelezl) — документация
+- [**Соловьёв Аким**](https://github.com/SkyKing521) — тестировщик
