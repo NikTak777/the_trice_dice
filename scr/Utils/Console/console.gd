@@ -11,10 +11,11 @@ func _ready():
 	input_field.custom_minimum_size = Vector2(600, 30)
 	$PanelContainer.position += Vector2(20, 110)
 	
-	visible = false
+	toggle() # Скрывает консоль при старте
+	
 	input_field.connect("text_submitted", Callable(self, "_on_command_entered"))
 
-	_load_commands("res://scr/Utils/Console/Commands/")
+	_load_commands()
 
 func toggle():
 	visible = !visible
@@ -27,28 +28,23 @@ func toggle():
 func register_command(name: String, cmd_object):
 	commands[name] = cmd_object
 
-func _load_commands(path: String) -> void:
-	var dir = DirAccess.open(path)
-	if dir == null:
-		push_error("Не удалось открыть папку с командами: %s" % path)
-		return
+func _load_commands() -> void:
+	var CommandList = preload("res://scr/Utils/Console/command_list.gd")
 
-	for file_name in dir.get_files():
-		if file_name.ends_with(".gd"):
-			var full_path := path.path_join(file_name)
-			var script := load(full_path)
-			if script == null:
-				push_warning("Не удалось загрузить команду: %s" % file_name)
-				continue
+	for full_path in CommandList.COMMANDS:
+		var script = load(full_path)
+		if script == null:
+			push_warning("Не удалось загрузить команду: %s" % full_path)
+			continue
 
-			var cmd_script = script.new()
-			if not cmd_script.has_method("get_name") or not cmd_script.has_method("execute"):
-				push_warning("Файл %s не является корректной командой" % file_name)
-				continue
+		var cmd_script = script.new()
+		if not cmd_script.has_method("get_name") or not cmd_script.has_method("execute"):
+			push_warning("Файл %s не является корректной командой" % full_path)
+			continue
 
-			var cmd_name = cmd_script.get_name()
-			register_command(cmd_name, cmd_script)
-			print_to_console("[OK] Команда '%s' загружена" % cmd_name)
+		var cmd_name = cmd_script.get_name()
+		register_command(cmd_name, cmd_script)
+		print_to_console("[OK] Команда '%s' загружена" % cmd_name)
 
 func _on_command_entered(command: String):
 	if command.strip_edges() == "":

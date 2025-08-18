@@ -32,7 +32,7 @@ func spawn_damage_popup(amount: int):
 	add_child(popup)
 	popup.global_position = global_position + Vector2(0, -10)
 	popup.setup(amount, true)
-	get_tree().current_scene.add_child(popup)
+	# get_tree().current_scene.add_child(popup)
 
 func take_damage(amount: int):
 	current_hp -= amount
@@ -43,8 +43,7 @@ func take_damage(amount: int):
 		die()
 
 func die():
-	var game_node = get_tree().current_scene
-	game_node.statistic_manager.end_game(true)
+	StatisticManager.end_game(true) # Передаёт статистику
 	var victory_node = Node.new()
 	victory_node.set_script(preload("res://scr/Entities/Player/victory_player.gd"))
 	victory_node.victory_scene = preload("res://scr/UserInterface/VictoryLabel/Victory.tscn")

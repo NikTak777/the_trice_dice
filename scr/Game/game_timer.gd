@@ -1,4 +1,4 @@
-# GameTimer.gd
+# game_timer.gd
 extends Node
 
 var game_time: float = 0.0

@@ -2,16 +2,16 @@ extends Node
 
 var master_volume: float = 1.0 # Уровень громкости
 var fullscreen: bool = false # Статус полнокэранного режима
-var difficulty: String = "normal" # Режим сложности по умолчанию
+var difficulty: String = "Normal" # Режим сложности по умолчанию
 
-var difficulties = ["easy", "normal", "hard"] # Список режимов сложности
+var difficulties = ["Easy", "Normal", "Hard"] # Список режимов сложности
 var current_difficulty: int = 1 # индекс текущей сложности в массиве difficulties
 
 # Настройки разброса и скорострельность для каждой сложности
 var boss_inaccuracy_settings = {
-	"easy": {"min_ang": 7.0, "max_ang": 10.0, "interval": 0.7},
-	"normal": {"min_ang": 3.0, "max_ang": 8.0, "interval": 0.5},
-	"hard": {"min_ang": 0.0, "max_ang": 0.0, "interval": 0.3}
+	"Easy": {"min_ang": 7.0, "max_ang": 10.0, "interval": 0.7},
+	"Normal": {"min_ang": 3.0, "max_ang": 8.0, "interval": 0.5},
+	"Hard": {"min_ang": 0.0, "max_ang": 0.0, "interval": 0.3}
 }
 
 func apply_settings():
