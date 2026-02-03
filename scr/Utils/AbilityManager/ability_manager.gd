@@ -59,17 +59,15 @@ var abilities = {
 	"cooldown_time_boost": {
 		"description": "Увеличивает скорострельность оружия",
 		"activate": func(player):
-			if player.inventory.carried_weapon:
-				player.inventory.carried_weapon.cooldown_time *= 0.8
-				player.inventory.carried_weapon.bullet_spread_degrees *= 1.8 # Тест: было 1.5
+			player.inventory.apply_cooldown_modifier_to_all_weapons(0.8)
 			player.inventory.spread_increased = true
-			player.inventory.cooldown_multiplier = 0.8,  
+			player.inventory.cooldown_multiplier = 0.8
+			player.inventory.apply_spread_modifiers_to_all_weapons(), 
 		"deactivate": func(player):
-			if player.inventory.carried_weapon:
-				player.inventory.carried_weapon.cooldown_time /= 0.8
-				player.inventory.carried_weapon.bullet_spread_degrees /= 1.8 # Тест: было 1.5
+			player.inventory.reset_cooldown_modifier_for_all_weapons(0.8)
 			player.inventory.spread_increased = false
-			player.inventory.cooldown_multiplier = 1.0,
+			player.inventory.cooldown_multiplier = 1.0
+			player.inventory.reset_spread_modifiers_for_all_weapons(),
 	},
 	#---------------------------------------------------------
 	# Способность: усиленная броня
@@ -93,20 +91,20 @@ var abilities = {
 	"no_spread": {
 	"description": "Убирает разброс оружия",
 	"activate": func(player):
-		var weapon = player.inventory.carried_weapon
-		if weapon:
-			if weapon.weapon_type == "shotgun":
-				weapon.bullet_spread_degrees /= 3.0 # Тест: было 5.0
-			else:
-				weapon.bullet_spread_degrees = 0.0
-			weapon.cooldown_time *= 1.2
+		for weapon in player.inventory.weapons:
+			if weapon:
+				if weapon.weapon_type == "shotgun":
+					weapon.bullet_spread_degrees /= 3.0
+				else:
+					weapon.bullet_spread_degrees = 0.0
+				weapon.cooldown_time *= 1.2
 		player.inventory.spread_disabled = true
 		player.inventory.cooldown_multiplier = 1.2,
 	"deactivate": func(player):
-		var weapon = player.inventory.carried_weapon
-		if weapon:
-			weapon.bullet_spread_degrees = weapon.original_bullet_spread_degrees
-			weapon.cooldown_time /= 1.2
+		for weapon in player.inventory.weapons:
+			if weapon:
+				weapon.bullet_spread_degrees = weapon.original_bullet_spread_degrees
+				weapon.cooldown_time /= 1.2
 		player.inventory.spread_disabled = false
 		player.inventory.cooldown_multiplier = 1.0,
 },
