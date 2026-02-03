@@ -67,8 +67,8 @@ func _process(delta):
 			nearby_weapon = null
 			
 	if Input.is_action_pressed("shoot") and is_inside_room:
-		if inventory.carried_weapon:
-			var weapon = inventory.carried_weapon
+		var weapon = inventory.get_current_weapon()
+		if weapon:
 			weapon.shoot(global_position, get_global_mouse_position())
 	
 	if Input.is_action_just_pressed("spawn_weapon"):
@@ -85,6 +85,9 @@ func _process(delta):
 	if Input.is_action_just_pressed("change_ability"):
 		print("Кнопка смены способности нажата!")
 		change_ability()
+	
+	if Input.is_action_just_pressed("switch_weapon"):
+		inventory.switch_weapon()
 
 func _physics_process(delta):
 	if Global.is_console_open:
