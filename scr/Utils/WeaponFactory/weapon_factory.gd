@@ -7,6 +7,7 @@ var weapon_data = {
 		"weapon_type": "shotgun",
 		"cooldown_time": 1.0,
 		"damage": 5,
+		"mana_cost": 5, # Было 7
 		"bullet_spread_degrees": 35.0, # Было 25.0
 		"sprite_target_height": 10.0,
 		"weapon_texture": preload("res://scr/Assets/weapon_sprite/shotgun.png")
@@ -15,7 +16,8 @@ var weapon_data = {
 		"weapon_name": "Automat",
 		"weapon_type": "automat",
 		"cooldown_time": 0.2,
-		"damage": 8,
+		"damage": 9, # Было 8, изменил для баланса маны
+		"mana_cost": 2, # Было 3
 		"bullet_spread_degrees": 20.0,
 		"sprite_target_height": 20.0,
 		"weapon_texture": preload("res://scr/Assets/weapon_sprite/automat.png")
@@ -25,6 +27,7 @@ var weapon_data = {
 		"weapon_type": "pistol",
 		"cooldown_time": 0.4,
 		"damage": 5,
+		"mana_cost": 1,
 		"bullet_spread_degrees": 10.0,
 		"sprite_target_height": 12.0,
 		"weapon_texture": preload("res://scr/Assets/weapon_sprite/pistol.png")
@@ -45,6 +48,7 @@ func create_weapon(weapon_type: String) -> Node:
 	weapon.weapon_type = config["weapon_type"]
 	weapon.cooldown_time = config["cooldown_time"]
 	weapon.damage = config["damage"]
+	weapon.mana_cost = config["mana_cost"]
 	weapon.bullet_spread_degrees = config["bullet_spread_degrees"]
 	weapon.original_bullet_spread_degrees = config["bullet_spread_degrees"]
 	weapon.sprite_target_height = config["sprite_target_height"]

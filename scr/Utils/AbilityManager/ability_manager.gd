@@ -10,18 +10,14 @@ var abilities = {
 	# Улучшает: увеличивает количество единиц здоровья на 20 процентов
 	# Ухудшает: ничего
 	#---------------------------------------------------------
-	"hp_boost": {
-		"description": "Увеличивает текущее и максимальное HP",
+	"mana_boost": {
+		"description": "Уменьшает потребление маны",
 		"activate": func(player):
-			player.max_hp += 20.0
-			player.current_hp += 20.0
-			player.hp_bar.set_max_hp(player.max_hp)
-			player.hp_bar.set_hp(player.current_hp),
+			player.mana_manager.bonus = 1
+			player.armor_bonus = 1.2,
 		"deactivate": func(player):
-			player.max_hp -= 20.0
-			if player.current_hp > 100.0: player.current_hp = 100.0
-			player.hp_bar.set_max_hp(player.max_hp)
-			player.hp_bar.set_hp(player.current_hp),
+			player.mana_manager.bonus = 0
+			player.armor_bonus = 1.0,
 	},
 	#---------------------------------------------------------
 	# Способность: увеличение урона оружия
@@ -32,10 +28,10 @@ var abilities = {
 		"description": "Увеличивает урон оружия",
 		"activate": func(player):
 			player.damage_bonus = 1.4 # Увеличиваем бонус урона у персонажа
-			player.armor_bonus = 1.2,
+			player.mana_manager.bonus = -2,
 		"deactivate": func(player):
 			player.damage_bonus = 1.0 # Сбрасываем бонус до исходного состояния
-			player.armor_bonus = 1.0,
+			player.mana_manager.bonus = 0,
 	},
 	#---------------------------------------------------------
 	# Способность: увеличение скорость передвижения
@@ -59,17 +55,15 @@ var abilities = {
 	"cooldown_time_boost": {
 		"description": "Увеличивает скорострельность оружия",
 		"activate": func(player):
-			if player.inventory.carried_weapon:
-				player.inventory.carried_weapon.cooldown_time *= 0.8
-				player.inventory.carried_weapon.bullet_spread_degrees *= 1.8 # Тест: было 1.5
+			player.inventory.apply_cooldown_modifier_to_all_weapons(0.8)
 			player.inventory.spread_increased = true
-			player.inventory.cooldown_multiplier = 0.8,  
+			player.inventory.cooldown_multiplier = 0.8
+			player.inventory.apply_spread_modifiers_to_all_weapons(), 
 		"deactivate": func(player):
-			if player.inventory.carried_weapon:
-				player.inventory.carried_weapon.cooldown_time /= 0.8
-				player.inventory.carried_weapon.bullet_spread_degrees /= 1.8 # Тест: было 1.5
+			player.inventory.reset_cooldown_modifier_for_all_weapons(0.8)
 			player.inventory.spread_increased = false
-			player.inventory.cooldown_multiplier = 1.0,
+			player.inventory.cooldown_multiplier = 1.0
+			player.inventory.reset_spread_modifiers_for_all_weapons(),
 	},
 	#---------------------------------------------------------
 	# Способность: усиленная броня
@@ -93,20 +87,20 @@ var abilities = {
 	"no_spread": {
 	"description": "Убирает разброс оружия",
 	"activate": func(player):
-		var weapon = player.inventory.carried_weapon
-		if weapon:
-			if weapon.weapon_type == "shotgun":
-				weapon.bullet_spread_degrees /= 3.0 # Тест: было 5.0
-			else:
-				weapon.bullet_spread_degrees = 0.0
-			weapon.cooldown_time *= 1.2
+		for weapon in player.inventory.weapons:
+			if weapon:
+				if weapon.weapon_type == "shotgun":
+					weapon.bullet_spread_degrees /= 3.0
+				else:
+					weapon.bullet_spread_degrees = 0.0
+				weapon.cooldown_time *= 1.2
 		player.inventory.spread_disabled = true
 		player.inventory.cooldown_multiplier = 1.2,
 	"deactivate": func(player):
-		var weapon = player.inventory.carried_weapon
-		if weapon:
-			weapon.bullet_spread_degrees = weapon.original_bullet_spread_degrees
-			weapon.cooldown_time /= 1.2
+		for weapon in player.inventory.weapons:
+			if weapon:
+				weapon.bullet_spread_degrees = weapon.original_bullet_spread_degrees
+				weapon.cooldown_time /= 1.2
 		player.inventory.spread_disabled = false
 		player.inventory.cooldown_multiplier = 1.0,
 },

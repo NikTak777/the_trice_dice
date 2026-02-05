@@ -6,6 +6,9 @@ extends CanvasLayer
 var commands = {}
 var is_console_open: bool = false
 
+var history: Array[String] = []
+var history_index: int = -1
+
 func _ready():
 	log_output.custom_minimum_size = Vector2(600, 400)
 	input_field.custom_minimum_size = Vector2(600, 30)
@@ -13,9 +16,47 @@ func _ready():
 	
 	toggle() # Скрывает консоль при старте
 	
-	input_field.connect("text_submitted", Callable(self, "_on_command_entered"))
+	# input_field.connect("text_submitted", Callable(self, "_on_command_entered"))
 
 	_load_commands()
+	
+	input_field.gui_input.connect(_on_input_gui_input)
+	
+func _on_input_gui_input(event: InputEvent):
+	if event is InputEventKey and event.pressed:
+		
+		# Логика стрелок (история)
+		if event.keycode == KEY_UP:
+			_navigate_history(-1)
+			get_viewport().set_input_as_handled()
+		elif event.keycode == KEY_DOWN:
+			_navigate_history(1)
+			get_viewport().set_input_as_handled()
+			
+		# НОВАЯ ЛОГИКА ДЛЯ ENTER
+		elif event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER:
+			# 1. Сначала выполняем команду
+			_on_command_entered(input_field.text)
+			
+			# 2. Говорим движку, что мы сами обработали эту кнопку.
+			# Благодаря этому Godot НЕ будет выполнять стандартное действие "снять фокус".
+			get_viewport().set_input_as_handled()
+			
+			# 3. На всякий случай обновляем фокус (хотя он и не должен был пропасть)
+			input_field.grab_focus()
+
+func _navigate_history(direction: int):
+	if history.is_empty():
+		return
+		
+	history_index = clampi(history_index + direction, 0, history.size())
+	
+	if history_index < history.size():
+		input_field.text = history[history_index]
+		# Устанавливаем каретку в конец текста
+		input_field.caret_column = input_field.text.length()
+	else:
+		input_field.text = "" # Если спустились ниже самой последней команды
 
 func toggle():
 	visible = !visible
@@ -47,8 +88,18 @@ func _load_commands() -> void:
 		print_to_console("[OK] Команда '%s' загружена" % cmd_name)
 
 func _on_command_entered(command: String):
-	if command.strip_edges() == "":
+	var stripped_command = command.strip_edges()
+	if stripped_command == "":
 		return
+		
+	input_field.text = ""
+	
+	# Добавляем в историю (только если команда не дублирует предыдущую)
+	if history.is_empty() or history.back() != stripped_command:
+		history.append(stripped_command)
+		
+	# Сбрасываем индекс истории для следующего раза
+	history_index = history.size()
 
 	var parts: Array = Array(command.strip_edges().split(" "))
 	var cmd = parts[0]
@@ -66,8 +117,6 @@ func _on_command_entered(command: String):
 		cmd_script.execute(args, self)
 	else:
 		print_to_console("Неизвестная команда: " + cmd)
-
-	input_field.text = ""
 
 func print_to_console(text: String):
 	log_output.append_text(text + "\n")

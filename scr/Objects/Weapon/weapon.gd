@@ -3,6 +3,7 @@ extends Node2D
 @export var weapon_name: String = "BaseWeapon"
 @export var cooldown_time: float = 0.5  # Интервал между выстрелами
 @export var damage: int = 10            # Урон оружия
+@export var mana_cost: int = 0
 @export var weapon_texture: Texture2D
 @export var sprite_target_height: float = 100.0
 @export var bullet_spread_degrees: float = 10.0  # Максимальный разброс пули
@@ -66,19 +67,22 @@ func get_direction_with_spread(base_direction: Vector2, spread_degrees: float) -
 # Функция для стрельбы (создаёт пулю, сбрасывает таймер)
 # Здесь мы принимаем позицию выстрела и целевую точку
 func shoot(origin: Vector2, target: Vector2, ) -> void:
-	if not can_shoot():
+	var player = get_tree().get_nodes_in_group("player")[0]
+	
+	if not(can_shoot() and player.mana_manager.can_change_value(-mana_cost)):
 		return
 		
 	var base_direction = (target - origin).normalized()
-	var final_damage = damage * (get_tree().get_nodes_in_group("player")[0].damage_bonus)
+	var final_damage = damage * (player.damage_bonus)
 	
-	print("Type of weapon: ", weapon_type)
 	if weapon_type == "shotgun":
 		shoot_shotgun(origin, base_direction, final_damage)
 	else:
 		shoot_single_bullet(origin, base_direction, final_damage)
 
 	time_since_last_shot = 0.0
+	
+	player.mana_manager.change_value(-mana_cost)
 	
 func shoot_single_bullet(origin: Vector2, base_direction: Vector2, damage: int) -> void:
 	var bullet_scene = preload("res://scr/Objects/Bullet/Bullet.tscn")
