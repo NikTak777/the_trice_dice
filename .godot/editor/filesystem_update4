@@ -1,2 +1,11 @@
 res://scr/Game/game.tscn
+res://scr/Entities/Player/dice.gd
+res://scr/Entities/Player/mana_manager.gd
+res://scr/Objects/Weapon/weapon.gd
+res://scr/Utils/WeaponFactory/weapon_factory.gd
+res://scr/Entities/Enemies/BaseEnemy/base_enemy.gd
+res://scr/UserInterface/ManaBar/ManaText.tscn
+res://scr/UserInterface/ManaBar/mana_text.gd
+res://scr/UserInterface/InGameMenu/InGameMenu.tscn
 res://scr/Game/game.gd
+res://.gitignor.txt

@@ -25,6 +25,7 @@ var map_y: int = 80
 var enemy_manager: Node
 var enemy_spawner: Node
 var health_bar: Node
+var mana_label: Node
 
 var hint_label: Node = null
 
@@ -104,6 +105,19 @@ func spawn_player():
 	player.hp_bar = health_bar
 	self.health_bar = health_bar
 	player.hp_bar.set_max_hp(player.max_hp)
+	
+	# Mana label
+	var mana_label = preload(
+		"res://scr/UserInterface/ManaBar/ManaText.tscn"
+	).instantiate()
+	canvas_layer.add_child(mana_label)
+	mana_label.position = Vector2(20, 100)
+	player.mana_manager.mana_changed.connect(mana_label.set_mana)
+	
+	mana_label.set_mana(
+		player.mana_manager.current_value,
+		player.mana_manager.max_value
+	)
 	
 	player.change_ability()
 

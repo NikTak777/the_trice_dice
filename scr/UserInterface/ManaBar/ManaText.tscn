@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://kohhdqbxgbgy"]
+
+[ext_resource type="Script" uid="uid://2exrphlf0ynq" path="res://scr/UserInterface/ManaBar/mana_text.gd" id="1_d2enm"]
+
+[node name="ManaText" type="Node2D" unique_id=250983053]
+script = ExtResource("1_d2enm")
+
+[node name="Label" type="Label" parent="." unique_id=1240139058]
+offset_right = 40.0
+offset_bottom = 23.0

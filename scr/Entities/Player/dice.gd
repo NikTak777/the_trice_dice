@@ -3,6 +3,7 @@ extends CharacterBody2D
 @onready var ability_manager = preload("res://scr/Utils/AbilityManager/ability_manager.gd").new()
 @onready var ability_scene = preload("res://scr/UserInterface/AbilityTitle/AbilityTitle.tscn")
 @onready var menu: Control  # Подключаем меню
+@onready var mana_manager = preload("res://scr/Entities/Player/mana_manager.gd").new()
 
 # const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/HealthBar.tscn")
 const HEALTHBAR_SCENE = preload("res://scr/UserInterface/HealthBar/PlayerHealthBar/PlayerHealthBar.tscn")
@@ -12,6 +13,7 @@ const BULLET_SCENE = preload("res://scr/Objects/Bullet/Bullet.tscn")
 var max_hp = 100
 var current_hp = 100
 var hp_bar = null  # Здесь хранится ссылку на HealthBar
+var mana_label = null
 
 var speed = 100.0
 var damage_bonus: float = 1.0
@@ -48,6 +50,8 @@ func _ready():
 	add_child(ability_instance)
 	# Получаем ссылку на Label внутри AbilityTitle
 	ability_label = ability_instance.get_node("Label") as Label
+	
+	add_child(mana_manager)
 
 func get_movement_direction():
 	var input_direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
