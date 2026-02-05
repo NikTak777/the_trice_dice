@@ -1,2 +1,0 @@
-TileSet
-Resource
