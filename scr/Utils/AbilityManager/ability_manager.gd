@@ -10,18 +10,14 @@ var abilities = {
 	# Улучшает: увеличивает количество единиц здоровья на 20 процентов
 	# Ухудшает: ничего
 	#---------------------------------------------------------
-	"hp_boost": {
-		"description": "Увеличивает текущее и максимальное HP",
+	"mana_boost": {
+		"description": "Уменьшает потребление маны",
 		"activate": func(player):
-			player.max_hp += 20.0
-			player.current_hp += 20.0
-			player.hp_bar.set_max_hp(player.max_hp)
-			player.hp_bar.set_hp(player.current_hp),
+			player.mana_manager.bonus = 1
+			player.armor_bonus = 1.2,
 		"deactivate": func(player):
-			player.max_hp -= 20.0
-			if player.current_hp > 100.0: player.current_hp = 100.0
-			player.hp_bar.set_max_hp(player.max_hp)
-			player.hp_bar.set_hp(player.current_hp),
+			player.mana_manager.bonus = 0
+			player.armor_bonus = 1.0,
 	},
 	#---------------------------------------------------------
 	# Способность: увеличение урона оружия
@@ -32,10 +28,10 @@ var abilities = {
 		"description": "Увеличивает урон оружия",
 		"activate": func(player):
 			player.damage_bonus = 1.4 # Увеличиваем бонус урона у персонажа
-			player.armor_bonus = 1.2,
+			player.mana_manager.bonus = -2,
 		"deactivate": func(player):
 			player.damage_bonus = 1.0 # Сбрасываем бонус до исходного состояния
-			player.armor_bonus = 1.0,
+			player.mana_manager.bonus = 0,
 	},
 	#---------------------------------------------------------
 	# Способность: увеличение скорость передвижения

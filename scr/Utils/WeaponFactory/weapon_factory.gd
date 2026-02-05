@@ -16,7 +16,7 @@ var weapon_data = {
 		"weapon_name": "Automat",
 		"weapon_type": "automat",
 		"cooldown_time": 0.2,
-		"damage": 8,
+		"damage": 9, # Было 8, изменил для баланса маны
 		"mana_cost": 2, # Было 3
 		"bullet_spread_degrees": 20.0,
 		"sprite_target_height": 20.0,
