@@ -35,7 +35,7 @@ func take_damage(amount: int):
 		die()
 
 func die():
-	get_tree().get_first_node_in_group("player").mana_manager.change_value(15)
+	get_tree().get_first_node_in_group("player").mana_manager.change_value(20)
 	
 	var scene = get_tree().get_current_scene()
 	if scene.has_node("EnemyManager"):

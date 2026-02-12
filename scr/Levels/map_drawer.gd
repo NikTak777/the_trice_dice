@@ -40,19 +40,65 @@ func draw_map(tilemap: TileMap, root_node, corridors: Array):
 				tilemap.set_cell(0, p, 0, Vector2i(2,2))
 				floor_type[p] = FloorType.ROOM
 
+	# Получаем список центров комнат для проверки
+	var room_centers = []
+	for leaf in root_node.get_leaves():
+		room_centers.append(leaf.get_center())
+
 	for c in corridors:
 		var from = c[0]; var to = c[1]
-		var corner = Vector2i(to.x, from.y)
-		for x in range(min(from.x, corner.x), max(from.x, corner.x)+1):
-			for dy in range(-2,2):
-				var p = Vector2i(x, from.y+dy)
-				tilemap.set_cell(0, p, 0, Vector2i(2,2))
-				floor_type[p] = FloorType.CORRIDOR
-		for y in range(min(corner.y, to.y), max(corner.y, to.y)+1):
-			for dx in range(-2,2):
-				var p = Vector2i(to.x+dx, y)
-				tilemap.set_cell(0, p, 0, Vector2i(2,2))
-				floor_type[p] = FloorType.CORRIDOR
+		
+		# Пробуем два варианта L-образного коридора
+		var corner1 = Vector2i(to.x, from.y)  # Сначала горизонтально, потом вертикально
+		var corner2 = Vector2i(from.x, to.y)  # Сначала вертикально, потом горизонтально
+		
+		var corner = null
+		var corner_in_room_center = false
+		
+		# Проверяем первый вариант угла
+		for room_center in room_centers:
+			if corner1 == room_center:
+				corner = corner1
+				corner_in_room_center = true
+				break
+		
+		# Если первый вариант не подходит, проверяем второй
+		if not corner_in_room_center:
+			for room_center in room_centers:
+				if corner2 == room_center:
+					corner = corner2
+					corner_in_room_center = true
+					break
+		
+		# Пропускаем коридор, если ни один угол не находится в центре комнаты
+		if not corner_in_room_center:
+			continue
+		
+		# Рисуем коридор в зависимости от выбранного угла
+		if corner == corner1:
+			# Горизонтально от from до corner, затем вертикально до to
+			for x in range(min(from.x, corner.x), max(from.x, corner.x)+1):
+				for dy in range(-2,2):
+					var p = Vector2i(x, from.y+dy)
+					tilemap.set_cell(0, p, 0, Vector2i(2,2))
+					floor_type[p] = FloorType.CORRIDOR
+			for y in range(min(corner.y, to.y), max(corner.y, to.y)+1):
+				for dx in range(-2,2):
+					var p = Vector2i(to.x+dx, y)
+					tilemap.set_cell(0, p, 0, Vector2i(2,2))
+					floor_type[p] = FloorType.CORRIDOR
+		else:  # corner == corner2
+			# Вертикально от from до corner, затем горизонтально до to
+			for y in range(min(from.y, corner.y), max(from.y, corner.y)+1):
+				for dx in range(-2,2):
+					var p = Vector2i(from.x+dx, y)
+					tilemap.set_cell(0, p, 0, Vector2i(2,2))
+					floor_type[p] = FloorType.CORRIDOR
+			for x in range(min(corner.x, to.x), max(corner.x, to.x)+1):
+				for dy in range(-2,2):
+					var p = Vector2i(x, to.y+dy)
+					tilemap.set_cell(0, p, 0, Vector2i(2,2))
+					floor_type[p] = FloorType.CORRIDOR
 
 	# 2) Отрисовка внутренних углов
 	var corner_dirs = {
