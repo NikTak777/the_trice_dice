@@ -171,6 +171,18 @@ func _on_player_entered_room(room_number: int) -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	player.is_inside_room = true
 	
+	# Активируем врагов через 2 секунды после входа в комнату
+	_activate_enemies_with_delay(room_number)
+
+func _activate_enemies_with_delay(room_number: int) -> void:
+	# Ждем 2 секунды
+	await get_tree().create_timer(0.3).timeout
+	
+	# Проверяем, что игрок все еще в комнате
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not player.is_inside_room:
+		return
+	
 	if room_enemies.has(room_number):
 		var enemies = room_enemies[room_number]
 		# Проходим от конца массива к началу

@@ -7,7 +7,7 @@ var weapon_data = {
 		"weapon_type": "shotgun",
 		"cooldown_time": 1.0,
 		"damage": 5,
-		"mana_cost": 5, # Было 7
+		"mana_cost": 7, # Было 5
 		"bullet_spread_degrees": 35.0, # Было 25.0
 		"sprite_target_height": 10.0,
 		"weapon_texture": preload("res://scr/Assets/weapon_sprite/shotgun.png")
@@ -16,8 +16,8 @@ var weapon_data = {
 		"weapon_name": "Automat",
 		"weapon_type": "automat",
 		"cooldown_time": 0.2,
-		"damage": 9, # Было 8, изменил для баланса маны
-		"mana_cost": 2, # Было 3
+		"damage": 11, # Было 8, изменил для баланса маны
+		"mana_cost": 3, # Было 2
 		"bullet_spread_degrees": 20.0,
 		"sprite_target_height": 20.0,
 		"weapon_texture": preload("res://scr/Assets/weapon_sprite/automat.png")
