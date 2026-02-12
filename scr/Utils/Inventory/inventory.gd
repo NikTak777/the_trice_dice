@@ -124,6 +124,10 @@ func pickup_weapon(new_weapon): # Функция подбора оружия
 	_apply_modifiers_to_weapon(new_weapon)
 	
 	print("Подобрано оружие: ", new_weapon.weapon_name)
+	
+	# Если теперь в инвентаре два оружия, показываем подсказку о переключении
+	if weapons.size() == 2:
+		_show_switch_weapon_hint()
 		
 
 func drop_current_weapon(): # Функция сброса текущего оружия
@@ -182,4 +186,16 @@ func switch_weapon():
 	
 	if new_weapon and new_weapon.has_method("equip"):
 		new_weapon.equip()
+	
+func _show_switch_weapon_hint():
+	# Получаем доступ к hint_manager через game сцену
+	var game_scene = get_tree().current_scene
+	if not game_scene:
+		return
+	
+	# Ищем hint_manager среди дочерних узлов game
+	for child in game_scene.get_children():
+		if child is HintManager:
+			child.show_hint("switch_weapon", 7.0)
+			return
 	

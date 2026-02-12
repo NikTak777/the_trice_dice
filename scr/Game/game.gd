@@ -28,6 +28,7 @@ var health_bar: Node
 var mana_label: Node
 
 var hint_label: Node = null
+var hint_manager: HintManager = null
 
 var statistic_manager: Node
 
@@ -67,23 +68,29 @@ func _ready():
 	add_child(door_manager)
 	
 	init_console()
-	
-	#statistic_manager = StatisticManager.new()
-	#add_child(statistic_manager)
+
 	StatisticManager.start_game()
 	
 	queue_redraw()
 	
 func create_level():
 	tilemap = get_node("TileMap")
-	root_node = map_generator.new(Vector2i(0, 0), Vector2i(map_x, map_y)) # Устанавливаем размер карты
-	root_node.split(2) # Кол-во комнат = 2 в степени числа
+	
+	root_node = map_generator.new(Vector2i(0, 0), Vector2i(1, 1)) 
+	
+	# НАСТРОЙКИ ГЕНЕРАЦИИ
+	var rooms_count = 9          # Количество комнат
+	var min_room_size = Vector2i(30, 30)
+	var max_room_size = Vector2i(30, 30)
+	var gap_size = 20         # Расстояние между комнатами (длина коридора)
+	
+	root_node.generate_random_walk(rooms_count, min_room_size, max_room_size, gap_size)
 	
 	corridor_graph = CorridorGraph.new()
 	corridor_graph.build_corridor_graph(root_node)
 	
 	map_drawer = MapDrawer.new()
-	add_child(map_drawer)  # если нужно
+	add_child(map_drawer)
 	map_drawer.draw_map(tilemap, root_node, corridor_graph.corridors)
 	
 func init_console():
@@ -92,6 +99,11 @@ func init_console():
 func spawn_hint():
 	hint_label = hint_scene.instantiate()
 	add_child(hint_label)
+	
+	# Создаем и инициализируем менеджер подсказок
+	hint_manager = preload("res://scr/Utils/HintManager/hint_manager.gd").new()
+	hint_manager.set_hint_label(hint_label)
+	add_child(hint_manager)
 
 func spawn_player():
 	var player = player_scene.instantiate()
@@ -143,6 +155,9 @@ func spawn_player():
 	if player.has_node("Sprite2D"):
 		sprite = player.get_node("Sprite2D")
 	
+	# Устанавливаем флаг, что персонаж находится в процессе спавна
+	player.is_spawning = true
+	
 	# --- Анимация падения игрока ---
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_BOUNCE)
@@ -158,6 +173,9 @@ func spawn_player():
 		spin_tween.tween_property(sprite, "rotation", 0.0, 0.0).set_delay(2.0)
 
 	await tween.finished
+	
+	# Помечаем, что спавн завершён
+	player.is_spawning = false
 
 	# --- Возвращаем камеру обратно ---
 	if cam:
@@ -167,7 +185,7 @@ func spawn_player():
 		cam.make_current()
 		cam.force_update_transform()
 	
-	hint_label.show_hint("Подойди и нажми E, чтобы подобрать оружие", 7.0)
+	hint_manager.show_hint("pickup_weapon", 7.0)
 
 func spawn_weapons():
 	var spawner = weapon_spawner_scene.instantiate()
@@ -186,7 +204,15 @@ func spawn_enemy(room_boss: int):
 	spawner.enemy_manager = enemy_manager
 	spawner.weapon_spawner = weapon_spawner
 	spawner.room_boss = room_boss
-	spawner.hint_label = hint_label
+	spawner.hint_manager = hint_manager
+	
+	# Автоматически устанавливаем количество комнат для спавна врагов
+	# Комната 1 - стартовая (где игрок), поэтому враги начинаются с комнаты 2
+	spawner.room_start = 2
+	# room_end устанавливаем равным общему количеству комнат
+	var total_rooms = root_node.get_leaves().size()
+	spawner.room_end = total_rooms
+	
 	add_child(spawner)
 	
 	enemy_spawner = spawner

@@ -11,7 +11,7 @@ extends Node2D
 @export var enemy_manager: Node
 @export var weapon_spawner: Node
 @export var room_area_scene: PackedScene
-@export var hint_label: Node
+@export var hint_manager: HintManager
 var count_room_cleared: int = 1
 
 var is_first_entered: bool = false # Флаг первого вхождения в любую комнату
@@ -171,6 +171,18 @@ func _on_player_entered_room(room_number: int) -> void:
 	var player = get_tree().get_first_node_in_group("player")
 	player.is_inside_room = true
 	
+	# Активируем врагов через 2 секунды после входа в комнату
+	_activate_enemies_with_delay(room_number)
+
+func _activate_enemies_with_delay(room_number: int) -> void:
+	# Ждем 2 секунды
+	await get_tree().create_timer(0.3).timeout
+	
+	# Проверяем, что игрок все еще в комнате
+	var player = get_tree().get_first_node_in_group("player")
+	if not player or not player.is_inside_room:
+		return
+	
 	if room_enemies.has(room_number):
 		var enemies = room_enemies[room_number]
 		# Проходим от конца массива к началу
@@ -206,7 +218,7 @@ func kill_room_enemies(room_number: int) -> void:
 		enemy.die()
 
 func show_first_hint():
-	hint_label.show_hint("Чтобы стрелять, зажмите ЛКМ", 7.0)
+	hint_manager.show_hint("shoot", 7.0)
 	is_first_entered = true
 	
 func _spawn_weapon_in_room(room_number: int) -> void:

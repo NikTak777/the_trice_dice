@@ -22,9 +22,12 @@ func change_value(delta: int) -> void:
 		print("Mana_points:", current_value)
 	
 func can_change_value(delta: int) -> bool:
-	if not(-delta + bonus == 0 or (delta + bonus < 0 and current_value < -delta + bonus)):
+	var actual_change = delta + bonus
+	
+	if actual_change >= 0:
 		return true
-	return false
+	
+	return current_value >= -actual_change
 	
 func get_value() -> int:
 	return current_value

@@ -26,6 +26,7 @@ var ability_instance = null  # Экземпляр AbilityTitle
 var ability_label = null
 
 var is_inside_room: bool = false
+var is_spawning: bool = true  # Флаг, что персонаж находится в процессе спавна/падения
 
 var knockback_velocity = Vector2.ZERO
 var knockback_timer = 0.0
