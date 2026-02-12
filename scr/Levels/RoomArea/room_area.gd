@@ -15,6 +15,9 @@ func _ready():
 func _on_body_entered(body):
 	# Предполагаем, что у игрока есть группа "player"
 	if body.is_in_group("player"):
+		# Не активируем комнату, если персонаж находится в процессе спавна/падения
+		if body.is_spawning:
+			return
 		emit_signal("player_entered_room", room_number)
 		
 func _on_body_exited(body):

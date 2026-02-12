@@ -30,6 +30,15 @@ func build_corridor_graph(root_node) -> void:
 			add_corridor_unique(min_pair[0], min_pair[1], root_node)
 			visited.append(min_pair[1])
 			unvisited.erase(min_pair[1])
+			
+	# Шанс добавить случайные дополнительные коридоры для создания петель
+	var rng = RandomNumberGenerator.new()
+	for i in range(rooms.size()):
+		for j in range(i + 1, rooms.size()):
+			var dist = rooms[i].distance_squared_to(rooms[j])
+			if dist < 10000:
+				if rng.randf() < 0.30:
+					add_corridor_unique(rooms[i], rooms[j], root_node)
 
 func add_corridor_unique(a: Vector2i, b: Vector2i, root_node) -> void:
 	var key = [a, b]
@@ -73,40 +82,29 @@ func vector2i_less(a: Vector2i, b: Vector2i) -> bool:
 		return a.y < b.y
 
 func get_farthest_room(root_node, start_idx: int) -> int:
-	var graph = {}
+	# Получаем все комнаты
+	var rooms = root_node.get_leaves()
 	
-	# Строим граф смежности (индексы комнат)
-	for corridor in corridors:
-		var a = get_room_index_by_center(corridor[0], root_node.get_leaves()) + 1
-		var b = get_room_index_by_center(corridor[1], root_node.get_leaves()) + 1
+	# Проверяем, что стартовая комната существует
+	if start_idx < 1 or start_idx > rooms.size():
+		return 1
+	
+	# Получаем центр стартовой комнаты (где спавнится игрок)
+	var start_room = rooms[start_idx - 1]
+	var start_center = start_room.get_center()
+	
+	# Находим комнату с максимальным территориальным расстоянием от стартовой
+	var farthest_room_idx = start_idx
+	var max_distance_squared = 0.0
+	
+	for i in range(rooms.size()):
+		var room = rooms[i]
+		var room_center = room.get_center()
+		# Вычисляем квадрат расстояния (быстрее, чем обычное расстояние)
+		var distance_squared = start_center.distance_squared_to(room_center)
 		
-		if not graph.has(a):
-			graph[a] = []
-		if not graph.has(b):
-			graph[b] = []
-		graph[a].append(b)
-		graph[b].append(a)
-
-	# BFS от start_idx
-	var visited = {}
-	var queue = [ [start_idx, 0] ]  # [room_idx, distance]
-	visited[start_idx] = true
-	var farthest = start_idx
-	var max_dist = 0
-
-	while queue.size() > 0:
-		var current = queue.pop_front()
-		var room = current[0]
-		var dist = current[1]
-
-		if dist > max_dist:
-			max_dist = dist
-			farthest = room
-
-		if graph.has(room):
-			for neighbor in graph[room]:
-				if not visited.has(neighbor):
-					visited[neighbor] = true
-					queue.append([neighbor, dist + 1])
-
-	return farthest
+		if distance_squared > max_distance_squared:
+			max_distance_squared = distance_squared
+			farthest_room_idx = i + 1  # Индексы комнат начинаются с 1
+	
+	return farthest_room_idx
