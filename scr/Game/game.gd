@@ -28,6 +28,7 @@ var health_bar: Node
 var mana_label: Node
 
 var hint_label: Node = null
+var hint_manager: HintManager = null
 
 var statistic_manager: Node
 
@@ -98,6 +99,11 @@ func init_console():
 func spawn_hint():
 	hint_label = hint_scene.instantiate()
 	add_child(hint_label)
+	
+	# Создаем и инициализируем менеджер подсказок
+	hint_manager = preload("res://scr/Utils/HintManager/hint_manager.gd").new()
+	hint_manager.set_hint_label(hint_label)
+	add_child(hint_manager)
 
 func spawn_player():
 	var player = player_scene.instantiate()
@@ -179,7 +185,7 @@ func spawn_player():
 		cam.make_current()
 		cam.force_update_transform()
 	
-	hint_label.show_hint("Подойди и нажми E, чтобы подобрать оружие", 7.0)
+	hint_manager.show_hint("pickup_weapon", 7.0)
 
 func spawn_weapons():
 	var spawner = weapon_spawner_scene.instantiate()
@@ -198,7 +204,7 @@ func spawn_enemy(room_boss: int):
 	spawner.enemy_manager = enemy_manager
 	spawner.weapon_spawner = weapon_spawner
 	spawner.room_boss = room_boss
-	spawner.hint_label = hint_label
+	spawner.hint_manager = hint_manager
 	
 	# Автоматически устанавливаем количество комнат для спавна врагов
 	# Комната 1 - стартовая (где игрок), поэтому враги начинаются с комнаты 2

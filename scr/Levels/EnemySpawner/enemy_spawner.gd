@@ -11,7 +11,7 @@ extends Node2D
 @export var enemy_manager: Node
 @export var weapon_spawner: Node
 @export var room_area_scene: PackedScene
-@export var hint_label: Node
+@export var hint_manager: HintManager
 var count_room_cleared: int = 1
 
 var is_first_entered: bool = false # Флаг первого вхождения в любую комнату
@@ -218,7 +218,7 @@ func kill_room_enemies(room_number: int) -> void:
 		enemy.die()
 
 func show_first_hint():
-	hint_label.show_hint("Чтобы стрелять, зажмите ЛКМ", 7.0)
+	hint_manager.show_hint("shoot", 7.0)
 	is_first_entered = true
 	
 func _spawn_weapon_in_room(room_number: int) -> void:
