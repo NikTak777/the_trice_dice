@@ -26,7 +26,7 @@ func _process(delta: float) -> void:
 		
 func change_zoom():
 	if flag_zoom:
-		camera.zoom = Vector2(0.3, 0.3)
+		camera.zoom = Vector2(0.20, 0.20)
 	else:
 		camera.zoom = Vector2(5.0, 5.0)
 	flag_zoom = !flag_zoom

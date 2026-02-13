@@ -32,6 +32,9 @@ var hint_manager: HintManager = null
 
 var statistic_manager: Node
 
+# Миникарта
+var minimap: Control = null
+
 # Словарь с направлениями выхода из каждой комнаты (room_number -> Array<Vector2>)
 var room_exit_dirs := {}
 
@@ -68,6 +71,12 @@ func _ready():
 	add_child(door_manager)
 	
 	init_console()
+	
+	spawn_minimap()
+	
+	# Подключаем сигналы миникарты после создания всех RoomArea
+	await get_tree().process_frame  # Ждем один кадр, чтобы RoomArea успели создаться
+	_connect_minimap_signals()
 
 	StatisticManager.start_game()
 	
@@ -216,3 +225,40 @@ func spawn_enemy(room_boss: int):
 	add_child(spawner)
 	
 	enemy_spawner = spawner
+
+func spawn_minimap():
+	"""Создает и инициализирует миникарту"""
+	var minimap_scene = preload("res://scr/UserInterface/Minimap/Minimap.tscn")
+	minimap = minimap_scene.instantiate()
+	
+	# Добавляем миникарту в CanvasLayer (UI)
+	var canvas_layer = get_node("CanvasLayer")
+	canvas_layer.add_child(minimap)
+	
+	# Позиционируем миникарту в правом верхнем углу с отступами
+	var margin_right = 20  # Отступ справа
+	var margin_top = 20     # Отступ сверху
+	var minimap_width = 220
+	var minimap_height = 250  # Увеличена высота для лучшей видимости коридоров
+	
+	minimap.anchor_left = 1.0
+	minimap.anchor_top = 0.0
+	minimap.anchor_right = 1.0
+	minimap.anchor_bottom = 0.0
+	minimap.offset_left = -minimap_width - margin_right
+	minimap.offset_top = margin_top
+	minimap.offset_right = -margin_right
+	minimap.offset_bottom = minimap_height + margin_top
+	
+	# Инициализируем миникарту данными о карте
+	minimap.initialize(root_node, corridor_graph)
+
+func _connect_minimap_signals():
+	"""Подключает сигналы входа в комнату к миникарте"""
+	if not minimap:
+		return
+	
+	# Подключаем сигналы входа в комнату к миникарте
+	for area in get_tree().get_nodes_in_group("room_area"):
+		if not area.is_connected("player_entered_room", Callable(minimap, "on_player_entered_room")):
+			area.connect("player_entered_room", Callable(minimap, "on_player_entered_room"))
